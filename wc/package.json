@@ -1,0 +1,21 @@
+{
+  "name": "wc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@geal/biscuit-web-components": "0.1.3"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@web/rollup-plugin-import-meta-assets": "^1.0.7",
+    "rollup": "^2.59.0"
+  }
+}
