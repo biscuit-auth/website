@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: deploy
 
     steps:
       - uses: actions/checkout@v2
@@ -19,8 +20,9 @@ jobs:
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_BUCKET: ${{ secrets.CELLAR_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.CELLAR_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.CELLAR_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET: ${{ secrets.CELLAR_BUCKET }}
+          AWS_S3_ENDPOINT: https://cellar-c2.services.clever-cloud.com/
+          AWS_ACCESS_KEY_ID: ${{ secrets.CELLAR_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CELLAR_KEY_SECRET }}
           SOURCE_DIR: 'public'
 
