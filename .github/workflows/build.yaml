@@ -10,6 +10,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - name: Install dependencies and build web components
+        run: |
+          cd wc/
+          npm ci --ignore-scripts
+          npm run build
+          cd ..
       - name: Install Zola
         run: |
           sudo snap install --edge zola
