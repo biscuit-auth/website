@@ -21,9 +21,10 @@ jobs:
       - name: Install dependencies and build web components
         run: |
           cd wc/
-          npm ci --ignore-scripts
+          npm install
           npm run build
           ls ../static
+          ls ../static/assets
           cd ..
       - name: Install Zola
         run: |
