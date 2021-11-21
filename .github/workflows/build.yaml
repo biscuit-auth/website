@@ -23,6 +23,7 @@ jobs:
           cd wc/
           npm ci --ignore-scripts
           npm run build
+          ls ../static
           cd ..
       - name: Install Zola
         run: |
