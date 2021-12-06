@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies and build web components
         run: |
           cd wc/
-          npm install
+          npm clean-install
           npm run build
           ls ../static
           ls ../static/assets
