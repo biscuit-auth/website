@@ -100,6 +100,32 @@ sealBiscuit :: Biscuit Open c -> Biscuit Sealed c
 sealBiscuit b = seal b
 ```
 
+## Reject revoked tokens
+
+Revoked tokens can be rejected directly during parsing:
+
+```haskell
+import Auth.Biscuit
+
+parseBiscuit :: IO Bool
+parseBiscuit =  do
+  let parsingOptions = ParserConfig
+        { encoding = UrlBase64
+        , getPublicKey = \_ -> myPublicKey
+        -- ^ biscuits carry a key identifier, allowing you to choose the
+        -- public key used for signature verification. Here we ignore
+        -- it, to always use the same public key
+        , isRevoked = fromRevocationList revokedIds
+        -- ^ `fromRevocationList` takes a list of revoked ids, but
+        -- the library makes it possible to run an effectful check instead
+        -- if you don't have a static revocation list
+        }
+  result <- parseWith parsingOptions encodedBiscuit
+  case result of
+    Left _ -> False
+    Right _ -> True
+```
+
 ## Query data from the authorizer
 
 (filters)
