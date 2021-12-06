@@ -47,14 +47,18 @@ content = 'Biscuit is implemented in Rust, Haskell, Go, Java, WebAssembly, C... 
 // we receive a request to read "admin.doc"
 // The request contains a token with the following content
 user(1234);
+
 // this restricts the kind of operation to "read"
 check if operation("read");
+
 // The authorizer loads facts representing the request
 resource("admin.txt");
 operation("read");
+
 // The authorizer loads the user's rights
 right(1234, "admin.txt", "read");
 right(1234, "admin.txt", "write");
+
 // Finally, the authorizer tests policies
 // by looking for a set of facts matching them
 allow if
