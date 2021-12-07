@@ -33,7 +33,7 @@ jobs:
           tar xvf zola.tar.gz
       - name: Build
         run: |
-          zola build
+          ./zola build
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
