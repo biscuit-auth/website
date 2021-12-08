@@ -128,6 +128,45 @@ parseBiscuit =  do
 
 ## Query data from the authorizer
 
-(filters)
+The values that made the authorizer succeed are kept around in the
+authorization success, and can be queried directly with `getBindings`.
 
-TODO
+```haskell
+{-# LANGUAGE QuasiQuotes #-}
+
+import Auth.Biscuit
+
+checkBiscuit :: Biscuit -> IO Text
+checkBiscuit b =
+  result <- authorizeBiscuit b [authorizer| allow if user($user); |]
+  case result of
+    Left a  -> throwError …
+    Right success ->
+      case getSingleVariableValue (getBindings success) of
+        Just userId -> pure userId
+        -- ^ this will only match if a unique user id is
+        -- retrieved from the matched variables
+        Nothing -> throwError …
+```
+
+You can also provide custom queries that will be run against all the
+generated facts.  Be careful, only _authority_ and _authorizer_ facts are
+queried; block facts are ignored since they can't be trusted.
+
+```haskell
+{-# LANGUAGE QuasiQuotes #-}
+
+import Auth.Biscuit
+
+checkBiscuit :: Biscuit -> IO Text
+checkBiscuit b =
+  result <- authorizeBiscuit b [authorizer| allow if true; |]
+  case result of
+    Left a  -> throwError …
+    Right success ->
+      case getSingleVariableValue (queryAuthorizerFacts success [query|user($user)|]) of
+        Just userId -> pure userId
+        -- ^ this will only match if a unique user id is
+        -- retrieved from the matched variables
+        Nothing -> throwError …
+```
