@@ -18,7 +18,7 @@ top = false
 
 ## Contribute to Biscuit
 
-👉 The specification lives in the [`biscuit` repository](https://github.com/CleverCloud/biscuit).
+👉 The specification lives in the [`biscuit` repository](https://github.com/biscuit-auth/biscuit).
 Everything is developed in the open
 
 👉 Find implementations and tools in the [`biscuit-auth` organisation](https://github.com/biscuit-auth)
