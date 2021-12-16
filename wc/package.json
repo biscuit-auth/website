@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@geal/biscuit-web-components": "0.3.3"
+    "@biscuit-auth/web-components": "0.3.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
