@@ -22,6 +22,6 @@ __TLDR__: We do not use cookies and we do not collect any personal data.
 
 ## Contact us
 
-[Contact us](https://github.com/CleverCloud/Biscuit) if you have any questions.
+[Contact us](https://github.com/biscuit-auth/biscuit) if you have any questions.
 
 Effective Date: _6th November 2021_

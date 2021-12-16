@@ -9,7 +9,7 @@ url = "/docs/getting-started/introduction/"
 url_button = "Get started"
 repo_version = "Specification"
 repo_license = "Open-source MIT License."
-repo_url = "https://github.com/CleverCloud/biscuit"
+repo_url = "https://github.com/biscuit-auth/biscuit"
 token = "ErEBCkcKBWZpbGUxCgRyZWFkCgVmaWxlMgoFd3JpdGUYAiIMCgoIBBICGAcSAhgIIgwKCggEEgIYCRICGAgiDAoKCAQSAhgHEgIYChIkCAASIPDO-114IUTIGGx9OmnKx8s9VlfSUo0ZUGp30u6V2-fzGkCjGcwLyNuqXmP5GOIefbBvqAqWyIrLQ0gP2wOCpzfK3tebojcnvKcJYIdhe6tmJQUzns0NkZuzF5PmiSLdNsINGpwBCjIKBmNoZWNrMRgCMiYKJAoGCAsSAggCEgYIAhICCAISBggDEgIYCBIKCAQSAggCEgIYCBIkCAASIEj_cN0LNVf1luHuoGBc7a5u-nsABIHnHe11KcnSsr9pGkC2n6PB3wYlWrt_aIcsfpfzervjxwDj510e1RWrO0RLy8ZJJf8SAau-QATYn2j6PU8XcZi8NJD1Z8hg6-V_L-8MGogBCh4KBmNoZWNrMhgCMhIKEAoGCAwSAhgHEgYIAhICGAcSJAgAEiD2K6xN4msa4tYaSsxmeN_JveHBDoBHPHNTgR9oK5rC1RpAGpALWu-VhFdEopFCsbSW0uFlAKsyMvNtUKwLWFb5fq1ngdeKNcrZnUASc7MzX60Wv20DclchDuv6K7QixcMdByIiCiDp6ahTKwyXJbyHCFnHtAGRvN9j1I2TQr0iSYVJ7jodug=="
 
 [[extra.list]]
