@@ -1,4 +1,4 @@
-import {initialize} from '@geal/biscuit-web-components';
+import {initialize} from '@biscuit-auth/web-components';
 
 async function setup() {
   console.log("SETUP");
