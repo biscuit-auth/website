@@ -110,7 +110,12 @@ Biscuit* b2 = biscuit_append_block(biscuit, bb, kp2);
 
 ## Seal a token
 
-TODO
+```C
+uint64_t size = biscuit_serialized_size(biscuit);
+printf("serialized size: %ld\n", size);
+uint8_t * buffer = malloc(size);
+uint64_t written = biscuit_serialize(biscuit, buffer);
+```
 
 ## Reject revoked tokens
 
