@@ -22,11 +22,10 @@ Logic languages are well suited for authorization policies, because they can rep
 
 Biscuit's language loads facts, data that can come from the token (example: user id), from the request (file name, read or write access, current date) or the application's internal databases (users, roles, rights).
 Then it validates those facts in two ways:
-- a check list: each check validates the presence of a fact. Example: `check if time($current_time), $time < 2022-01-01T00:00:00Z` for an expiration date. If at least one of the checks fails, the request is denied
-- allow/deny policies: a list of poliies that are tried in sequence until one of them matches. If it is an allow policy, the request is accepted, while if it is a deny policy or none matched, the request is denied. Example: `allow if resource($res), operation($op), right($res, $op)`
+- a check list: each check validates the presence of a fact. Example: `check if time($time), $time < 2022-01-01T00:00:00Z` for an expiration date. If one or more checks fail, the request is denied
+- allow/deny policies: a list of policies that are tried in sequence until one of them matches. If it is an allow policy, the request is accepted, while if it is a deny policy (or none matched), the request is denied. Example: `allow if resource($res), operation($op), right($res, $op)`
 
 Allow/deny policies can only be defined in the application, while checks can come from the application or the token. This is how token are attenuated: by adding more checks (ie more restrictions) to an existing token.
-
 
 ## First code example
 
@@ -40,33 +39,7 @@ allow if true;
 
 # Datalog in Biscuit
 
-Biscuit comes with a few specific adaptations of Datalog.
-
-It has the following base types (for elements inside of a fact):
-
-- integer (i64)
-- string
-- date (seconds from epoch, UTC)
-- byte array
-- symbol (interned strings that are stored in a dictionary to spare space)
-- boolean (true or false)
-- set: a deduplicated list of values, that can be of any type except variables or sets
-
-Rules can contain expressions that evaluate variable defined in the other
-predicates. An expression must always evaluate to a boolean. If it returns
-false, the rule evaluation fails. The following rule will generate a fact only
-if there's a `file` fact and its value starts with `/folder/`:
-
-`in_folder($path) <- file($path), $path.starts_with(/folder/*)`
-
-Here are the possible operations:
-
-- integer: <, >, <=, >=, ==, +, -, *, /
-- string: .starts_with(string), .ends_with(string), .matches(regex string), ==
-- date: <=, >=
-- byte array: ==, is in set, is not in set
-- boolean: &&,  ||, !
-- set: .contains(value)
+Please see the [datalog reference page](../../datalog/reference/) for more info.
 
 ## Checks
 
@@ -92,7 +65,7 @@ which `$path` matches a pattern.
 ## Allow and deny policies
 
 The validation in Biscuit relies on a list of allow or deny policies, that are
-evaluated after all of the checks have succeeded. Like checks; they are queries
+evaluated after all of the checks have succeeded. Like checks, they are queries
 that must find a matching set of fact to succeed. If they do not match, we try
 the next one. If they succeed, an allow policy will make the request validation
 succeed, while a deny policy will make it fail. If no policy matched, the
@@ -105,13 +78,10 @@ Example policies:
 allow if
   resource($res),
   operation($op),
-  right($res, $op)
+  right($res, $op);
 
 // otherwise, allow if we're admin
-allow if is_admin()
-
-// catch all if non of the policies matched
-deny if true
+allow if is_admin();
 ```
 
 ## Blocks
@@ -121,32 +91,16 @@ facts, rules and checks. Their order affects execution: rules and checks can onl
 apply to facts created in their own block or previous blocks.
 
 This is how security is guaranteed:
-- the first block contains facts representing he basic rights. They are loaded into the
+
+- the first block contains facts representing the basic rights. They are loaded into the
 Datalog engine, along with the authorizer's facts, rules, checks and policies. They will
 not execute on the following block data
 - they are all executed and verified in that context
 - for every following block, we load their facts and rules, execute their rules and apply
-their checks. They can only see facts from previous blocks
+their checks. They can only see facts from previous blocks.
 
-That way, a token cannot increase its rights when adding blocks the only way they can
+That way, a token cannot increase its rights when adding blocks; the only way they can
 change execution is by adding checks covering previous blocks.
-
-## Revocation identifiers
-
-The verifier will generate a list of facts indicating revocation identifiers for
-the token. They uniquely identify the token and each of its parent tokens through
-a serie of SHA256 hashes. That way, if a token is revoked, we will be able to
-refuse all the tokens derived from it.
-
-To check revocation status, we can either:
-- query the list of revocation tokens: `revocation($index, $id) <- revocation_id($index, $id)` then verify their presence in a revocation list
-- load a policy with the list of revoked tokens: `deny if revocation_id($index, $id), [ hex:1234..., hex:4567...].contains($id)`
-
-The hashes are generated from the serialized blocks and the corresponding keys,
-so if you generate multiple tokens with the same root key and same authority
-block, they will have the same revocation identifier. To avoid that, you can
-add unique data to the block, like a random value, a UUID identifying that
-token chain, a date, etc.
 
 # Example tokens
 
@@ -159,37 +113,13 @@ verifier's side knows the root public key and, upon receiving the request,
 will deserialize the token and verify its signature, thus authenticating
 the token.
 
-```
-Biscuit {
-    symbols: ["authority", "ambient", "resource", "operation", "right", "current_time", "revocation_id", "user_id"]
-    authority: Block[0] {
-            symbols: ["user_id"]
-            context: ""
-            version: 1
-            facts: [
-                user_id("user_1234"),
-            ]
-            rules: []
-            checks: []
-        }
-    blocks: [
-    ]
-}
-```
+<bc-token-printer biscuit="EocBCh0KBHVzZXIKCXVzZXJfMTIzNBgCIggKBggHEgIYCBIkCAASIIPrUMvLX3ott2ZS3NDj_mEyaljWpg66t2vVGYrLeKE2GkDSsL9rpeAWGz3h9X6xXAw26xMgGh8oHL_x6e1uZCOGyXlq7NKxkPR9q1CU8_5GlR1Hk20qUYkHTlNX8NzmowYGIiIKIAQ6WdXjpxXh6xLqyA14fI6ZGbcsK9odaAoEx9Cs59r2"></bc-token-printer>
 
-Let's unpack what's displayed here:
 
- - `symbols` carries a list of symbols used in the biscuit.
- - `blocks` carries a list of blocks, which can refine the scope of the biscuit
+Here the token carries a single block, `authority`, that is the initial block containing basic rights, which can be refined in subsequent blocks.
 
-Here, `authority` is the initial block containing basic rights, which can be refined in subsequent blocks.
+A block can contain:
 
-A block comes with new symbols it adds to the system (there's a default symbol
-table that already contains values like  `#operation`). It can
-contain facts, rules and checks. A block contains:
-
- - `symbols`:  a block can introduce new symbols: these symbols are available in the current block, _and the following blocks_. **It is not possible to re-declare an existing symbol**.
- - `context`: free form text used either for documentation purpose, or to give a hind about which facts should be retrieved from DB
  - `facts`: each block can define new facts
  - `rules` each block can define new rules
  - `checks` each block can define new checks (queries that need to match in order to make the biscuit valid)
@@ -199,10 +129,10 @@ request. The verifier would then load the token's facts and rules, along with
 facts from the request:
 
 ```
-user_id("user_1234");
+user("user_1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
-current_time(2020-11-17T12:00:00+00:00);
+time(2020-11-17T12:00:00+00:00);
 ```
 
 The verifier would also be able to load authorization data from its database,
@@ -219,7 +149,7 @@ if we own a specific folder:
 right($bucket, $path, $operation) <-
   resource($bucket, $path),
   operation($operation),
-  user_id($id),
+  user($id),
   owner($id, $bucket)
 ```
 
@@ -228,7 +158,7 @@ This rule will generate a `right` fact if it finds data matching the variables.
 We end up with a system with the following facts:
 
 ```
-user_id("user_1234");
+user("user_1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
 current_time(2020-11-17T12:00:00+00:00);
@@ -245,7 +175,7 @@ operation:
 allow if
   right($bucket, $path, $operation),
   resource($bucket, $path),
-  operation($operation)
+  operation($operation);
 ```
 
 Here we can find matching facts, so the request succeeds. If the request was
@@ -258,64 +188,21 @@ Now, what if we wanted to limit access to reading `/folder1/hello.txt` in
 We could ask the authorization server to generate a token with only that specific
 access:
 
-```
-Biscuit {
-    symbols: ["authority", "ambient", "resource", "operation", "right", "current_time", "revocation_id"]
-    authority: Block[0] {
-            symbols: []
-            context: ""
-            version: 1
-            facts: [
-                right("bucket_5678", "/folder1/hello.txt", "read")
-            ]
-            rules: []
-            checks: []
-        }
-    blocks: [
-    ]
-}
-```
+<bc-token-printer biscuit="EqUBCjsKC2J1Y2tldF81Njc4ChIvZm9sZGVyMS9oZWxsby50eHQKBHJlYWQYAiIQCg4IBBICGAcSAhgIEgIYCRIkCAASIFmurdZP3Bxp7Y7KU4uMHfn8_DvPNNCtY1keOYHAtzDlGkCp_FQE6mssE5QKKZZKJXYU-fBMlZoqk7vFoNWEJsCjfbTTJ13adV-X3BIDmgix3MtjeU5jNRdzT7ukUYWX4moFIiIKIIrwKKUVBI2l0Ur3VhzUVDOJa5Z3jbirRUUEyUaVH8jK"></bc-token-printer>
 
-Without a `user_id`, the verifier would be unable to generate more `right` facts
+Without a `user`, the verifier would be unable to generate more `right` facts
 and would only have the one provided by the token.
 
 But we could also take the first token, and restrict it by adding a block containing
 a new check:
 
-```
-Biscuit {
-    symbols: ["authority", "ambient", "resource", "operation", "right", "current_time", "revocation_id", "user_id"]
-    authority: Block[0] {
-            symbols: ["user_id"]
-            context: ""
-            version: 1
-            facts: [
-                user_id("user_1234"),
-            ]
-            rules: []
-            checks: []
-        }
-    blocks: [
-        Block[1] {
-            symbols: ["caveat1", "read"]
-            context: ""
-            version: 1
-            facts: []
-            rules: []
-            checks: [
-                check if resource("bucket_5678", "/folder1/hello.txt"), operation("read")
-            ]
-        }
-
-    ]
-}
-```
+<bc-token-printer biscuit="EocBCh0KBHVzZXIKCXVzZXJfMTIzNBgCIggKBggHEgIYCBIkCAASIIPrUMvLX3ott2ZS3NDj_mEyaljWpg66t2vVGYrLeKE2GkDSsL9rpeAWGz3h9X6xXAw26xMgGh8oHL_x6e1uZCOGyXlq7NKxkPR9q1CU8_5GlR1Hk20qUYkHTlNX8NzmowYGGrYBCkwKBXF1ZXJ5CgtidWNrZXRfNTY3OAoSL2ZvbGRlcjEvaGVsbG8udHh0CgRyZWFkGAIyGgoYCgIICRIKCAISAhgKEgIYCxIGCAMSAhgMEiQIABIgD1TwTlGCPt97O9PwxHXm_f-Z1gBdhmNQzLm0FBLn9wUaQEtZ-OOxmVbp7ahlGbjOMOaUk5F_F1kwPiFUSF02sWMWDI5uwBsp2gpGiyRuPd3wneA2ZU0H3wDNjXAM1j-LdQoiIgogCCMQbcjX-YsOBZJeWLR8wNu9b7RpdxhQnk4d5ezXjuw="></bc-token-printer>
 
 With that token, if the holder tried to do a `PUT /bucket_5678/folder1/hello.txt`
 request, we would end up with the following facts:
 
 ```
-user_id("user_1234");
+user("user_1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
 current_time(2020-11-17T12:00:00+00:00);
