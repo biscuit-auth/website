@@ -1,5 +1,5 @@
 +++
-title = "Datalog quickstart"
+title = "Datalog tutorial"
 description = "Introduction to Datalog"
 date = 2021-05-01T08:20:00+00:00
 updated = 2021-05-01T08:20:00+00:00
