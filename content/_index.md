@@ -5,7 +5,7 @@ title = "Biscuit authorization"
 # The homepage contents
 [extra]
 lead = '<b>Biscuit</b> is an authorization token with decentralized verification, offline attenuation and strong security policy enforcement based on a logic language'
-url = "/docs/getting-started/introduction/"
+url = "/docs/getting-started/introduction/index.html"
 url_button = "Get started"
 repo_version = "Specification"
 repo_license = "Open-source MIT License."
