@@ -51,14 +51,21 @@ fn create_token(root: &KeyPair) -> Result<Biscuit, error::Token> {
 ## Create an authorizer
 
 ```rust
-use biscuit_auth::{Biscuit, error};
+use biscuit_auth::{Biscuit, error, builder::Fact};
 
 fn authorize(token: &Biscuit) -> Result<(), error::Token> {
     let mut authorizer = token.authorizer()?;
 
     // add a time($date) fact with the current date
     authorizer.set_time()?;
-    authorizer.add_operation("read")?;
+
+    // facts can be created directly from a string generated with `format!()`
+    // but this way is safer if you create facts from user data,because it
+    // prevents injections
+    let mut operation: Fact = "operation($op)".try_into()?;
+    operation.set("op", "read")?;
+
+    authorizer.add_fact(operation)?;
     authorizer.allow()?;
 
     authorizer.authorize()?;
