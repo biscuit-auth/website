@@ -75,7 +75,7 @@ Expressions can use the following operations:
 Here are the currently defined unary operations:
 
 * parens: returns its argument without modification : `1 + ( 2 + 3 )`
-* negate: boolean negation `!( 1 < 2 )
+* negate: boolean negation `!( 1 < 2 )`
 * length: defined on strings, byte arrays and sets, returns an int `"hello".length()`
 
 #### Binary operations
