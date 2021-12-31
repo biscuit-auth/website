@@ -8,6 +8,6 @@
   
 // enforce local storage setting but also fallback to user-agent preferences
 //if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-if window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
   document.body.classList.add('dark');
 }
