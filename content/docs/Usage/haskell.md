@@ -132,7 +132,8 @@ The values that made the authorizer succeed are kept around in the
 authorization success, and can be queried directly with `getBindings`.
 
 ```haskell
-{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes       #-}
 
 import Auth.Biscuit
 
@@ -142,7 +143,7 @@ checkBiscuit b =
   case result of
     Left a  -> throwError …
     Right success ->
-      case getSingleVariableValue (getBindings success) of
+      case getSingleVariableValue (getBindings success) "user" of
         Just userId -> pure userId
         -- ^ this will only match if a unique user id is
         -- retrieved from the matched variables
@@ -154,7 +155,8 @@ generated facts.  Be careful, only _authority_ and _authorizer_ facts are
 queried; block facts are ignored since they can't be trusted.
 
 ```haskell
-{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes       #-}
 
 import Auth.Biscuit
 
@@ -164,7 +166,7 @@ checkBiscuit b =
   case result of
     Left a  -> throwError …
     Right success ->
-      case getSingleVariableValue (queryAuthorizerFacts success [query|user($user)|]) of
+      case getSingleVariableValue (queryAuthorizerFacts success [query|user($user)|]) "user" of
         Just userId -> pure userId
         -- ^ this will only match if a unique user id is
         -- retrieved from the matched variables
