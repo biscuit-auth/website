@@ -267,4 +267,4 @@ allow if
 deny if true
 {% end %}
 
-Attenuating a token does not increase rights: if suddenly Leela loses the delivery role, the chec of the attenuated token could succeed but authorization would fail both for Leela and Bender because the `right` fact will not be generated.
+Attenuating a token does not increase rights: if suddenly Leela loses the delivery role, the check of the attenuated token could succeed but authorization would fail both for Leela and Bender because the `right` fact would not be generated.
