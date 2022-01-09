@@ -240,7 +240,7 @@ check if
 operation("address:read");
 resource("high priority");
 // provided by the authorizer
-time(3000-01-31T11:00:00:00.00Z);
+time(3000-01-31T11:00:00.00Z);
 
 // user roles loaded from the user id in the first block
 user_roles(3, "Leela", "high priority", ["pilot", "delivery"]);
