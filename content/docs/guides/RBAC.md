@@ -213,3 +213,58 @@ allow if
 
 deny if true;
 {% end %}
+
+## Attenuation
+
+Roles work great when the user structure is well defined and does not change much, but they grow in complexity as we support more use cases, temporary access, transversal roles, interns, contractors, audits...
+
+Attenuation in Biscuit provides a good escape hatch to avoid that complexity. As an example, let's assume that, for pressing reasons, Leela has to let Bender deliver the package (usually we do not trust Bender). Do we add a new role just for him? Does Leela need to contact headquarters to create it and issue a new token for Bender, in the middle of traveling?
+
+Leela can instead take her own token, attenuate it to allow the delivery of high priority packages for a limited time. She can even seal the token to avoid other attenuations. We would end up with the following:
+
+{% datalog() %}
+// we got this from the first block of the token
+user(3);
+
+// the token is attenuated with a new block containing those checks
+check if
+  resource("high priority"),
+  operation($op),
+  role("high priority", "delivery", $permissions),
+  $permissions.contains($op);
+check if
+  time($date),
+  $date < 3000-01-31T12:00:00.00Z;
+
+// data from the request
+operation("address:read");
+resource("high priority");
+// provided by the authorizer
+time(3000-01-31T11:00:00:00.00Z);
+
+// user roles loaded from the user id in the first block
+user_roles(3, "Leela", "high priority", ["pilot", "delivery"]);
+
+// roles loaded from the ressource and the list from user_roles
+role("high priority", "pilot", ["spaceship:drive", "address:read"]);
+role("high priority", "delivery", ["address:read", "package:load", "package:unload", "package:deliver"]);
+
+// we materialize the rights
+right($id, $principal, $operation, $priority) <-
+  user($id),
+  operation($operation),
+  resource($priority),
+  user_roles($id, $principal, $priority, $roles),
+  role($priority, $role, $permissions),
+  $roles.contains($role),
+  $permissions.contains($operation);
+
+allow if
+  operation($op),
+  resource($priority),
+  right($id, $principal, $op, $priority);
+
+deny if true
+{% end %}
+
+Attenuating a token does not increase rights: if suddenly Leela loses the delivery role, the chec of the attenuated token could succeed but authorization would fail both for Leela and Bender because the `right` fact will not be generated.
