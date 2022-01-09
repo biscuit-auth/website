@@ -15,11 +15,11 @@ top = false
 +++
 
 Role-based access control is a common authorization model where a set of permissions is assigned to a role, and a user or program can have one or more roles.
-This makes permissions more manageable than giving them to users directly: a role can be designed for a set of tasks, and can be given or taken back from the user depending on their duties, in one operation, instead of reviewing te user's entire set of rights. Changing the permissions of a role can also be done without going through all the users.
+This makes permissions more manageable than giving them to users directly: a role can be designed for a set of tasks, and can be given or taken back from the user depending on their duties, in one operation, instead of reviewing the user's entire set of rights. Changing the permissions of a role can also be done without going through all the users.
 
 ## Example
 
-Let us imagine a space faring package delivery company. Each member of the company has specific duties, represented by roles, that can perform specific actions.
+Let us imagine a space-faring package delivery company. Each member of the company has specific duties, represented by roles, that can perform specific actions.
 
 {% display() %}
 // let's define roles and associated permissions for a package delivery company
@@ -46,7 +46,7 @@ user_roles(4, "Fry", ["delivery"]);
 
 We want to check if an operation is authorized, depending on the user requesting it. Typically, the user id would be carried in a fact like`user(0)`, in the first block of a Biscuit token. Each employee gets issued their own token.
 
-From that user id, we would look up in the database the user's roles, and for each roles the authorized operations, and load that as facts. We can then check that we have the rights to perform the operation:
+From that user id, we would look up in the database the user's roles, and for each role the authorized operations, and load that as facts. We can then check that we have the rights to perform the operation:
 
 {% datalog() %}
 role("admin", ["billing:read", "billing:write", "address:read", "address:write"] );
@@ -82,7 +82,7 @@ allow if
 deny if true;
 {% end %}
 
-Why are we loading data from the database and checking the rights here, while we could do all of that sa part of a SQL query? After all, Datalog is doing similar work, joining facts like we would join tables.
+Why are we loading data from the database and checking the rights here, while we could do all of that as part of a SQL query? After all, Datalog is doing similar work, joining facts like we would join tables.
 
 We actually need to use both: a SQL query to load only the data we need, because requesting all the users and roles on every request would quickly overload the database. And we load them in Datalog because we can encode more complex rules with multiple nested joins and more specific patterns. Example: we could get an attenuated token that only delegates rights from a particular role of the original user.
 
