@@ -1,7 +1,7 @@
 var suggestions = document.getElementById('suggestions');
 var userinput = document.getElementById('userinput');
 
-document.addEventListener('keydown', inputFocus);
+//document.addEventListener('keydown', inputFocus);
 
 function inputFocus(e) {
 
