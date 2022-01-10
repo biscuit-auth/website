@@ -98,8 +98,17 @@ let sealed_token = token.seal()?;
 
 ## Reject revoked tokens
 
-TODO
+The `Biscuit::revocation_identifiers` method returns the list of revocation identifiers as byte arrays.
+
+```rust
+let identifiers: Vec<Vec<u8>> = token.revocation_identifiers();
+```
 
 ## Query data from the authorizer
 
-TODO
+The `Authorizer::query` method takes a rule as argument and extract the data from generated facts as tuples.
+
+```rust
+let res: Vec<(String, i64)> =
+    authorizer.query("data($name, $id) <- user($name, $id)").unwrap();
+```
