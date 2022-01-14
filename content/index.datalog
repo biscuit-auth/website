@@ -1,4 +1,4 @@
-// we receive a request to read "admin.doc"
+// we receive a request to read "admin.txt"
 // The request contains a token with the following content
 user(1234);
 // this restricts the kind of operation to "read"
