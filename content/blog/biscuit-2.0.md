@@ -87,6 +87,24 @@ That new scheme is simpler to write and audit, and can be implemented in almost
 every language (in most cases, FFI to libsodium will be enough). It is also a lot
 faster to sign and verify.
 
+The second change is about Datalog execution. In a token, the first block contains
+the initial rights as facts, created by the root of trust. In 1.0, to avoid confusion
+with facts from the next blocks, they were tagged with the `#authority` symbol, and
+facts provided by the authorizer from request data had the `#ambient` tag.
+
+In 2.0, Datalog execution is better isolated, it makes sure that there will be no
+interference from later blocks, without requiring `#authority` or `#ambient`.
+This simplifies writing policies significantly.
+
+We also removed entirely the Symbol type (marked with the `#`). Symbols were interned
+strings, separated from normal strings. They were used to reduce the token's size: if
+a symbol appeared multiple times, the token would only carry the string once, and refer
+to it by a number. It also improved performance of Datalog execution, because symbols
+could be matched by comparing numbers instead of string equality. It came with a
+tradeoff: symbols did not support string operations like prefix matching.
+Now all strings are interned, supporting all operations, so the symbols are not needed
+anymore, and execution gets a performance boost.
+
 Outline:
 - short description of Biscuit: this might be the first time readers hear about it
   - why it was designed
