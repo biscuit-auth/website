@@ -20,12 +20,12 @@ and is already deployed in production systems.
 
 Biscuit was designed to address new challenges in building authorization in distributed systems:
 - a query going through microservices must be verifiable decentrally without giving its full
-authrization level to every node
+authorization level to every node
 - API authorization increasingly has to fit a user's authorization landscape (teams, roles,
 delegation) while guaranteeing multitenant isolation
 
 As an example, [Clever Cloud](https://www.clever-cloud.com)'s Pulsar service is accessible
-with Biscuit tokens: each customer is provided a token with full access to their namespace,
+with Biscuit tokens: each customer is given a token with full access to their namespace,
 and from there new tokens can be created that are limited to producing or subscribing to
 specific topics, exactly according to application needs, without adding specific code on
 the server's side.
@@ -34,7 +34,7 @@ To support those use cases, Biscuit specifies a token with public key signatures
 and offline attenuation (like Macaroons): any service that knows the public key can verify
 the token. And any token holder can derive a new token with more restrictions. For the
 microservices use case, that means a node can take the token it received, and create a new one
-with the least privilege before sending it to the next node.
+with fewer privileges before sending it to the next node.
 
 To guarantee that authorization policies execute the same way everywhere, Biscuit provides
 an authorization language based on Datalog, that all implementations must support.
@@ -104,6 +104,17 @@ could be matched by comparing numbers instead of string equality. It came with a
 tradeoff: symbols did not support string operations like prefix matching.
 Now all strings are interned, supporting all operations, so the symbols are not needed
 anymore, and execution gets a performance boost.
+In addition to spec changes, there are new implementations and tooling available:
+
+- a [haskell implementation](https://hackage.haskell.org/package/biscuit-haskell) covers all the v2 spec and comes with [bindings for protecting servant endpoints](https://hackage.haskell.org/package/biscuit-servant)
+- the [wasm implementation](https://www.npmjs.com/package/@biscuit-auth/biscuit-wasm) makes the library usable from NodeJS and browsers, with both CommonJS an ES6 modules, as well as typescript definitions
+- [web components](https://www.npmjs.com/package/@biscuit-auth/web-components) provide a simple way to interact with biscuits client-side (see for instance the datalog playground and the token inspector used on the website)
+While Rust, JS and Haskell implementations fully support v2.0 biscuits, there is still work to be done:
+
+[biscuit-go](todo), [biscuit-java](todo), [biscuit-C#](todo) and [biscuit-swift](todo) don't support V2 yet and we welcome help getting them there.
+We would also like to improve documentation and examples, so if you want to discuss use cases, or find the existing material unclear, please reach out so we can improve it!
+
+Finally, the big breaking changes (serialization, cryptographic schemes) have been shipped in V2, but there are still open questions about new features, namely providing PKI primitives within datalog, finding a way to encode something similar to macaroon's third-party caveats in biscuit, and extending biscuit to support specific ecdsa profiles, in order to make hardware tokens support easier.
 
 Outline:
 - short description of Biscuit: this might be the first time readers hear about it
