@@ -130,7 +130,7 @@ In addition to spec changes, there are new implementations and tooling available
 While Rust, JS and Haskell implementations fully support v2.0 biscuits, there is still work to be done:
 
 [biscuit-go](https://github.com/biscuit-auth/biscuit-go), [biscuit-java](https://github.com/clevercloud/biscuit-java), [biscuit-dotnet](https://github.com/fbredy/biscuit-dotnet) and [biscuit-swift](https://github.com/RemiBardon/biscuit-swift) don't support V2 yet and we welcome help getting them there.
-We would also like to improve documentation and examples, so if you want to discuss use cases, or find the existing material unclear, please reach out so we can improve it!
+We would also like to improve documentation and examples, so if you want to discuss use cases, or find the existing material unclear, please reach out so we can improve it! Come [chat with us](https://matrix.to/#/#biscuit-auth:matrix.org).
 
 Finally, the big breaking changes (serialization, cryptographic schemes) have been shipped in V2, but there are still open questions about new features, namely providing PKI primitives within datalog, finding a way to encode something similar to macaroon's third-party caveats in biscuit, and extending biscuit to support specific ecdsa profiles, in order to make hardware tokens support easier.
 
