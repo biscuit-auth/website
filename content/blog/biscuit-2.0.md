@@ -2,18 +2,18 @@
 title = "Biscuit 2.0 release"
 description = "Introducing Biscuit 2.0"
 date = 2022-01-16T09:19:42+00:00
-updated = 2022-14-01T09:19:42+00:00
-draft = true
+updated = 2022-01-22T09:19:42+00:00
+draft = false
 template = "blog/page.html"
 
 [taxonomies]
-authors = ["Rustaceans"]
+authors = ["geal", "divarvel"]
 
 [extra]
-lead = "Biscuit 2.0 announcement"
+lead = "We are delighted to announce the release of Biscuit at version 2.0!"
 +++
 
-We are delighted to announce the release of Biscuit at version 2.0! Biscuit is a specification
+Biscuit is a specification
 for a cryptographically verified authorization token supporting offline delegation, and a
 language for authorization policies based on Datalog. It has been in development for 3 years
 and is already deployed in production systems.
@@ -39,8 +39,8 @@ with fewer privileges before sending it to the next node.
 To guarantee that authorization policies execute the same way everywhere, Biscuit provides
 an authorization language based on Datalog, that all implementations must support.
 This logic language comes with benefits about execution (guaranteed to terminate) and
-serialization (small enough to be carried in the token) while keeping nearly as much
-expressiveness as SQL.
+serialization (small enough to be carried in the token), and can encode complex policies
+in a concise and readable way.
 
 You can test it right there, in your browser:
 
@@ -49,7 +49,7 @@ You can test it right there, in your browser:
 // The request contains a token with the following content
 user(1234);
 
-// this restricts the kind of operation to "read"
+// the token restricts the kind of operation to "read"
 check if operation("read");
 
 // The authorizer loads facts representing the request
@@ -71,10 +71,17 @@ allow if
 
 While Biscuit has great ambitions for your systems, it can be integrated right
 now without replacing the entire authorization stack: you can use it to carry
-user ids and API keys, and benefit from attenuation on the client side.
+user ids and API keys, and benefit from attenuation on the client side. Users
+could take their token, that contains their session ID, and attenuate it for
+use on a specific server, by adding checks for a specific source IP address,
+and a short expiration. Or give a full access, but only for a specific project.
 
 And with this 2.0 release, we made it easier to integrate, simplified the
 authorization language and improved performance.
+
+## What changed in 2.0?
+
+### New cryptographic signatures
 
 The first big improvement of Biscuit 2.0 is the new cryptographic scheme. It has
 evolved over the course of the project, from pairing based cryptography to
@@ -87,6 +94,8 @@ That new scheme is simpler to write and audit, and can be implemented in almost
 every language (in most cases, FFI to libsodium will be enough). It is also a lot
 faster to sign and verify.
 
+### Scoped rules
+
 The second change is about Datalog execution. In a token, the first block contains
 the initial rights as facts, created by the root of trust. In 1.0, to avoid confusion
 with facts from the next blocks, they were tagged with the `#authority` symbol, and
@@ -96,6 +105,8 @@ In 2.0, Datalog execution is better isolated, it makes sure that there will be n
 interference from later blocks, without requiring `#authority` or `#ambient`.
 This simplifies writing policies significantly.
 
+### Removing the Symbol type
+
 We also removed entirely the Symbol type (marked with the `#`). Symbols were interned
 strings, separated from normal strings. They were used to reduce the token's size: if
 a symbol appeared multiple times, the token would only carry the string once, and refer
@@ -104,36 +115,22 @@ could be matched by comparing numbers instead of string equality. It came with a
 tradeoff: symbols did not support string operations like prefix matching.
 Now all strings are interned, supporting all operations, so the symbols are not needed
 anymore, and execution gets a performance boost.
+
+### New implementations
+
 In addition to spec changes, there are new implementations and tooling available:
 
+- a [command line application](https://github.com/biscuit-auth/biscuit-cli) to create, inspect and attenuate tokens
 - a [haskell implementation](https://hackage.haskell.org/package/biscuit-haskell) covers all the v2 spec and comes with [bindings for protecting servant endpoints](https://hackage.haskell.org/package/biscuit-servant)
 - the [wasm implementation](https://www.npmjs.com/package/@biscuit-auth/biscuit-wasm) makes the library usable from NodeJS and browsers, with both CommonJS an ES6 modules, as well as typescript definitions
 - [web components](https://www.npmjs.com/package/@biscuit-auth/web-components) provide a simple way to interact with biscuits client-side (see for instance the datalog playground and the token inspector used on the website)
+
+## Come help us!
+
 While Rust, JS and Haskell implementations fully support v2.0 biscuits, there is still work to be done:
 
-[biscuit-go](todo), [biscuit-java](todo), [biscuit-C#](todo) and [biscuit-swift](todo) don't support V2 yet and we welcome help getting them there.
+[biscuit-go](https://github.com/biscuit-auth/biscuit-go), [biscuit-java](https://github.com/clevercloud/biscuit-java), [biscuit-dotnet](https://github.com/fbredy/biscuit-dotnet) and [biscuit-swift](https://github.com/RemiBardon/biscuit-swift) don't support V2 yet and we welcome help getting them there.
 We would also like to improve documentation and examples, so if you want to discuss use cases, or find the existing material unclear, please reach out so we can improve it!
 
 Finally, the big breaking changes (serialization, cryptographic schemes) have been shipped in V2, but there are still open questions about new features, namely providing PKI primitives within datalog, finding a way to encode something similar to macaroon's third-party caveats in biscuit, and extending biscuit to support specific ecdsa profiles, in order to make hardware tokens support easier.
 
-Outline:
-- short description of Biscuit: this might be the first time readers hear about it
-  - why it was designed
-  - features: datalog, attenuation
-  - executable example
-  - where does it fit in my tech stack?
-- Biscuit 2.0
-  - what happened since 1.0
-  - why some changes were needed
-  - what changed: crypto changes, datalog execution
-- exciting new things
-  - Haskell implementation
-  - new wasm implementation
-  - web components
-- we need help
-  - implementations that need to get to 2.0: Go, Java, C#, Swift
-  - suggestions for new examples and docs
-  - spec points that need to be decided
-    - signatures exposed in datalog
-    - 3rd party caveats
-    - other signature algorithms (ecdsa)
