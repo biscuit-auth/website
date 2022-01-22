@@ -7,7 +7,7 @@ draft = false
 template = "blog/page.html"
 
 [taxonomies]
-authors = ["geal", "divarvel"]
+authors = ["geal", "clementd"]
 
 [extra]
 lead = "We are delighted to announce the release of Biscuit at version 2.0!"
@@ -120,7 +120,7 @@ anymore, and execution gets a performance boost.
 
 In addition to spec changes, there are new implementations and tooling available:
 
-- a [command line application](https://github.com/biscuit-auth/biscuit-cli) to create, inspect and attenuate tokens
+- a [command line application](https://github.com/biscuit-auth/biscuit-cli) to create, inspect, authorize and attenuate tokens
 - a [haskell implementation](https://hackage.haskell.org/package/biscuit-haskell) covers all the v2 spec and comes with [bindings for protecting servant endpoints](https://hackage.haskell.org/package/biscuit-servant)
 - the [wasm implementation](https://www.npmjs.com/package/@biscuit-auth/biscuit-wasm) makes the library usable from NodeJS and browsers, with both CommonJS an ES6 modules, as well as typescript definitions
 - [web components](https://www.npmjs.com/package/@biscuit-auth/web-components) provide a simple way to interact with biscuits client-side (see for instance the datalog playground and the token inspector used on the website)

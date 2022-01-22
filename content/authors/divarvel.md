@@ -8,4 +8,4 @@ draft = false
 
 Maintainer of Biscuit and biscuit-haskell
 
-[@divarvel](https://github.com/divarvel)
+[@clementd](https://github.com/divarvel)
