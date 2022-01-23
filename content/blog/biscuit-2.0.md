@@ -134,3 +134,4 @@ We would also like to improve documentation and examples, so if you want to disc
 
 Finally, the big breaking changes (serialization, cryptographic schemes) have been shipped in V2, but there are still open questions about new features, namely providing PKI primitives within datalog, finding a way to encode something similar to macaroon's third-party caveats in biscuit, and extending biscuit to support specific ecdsa profiles, in order to make hardware tokens support easier.
 
+While biscuit v1 was the consolidation of the initial ideas, biscuit v2 is the result of production experience and external feedback. We are super happy to see biscuit become more mature and excited for it to find new use cases.
