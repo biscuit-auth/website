@@ -81,6 +81,13 @@ authorization language and improved performance.
 
 ## What changed in 2.0?
 
+### Governance changes
+
+While biscuit was started at [Clever Cloud](https://clever-cloud.com), biscuit v2 marks
+the transition to a community ownership, with new contributions coming from people
+not employed by Clever Cloud. The github repositories now live under the
+[biscuit-auth](https://github.com/biscuit-auth) organization.
+
 ### New cryptographic signatures
 
 The first big improvement of Biscuit 2.0 is the new cryptographic scheme. It has
