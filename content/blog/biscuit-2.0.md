@@ -1,8 +1,8 @@
 +++
 title = "Biscuit 2.0 release"
 description = "Introducing Biscuit 2.0"
-date = 2022-01-16T09:19:42+00:00
-updated = 2022-01-22T09:19:42+00:00
+date = 2022-01-24T09:00:00+01:00
+updated = 2022-01-24T09:00:00+01:00
 draft = false
 template = "blog/page.html"
 
