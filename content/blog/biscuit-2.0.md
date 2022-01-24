@@ -45,7 +45,7 @@ in a concise and readable way.
 You can test it right there, in your browser:
 
 {% datalog() %}
-// we receive a request to read "admin.doc"
+// we receive a request to read "admin.txt"
 // The request contains a token with the following content
 user(1234);
 
