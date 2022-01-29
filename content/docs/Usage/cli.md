@@ -19,7 +19,9 @@ top = false
 ### From source
 
 ```
-cargo install biscuit-cli
+git clone https://github.com/biscuit-auth/biscuit-cli.git
+cd biscuit-cli
+cargo install --path .
 ```
 
 ### From pre-built packages
