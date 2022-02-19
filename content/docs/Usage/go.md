@@ -20,7 +20,7 @@ The Go version of Biscuit can be found on [Github](https://github.com/biscuit-au
 
 In `go.mod`:
 
-```toml
+```
 require(
     github.com/biscuit-auth/biscuit-go v1.0.0
 )
