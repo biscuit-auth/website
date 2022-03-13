@@ -33,7 +33,7 @@ The token then contains two blocks:
   - data
   - new public key
   - signature
-- proof block:
+- proof:
   - new private key
 
 <img src="/img/authority.svg" style="width: 100%" />
@@ -41,30 +41,45 @@ The token then contains two blocks:
 To verify that token, we need to know the root public key. With that key,
 we check the signature of the first block. Then we take the public key
 from the first block, and verify that it matches the private key from
-the proof block.
+the proof. Any attempt at tampering with the first block would invalidate
+the signature. Changing the private key in the proof does not affect signed
+data, and would be detected during verification anyway.
+
+That first block is called the *authority block*: it is the only one signed by the
+root private key, it is trusted by the authorizer side to define the token's basic
+rights. Any following block added during attenuation could have been created by
+anyone, so they can only to restrict rights, by using checks written in Datalog.
 
 ## Attenuation
 
-If we have a valid token, to create a new one, we remove the last block
-that contains a private key, generate a new random key pair, sign the data
-an the new public key, with the private key from the previous token.
+If we have a valid token, to create a new one, we copy all the blocks,
+get the private key from the proof, generate a new random key pair, sign
+the data and the new public key using the private key from the previous token.
 The token now contains:
 - all the blocks from the previous token except the last one
 - new block:
   - data
   - new public key
   - signature
-- proof block:
+- proof:
   - new private key
 
 <img src="/img/block1.svg" style="width: 100%" />
 
-To verify that token, we proceed as previously, using the public key from
-the current block to check the signature of the next block.
+To verify that token, we proceed as previously, using the root public key to
+check the signature of the first block, then the public key from the first
+block to check the signature of the second block, up until the last block.
+And then we verify that the private key from the proof matches the public
+key from the last block.
+
+If any block was modified, it would be detected by signature verification,
+as it would not match the data. If any block was removed, it would be detected
+by signature verification too, as the public key would not match the signature.
 
 ## Sealed tokens
 
 It is possible to seal a token, making sure that it cannot be attenuated
-anymore. In that scheme, the proof block is replaced with a signature
-of the last data block (including the signature). This proves that we had
-access to the last private key.
+anymore. In that scheme, we create a new token, again by copying the blocks
+from the existing one, and using the private key from the proof, generate
+a new proof containing a signature of the last data block (including the
+signature). This proves that we had access to the last private key.
