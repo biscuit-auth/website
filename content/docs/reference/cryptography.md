@@ -28,7 +28,9 @@ The token uses a scheme inspired from public key infrastructure, like TLS certif
 It is made of a list of blocks, each of them containing data, a signature
 and a public key. When creating the token, we generate a random key pair.
 The root private key is used to sign the data and the new public key.
-The token then contains two blocks:
+
+The token then contains one block, and a final proof:
+
 - first block:
   - data
   - new public key
@@ -48,14 +50,16 @@ data, and would be detected during verification anyway.
 That first block is called the *authority block*: it is the only one signed by the
 root private key, it is trusted by the authorizer side to define the token's basic
 rights. Any following block added during attenuation could have been created by
-anyone, so they can only to restrict rights, by using checks written in Datalog.
+anyone, so they can only restrict rights, by using checks written in Datalog.
 
 ## Attenuation
 
 If we have a valid token, to create a new one, we copy all the blocks,
 get the private key from the proof, generate a new random key pair, sign
 the data and the new public key using the private key from the previous token.
+
 The token now contains:
+
 - all the blocks from the previous token except the last one
 - new block:
   - data
