@@ -1,6 +1,6 @@
 +++
-title = "Biscuit 2.1 release"
-description = "Introducing Biscuit 2.1"
+title = "Biscuit v2 update"
+description = "New v2 breaking changes"
 date = 2022-03-26T09:00:00+01:00
 updated = 2022-03-26T09:00:00+01:00
 draft = false
@@ -10,18 +10,24 @@ template = "blog/page.html"
 authors = ["geal", "clementd"]
 
 [extra]
-lead = "We are delighted (again) to announce the release of Biscuit at version 2.1!"
+lead = "We have issued a series of supplemental (breaking) changes in biscuit v2"
 +++
 
 After the release of biscuit v2.0, we’ve noticed a small discrepancy between the spec and most implementations.
 While small, this discrepancy was annoying enough to cause issues: it meant that the same serialized biscuit
 could have different textual representations when read from `biscuit-haskell` or `biscuit-rust`. A quick fix would
 have been to align the spec to the reference implementation and move on, but (after discussing it with the biscuit
-early adopters, we decided to take this opportunity to ship a couple breaking changes that had not made it in biscuit
-2.0.
+early adopters, we decided to take this opportunity to ship a couple breaking changes that had not made it in the first
+2.0 release.
 
 After discussing with early biscuit adopters, we felt these breaking changes were important enough to be shipped immediately,
 while biscuit v2.0 deployment is still limited.
+
+## Block version update
+
+The minimum block version for v2 biscuits is now `3`:
+biscuits created with biscuit-rust 2.0.1, biscuit-haskell 0.2.0.1, biscuit-wasm 0.1.3, biscuit-java 2.0.0,
+and biscuit-go 1.0.0 won't be supported anymore.
 
 ## Block scoping
 
