@@ -28,7 +28,7 @@ Offline attenuation unlocks powerful delegation patterns, without needing to sup
 
 Here is what a biscuit looks like: the left-hand side shows you the encoded token, while the right-hand side shows its contents: the first block (called the _authority block_) gives us what the token grants access to, while the two other blocks restrict how the token can be used. Only the authority block can be created by the token emitter, while the other blocks can be freely added by intermediate parties (_offline attenuation_).
 
-<bc-token-printer biscuit="ErEBCkcKBWZpbGUxCgRyZWFkCgVmaWxlMgoFd3JpdGUYAiIMCgoIBBICGAcSAhgIIgwKCggEEgIYCRICGAgiDAoKCAQSAhgHEgIYChIkCAASIPDO-114IUTIGGx9OmnKx8s9VlfSUo0ZUGp30u6V2-fzGkCjGcwLyNuqXmP5GOIefbBvqAqWyIrLQ0gP2wOCpzfK3tebojcnvKcJYIdhe6tmJQUzns0NkZuzF5PmiSLdNsINGpwBCjIKBmNoZWNrMRgCMiYKJAoGCAsSAggCEgYIAhICCAISBggDEgIYCBIKCAQSAggCEgIYCBIkCAASIEj_cN0LNVf1luHuoGBc7a5u-nsABIHnHe11KcnSsr9pGkC2n6PB3wYlWrt_aIcsfpfzervjxwDj510e1RWrO0RLy8ZJJf8SAau-QATYn2j6PU8XcZi8NJD1Z8hg6-V_L-8MGogBCh4KBmNoZWNrMhgCMhIKEAoGCAwSAhgHEgYIAhICGAcSJAgAEiD2K6xN4msa4tYaSsxmeN_JveHBDoBHPHNTgR9oK5rC1RpAGpALWu-VhFdEopFCsbSW0uFlAKsyMvNtUKwLWFb5fq1ngdeKNcrZnUASc7MzX60Wv20DclchDuv6K7QixcMdByIiCiDp6ahTKwyXJbyHCFnHtAGRvN9j1I2TQr0iSYVJ7jodug==">
+<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiAs2CFWr5WyHHWEiMhTXxVNw4gP7PlADPaGfr_AQk9WohpA6LZTjFfFhcFQrMsp2O7bOI9BOzP-jIE5PGhha62HDfX4t5FLQivX5rUhH5iTv2c-rd0kDSazrww4cD1UCeytDSIiCiCfMgpVPOuqq371l1wHVhCXoIscKW-wrwiKN80vR_Rfzg==">
 </bc-token-printer>
 
 ## Biscuit is a policy language

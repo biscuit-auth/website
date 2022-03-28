@@ -55,7 +55,7 @@ Now we have a secret key and an authority block, we can go ahead and generate a 
 
 ```
 ❯ biscuit generate --private-key-file key.secret authority.datalog
-EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBSIiCiBZgsoaMn4jXN8-boHthy2IJqADpZlQI5f33-5h5_4ftQ==
+En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==
 ```
 
 You can inspect the generated biscuit with `biscuit inspect`
@@ -63,23 +63,24 @@ You can inspect the generated biscuit with `biscuit inspect`
 ```
 ❯ biscuit inspect -
 Please input a base64-encoded biscuit, followed by <enter> and ^D
-EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBSIiCiBZgsoaMn4jXN8-boHthy2IJqADpZlQI5f33-5h5_4ftQ==
+En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==
 Authority block:
 == Datalog ==
 user("1234");
 
 == Revocation id ==
-e29a2a4d10de63933107b8f25638f7b0bf30b40878348eb8d003690cacd7829c34974664650ab16b3fe7e904ff065d7e62da79b51ea6e83b0490bc6bb7718805
+a2532bf570cfed3e38aa0757c6dba67363f73bdde90876864ae054b37fdff27b1027b354e8f764ba3648312b73109dfa0839f16b04998d400aa133be6b57020d
 
 ==========
 
 🙈 Public key check skipped 🔑
 🙈 Datalog check skipped 🛡️
+
 ```
 
 Biscuit also provides web components that let you inspect biscuits in the browser:
 
-<bc-token-printer biscuit="EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBSIiCiBZgsoaMn4jXN8-boHthy2IJqADpZlQI5f33-5h5_4ftQ==" readonly="true"></bc-token-printer>
+<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==" readonly="true"></bc-token-printer>
 
 ## Authorizing a biscuit
 
@@ -127,21 +128,22 @@ With all that done, we can go ahead and check our biscuit
 ```
 ❯ biscuit inspect - --verify-with-file authorizer.datalog --public-key 41e77e842e5c952a29233992dc8ebbedd2d83291a89bb0eec34457e723a69526
 Please input a base64-encoded biscuit, followed by <enter> and ^D
-EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBSIiCiBZgsoaMn4jXN8-boHthy2IJqADpZlQI5f33-5h5_4ftQ==
+En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==
 Authority block:
 == Datalog ==
 user("1234");
 
 == Revocation id ==
-e29a2a4d10de63933107b8f25638f7b0bf30b40878348eb8d003690cacd7829c34974664650ab16b3fe7e904ff065d7e62da79b51ea6e83b0490bc6bb7718805
+a2532bf570cfed3e38aa0757c6dba67363f73bdde90876864ae054b37fdff27b1027b354e8f764ba3648312b73109dfa0839f16b04998d400aa133be6b57020d
 
 ==========
 
 ✅ Public key check succeeded 🔑
-✅ Datalog check succeeded 🛡️
+✅ Authorizer check succeeded 🛡️
+Matched allow policy: allow if is_allowed($user, $resource, $op)
 ```
 
-<bc-token-printer biscuit="EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBSIiCiBZgsoaMn4jXN8-boHthy2IJqADpZlQI5f33-5h5_4ftQ==" readonly="true" showAuthorizer="true">
+<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==" readonly="true" showAuthorizer="true">
   <code class="authorizer">
 // request-specific data
 operation("write");
@@ -188,46 +190,42 @@ We can create a new token by appending this block to our existing token:
 ```
 ❯ biscuit attenuate - --block-file 'block1.datalog'
 Please input a base64-encoded biscuit, followed by <enter> and ^D
-EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBSIiCiBZgsoaMn4jXN8-boHthy2IJqADpZlQI5f33-5h5_4ftQ==
-EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBRqhAQo3CgVxdWVyeQoEdGltZRgCMiYKJAoCCAkSBggKEgIIChoWCgQKAggKCggKBiCAj_-NBgoEGgIIAhIkCAASIHhqG1rHTCB1u9kXzUhD1d_VhZGqUwPa_su7yOskeDPWGkCavMFzZaDaCv_WrHmHJyECGjW4UjSPEKjLNkxj6zGZYLU78opJ5MOUssfGtWovKlKxOdda5qNDSiU0Rs29oawIIiIKIAtxsWj2z69efzcw4idHb9M9ANr2Gh2lsF31kX0DzfjD
+En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==
+En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDRqUAQoqGAMyJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIICP_40GCgQaAggCEiQIABIgkzpUMZubXcd8K7mWNchjb0D2QXeYoWtlZw2KMryKubUaQOFlx4iPKUqKeJrEH4MKO7tjM3H9z1rYbOj-gKGTtYJ4bac0kIoWl9v_7q7qN7fQJJgj0IU4jx4_QhxIk9SeigMiIgogqvHkuXrYkoMRvKgT9zNV4BEKC5W2K8L7NcGiX44ASwE=
 ```
 
 You can inspect this new token:
 
-<bc-token-printer biscuit="EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBRqhAQo3CgVxdWVyeQoEdGltZRgCMiYKJAoCCAkSBggKEgIIChoWCgQKAggKCggKBiCAj_-NBgoEGgIIAhIkCAASIHhqG1rHTCB1u9kXzUhD1d_VhZGqUwPa_su7yOskeDPWGkCavMFzZaDaCv_WrHmHJyECGjW4UjSPEKjLNkxj6zGZYLU78opJ5MOUssfGtWovKlKxOdda5qNDSiU0Rs29oawIIiIKIAtxsWj2z69efzcw4idHb9M9ANr2Gh2lsF31kX0DzfjD" readonly="true"></bc-token-printer>
+<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDRqUAQoqGAMyJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIICP_40GCgQaAggCEiQIABIgkzpUMZubXcd8K7mWNchjb0D2QXeYoWtlZw2KMryKubUaQOFlx4iPKUqKeJrEH4MKO7tjM3H9z1rYbOj-gKGTtYJ4bac0kIoWl9v_7q7qN7fQJJgj0IU4jx4_QhxIk9SeigMiIgogqvHkuXrYkoMRvKgT9zNV4BEKC5W2K8L7NcGiX44ASwE=" readonly="true"></bc-token-printer>
 
 Now, let's try to check it again (pay special attention to the `time` fact we added in the authorizer)
 ```
 ❯ biscuit inspect - --verify-with-file authorizer.datalog --public-key 41e77e842e5c952a29233992dc8ebbedd2d83291a89bb0eec34457e723a69526
 Please input a base64-encoded biscuit, followed by <enter> and ^D
-EoIBChgKBHVzZXIKBDEyMzQYAiIICgYIBxICGAgSJAgAEiDr7M1-FDBN8u7m2BH2GDBZmfyuWTXdsJL9rtW4Ygz_mRpA4poqTRDeY5MxB7jyVjj3sL8wtAh4NI640ANpDKzXgpw0l0ZkZQqxaz_n6QT_Bl1-Ytp5tR6m6DsEkLxrt3GIBRqhAQo3CgVxdWVyeQoEdGltZRgCMiYKJAoCCAkSBggKEgIIChoWCgQKAggKCggKBiCAj_-NBgoEGgIIAhIkCAASIHhqG1rHTCB1u9kXzUhD1d_VhZGqUwPa_su7yOskeDPWGkCavMFzZaDaCv_WrHmHJyECGjW4UjSPEKjLNkxj6zGZYLU78opJ5MOUssfGtWovKlKxOdda5qNDSiU0Rs29oawIIiIKIAtxsWj2z69efzcw4idHb9M9ANr2Gh2lsF31kX0DzfjD
+En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDRqUAQoqGAMyJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIICP_40GCgQaAggCEiQIABIgkzpUMZubXcd8K7mWNchjb0D2QXeYoWtlZw2KMryKubUaQOFlx4iPKUqKeJrEH4MKO7tjM3H9z1rYbOj-gKGTtYJ4bac0kIoWl9v_7q7qN7fQJJgj0IU4jx4_QhxIk9SeigMiIgogqvHkuXrYkoMRvKgT9zNV4BEKC5W2K8L7NcGiX44ASwE=
 Authority block:
 == Datalog ==
 user("1234");
 
 == Revocation id ==
-e29a2a4d10de63933107b8f25638f7b0bf30b40878348eb8d003690cacd7829c34974664650ab16b3fe7e904ff065d7e62da79b51ea6e83b0490bc6bb7718805
+a2532bf570cfed3e38aa0757c6dba67363f73bdde90876864ae054b37fdff27b1027b354e8f764ba3648312b73109dfa0839f16b04998d400aa133be6b57020d
 
 ==========
 
 Block n°1:
 == Datalog ==
-check if time($time), $time <= 2021-12-20T00:00:00+00:00;
+check if time($time), $time <= 2021-12-20T00:00:00Z;
 
 == Revocation id ==
-9abcc17365a0da0affd6ac79872721021a35b852348f10a8cb364c63eb319960b53bf28a49e4c394b2c7c6b56a2f2a52b139d75ae6a3434a253446cdbda1ac08
+e165c7888f294a8a789ac41f830a3bbb633371fdcf5ad86ce8fe80a193b582786da734908a1697dbffeeaeea37b7d0249823d085388f1e3f421c4893d49e8a03
 
 ==========
 
 ✅ Public key check succeeded 🔑
-is_allowed($user, $res, $op) <-
-  user($user),
-  resource($res),
-  operation($op),
-  right($user, $res, $op)
-❌ Datalog check failed 🛡️
+❌ Authorizer check failed 🛡️
+An allow policy matched: allow if is_allowed($user, $resource, $op)
 The following checks failed:
-[Block(FailedBlockCheck { block_id: 1, check_id: 0, rule: "check if time($time), $time <= 2021-12-20T00:00:00+00:00" })]
+  Block 1 check: check if time($time), $time <= 2021-12-20T00:00:00Z
 ```
 
 Here it failed because the date provided in the authorizer (`time(2021-12-21T20:00:00Z)`) is greater
