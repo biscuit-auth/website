@@ -87,11 +87,15 @@ Here are the currently defined binary operations:
 * less or equal, defined on integers and dates, returns a boolean `<=`
 * greater or equal, defined on integers and dates, returns a boolean `>=`
 * equal, defined on integers, strings, byte arrays, dates, set, returns a boolean `==`
-* contains takes a set and another value as argument, returns a boolean. Between two sets, indicates if the first set is a superset of the second one `$set.contains(1)`
+* contains takes either:
+  * a set and another value as argument, returns a boolean. Between two sets, indicates if the first set is a superset of the second one `$set.contains(1)`
+  * two strings, and returns a boolean, indicating if the second string is a substring of the first `"a long string".contains("long")`
 * prefix, defined on strings, returns a boolean `$str.starts_with("hello")`
 * suffix, defined on strings, returns a boolean `$str.ends_with("world")`
 * regex, defined on strings, returns a boolean `$str.matches("ab?c")`
-* add, defined on integers, returns an integer `+`
+* add, defined:
+  * on integers, returns an integer `+`
+  * on strings, concatenates two strings `"a long" + " string"`
 * sub, defined on integers, returns an integer `-`
 * mul, defined on integers, returns an integer `*`
 * div, defined on integers, returns an integer `/`

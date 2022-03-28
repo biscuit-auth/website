@@ -19,7 +19,7 @@ top = false
 In the cabal file:
 
 ```
-biscuit-haskell ^>= 0.2
+biscuit-haskell ^>= 0.2.1
 ```
 
 ## Create a key pair
