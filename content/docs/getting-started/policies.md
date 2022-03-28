@@ -113,7 +113,7 @@ verifier's side knows the root public key and, upon receiving the request,
 will deserialize the token and verify its signature, thus authenticating
 the token.
 
-<bc-token-printer biscuit="EocBCh0KBHVzZXIKCXVzZXJfMTIzNBgCIggKBggHEgIYCBIkCAASIIPrUMvLX3ott2ZS3NDj_mEyaljWpg66t2vVGYrLeKE2GkDSsL9rpeAWGz3h9X6xXAw26xMgGh8oHL_x6e1uZCOGyXlq7NKxkPR9q1CU8_5GlR1Hk20qUYkHTlNX8NzmowYGIiIKIAQ6WdXjpxXh6xLqyA14fI6ZGbcsK9odaAoEx9Cs59r2"></bc-token-printer>
+<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw=="></bc-token-printer>
 
 
 Here the token carries a single block, `authority`, that is the initial block containing basic rights, which can be refined in subsequent blocks.
@@ -188,7 +188,7 @@ Now, what if we wanted to limit access to reading `/folder1/hello.txt` in
 We could ask the authorization server to generate a token with only that specific
 access:
 
-<bc-token-printer biscuit="EqUBCjsKC2J1Y2tldF81Njc4ChIvZm9sZGVyMS9oZWxsby50eHQKBHJlYWQYAiIQCg4IBBICGAcSAhgIEgIYCRIkCAASIFmurdZP3Bxp7Y7KU4uMHfn8_DvPNNCtY1keOYHAtzDlGkCp_FQE6mssE5QKKZZKJXYU-fBMlZoqk7vFoNWEJsCjfbTTJ13adV-X3BIDmgix3MtjeU5jNRdzT7ukUYWX4moFIiIKIIrwKKUVBI2l0Ur3VhzUVDOJa5Z3jbirRUUEyUaVH8jK"></bc-token-printer>
+<bc-token-printer biscuit="EqEBCjcKC2J1Y2tldF81Njc4ChIvZm9sZGVyMS9oZWxsby50eHQYAyISChAIBBIDGIAIEgMYgQgSAhgAEiQIABIgCxu0Xjo6dUhbxvvSZWXktNjkYwNVCJdX4Oc0VjbzFMYaQDdAHC244NGJcyhz75EqL56BnrOrquIOS5kW-hMoTVmFP846WGSQEeMhnyWhB6_ibg8HCtlrZ2beihSul3lEnwQiIgogFHWo9rDbhDCZbh3gsUjbn-8rCGhpmukxsphfZKJKoZM="></bc-token-printer>
 
 Without a `user`, the verifier would be unable to generate more `right` facts
 and would only have the one provided by the token.
@@ -196,7 +196,7 @@ and would only have the one provided by the token.
 But we could also take the first token, and restrict it by adding a block containing
 a new check:
 
-<bc-token-printer biscuit="EocBCh0KBHVzZXIKCXVzZXJfMTIzNBgCIggKBggHEgIYCBIkCAASIIPrUMvLX3ott2ZS3NDj_mEyaljWpg66t2vVGYrLeKE2GkDSsL9rpeAWGz3h9X6xXAw26xMgGh8oHL_x6e1uZCOGyXlq7NKxkPR9q1CU8_5GlR1Hk20qUYkHTlNX8NzmowYGGrYBCkwKBXF1ZXJ5CgtidWNrZXRfNTY3OAoSL2ZvbGRlcjEvaGVsbG8udHh0CgRyZWFkGAIyGgoYCgIICRIKCAISAhgKEgIYCxIGCAMSAhgMEiQIABIgD1TwTlGCPt97O9PwxHXm_f-Z1gBdhmNQzLm0FBLn9wUaQEtZ-OOxmVbp7ahlGbjOMOaUk5F_F1kwPiFUSF02sWMWDI5uwBsp2gpGiyRuPd3wneA2ZU0H3wDNjXAM1j-LdQoiIgogCCMQbcjX-YsOBZJeWLR8wNu9b7RpdxhQnk4d5ezXjuw="></bc-token-printer>
+<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDRqrAQpBCgtidWNrZXRfNTY3OAoSL2ZvbGRlcjEvaGVsbG8udHh0GAMyHAoaCgIIGxIMCAISAxiBCBIDGIIIEgYIAxICGAASJAgAEiBl-6CdFUkuctDhcpZv7_xra-IVXuuaC5hBKgOZbPdVoRpAslJIfbaa076hHmML-VhU7t-73iaiHWZu95G7AFFiPEuPIygBlmcxP5MZh_H4wN-TDLdy8JwcRazvajhhwMVNBCIiCiDERGgv9mgdpHxUp16L83cjMLzYQAu9_C5KESRC1dmNSA=="></bc-token-printer>
 
 With that token, if the holder tried to do a `PUT /bucket_5678/folder1/hello.txt`
 request, we would end up with the following facts:
