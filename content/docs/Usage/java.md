@@ -25,7 +25,7 @@ In `pom.xml`:
 <dependency>
     <groupId>com.clever-cloud</groupId>
     <artifactId>biscuit-java</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <type>jar</type>
 </dependency>
 ```
@@ -52,7 +52,7 @@ public Biscuit createToken(KeyPair root) throws Error {
 ## Create an authorizer
 
 ```java
-public Long authorize(KeyPair root, byte[] serializedToken) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, Error {
+public Tuple2<Long, WorldAuthorized> authorize(KeyPair root, byte[] serializedToken) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, Error {
     return Biscuit.from_bytes(serializedToken, root.public_key()).authorizer()
             .add_fact("resource(\"/folder1/file1\")")
             .add_fact("operation(\"read\")")
@@ -82,7 +82,7 @@ Either<Error, byte[]> sealed_token = token.seal();
 The `revocation_identifiers` method returns the list of revocation identifiers as byte arrays.
 
 ```java
-List<byte[]> revocation_ids = token.revocation_identifiers();
+List<RevocationIdentifier> revocation_ids = token.revocation_identifiers();
 ```
 
 ## Query data from the authorizer
@@ -91,6 +91,6 @@ The `query` method takes a rule as argument and extract the data from generated 
 
 ```java
 public Set<Fact> query(Authorizer authorizer) throws Error.Timeout, Error.TooManyFacts, Error.TooManyIterations, Error.Parser {
-    return authorizer.query("data($name, $id) <- user($name, $id)");
+    return authorizer.queryAll("data($name, $id) <- user($name, $id)");
 }
 ```
