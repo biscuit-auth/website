@@ -9,13 +9,14 @@ sort_by = "weight"
 template = "docs/page.html"
 +++
 
-<bc-datalog-playground>
-  <code>
+<bc-datalog-playground showBlocks="true">
+  <code class="block">
     right("/file1", "read");
     right("/file2", "read");
     right("/file2", "write");
 check if operation("read");
-
+  </code>
+  <code class="authorizer">
     operation("read");
     file("/file1");
 
