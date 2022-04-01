@@ -10,7 +10,7 @@ template = "docs/page.html"
 
 [extra]
 lead = "Implementing RBAC with Biscuit"
-toc = false
+toc = true
 top = false
 +++
 
