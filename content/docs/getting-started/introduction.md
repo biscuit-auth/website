@@ -78,7 +78,7 @@ To sum up, Biscuit provides tools to build a complete, cross platform authorizat
 
 *Getting started:* Create and verify your first biscuit in a step-by-step guide. [Getting started](../my-first-biscuit/)
 
-*Datalog reference:* Learn about the logic language who's powering biscuits [Datalog reference](../../datalog/reference/)
+*Datalog reference:* Learn about the logic language who's powering biscuits [Datalog reference](../../reference/datalog)
 
 *Policies cookbook:* Have a look at different ways to use biscuits to implement your security policies [Policies cookbook](../policies/)
 
