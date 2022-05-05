@@ -111,5 +111,5 @@ allow if true;
 </bc-datalog-playground>
 
 This method relies on the authorizer providing the facts to match on the request.
-It can be extended further by prviding more data, like a list of HTTP headers
+It can be extended further by providing more data, like a list of HTTP headers
 or a cryptographic hash of the body.
