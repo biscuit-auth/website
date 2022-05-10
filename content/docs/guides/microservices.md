@@ -43,7 +43,7 @@ infrastructure.
 The third solution tries to sidestep that point of failure by carrying a JWT from
 request to request, that carries the set of rights needed to perform them. Those
 tokens can be verified decentrally, so that reduces scaling issues. But this
-reintroduces securitiy holes: now any service can use the token it just received
+reintroduces security holes: now any service can use the token it just received
 to talk to more trusted services, and they will accept it.
 
 Those partial solutions to microservice authorization show which features we
