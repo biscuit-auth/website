@@ -41,19 +41,45 @@ with sidecar authorization services, but they introduce more complexity in the
 infrastructure.
 
 The third solution tries to sidestep that point of failure by carrying a JWT from
-request to request, that carries the set of rights needed to perform them. Those
+request to request, that holds the set of rights needed to perform them. Those
 tokens can be verified decentrally, so that reduces scaling issues. But this
 reintroduces security holes: now any service can use the token it just received
 to talk to more trusted services, and they will accept it.
 
 Those partial solutions to microservice authorization show which features we
 actually need:
-- authorization must be tied to the request, not only the service sending the request
+- authorization must be tied to the request, not only the microservice sending the request
 - authorization should be decentralized
 - a service should not be able to query more trusted services
 
-As it turns out, Biscuit tokens are well suited for this problem:
-- any service that knows the root public key can verify a token
-- tokens can be attenuated when going from one service to the next
+We can meet those demands using Biscuit tokens. in this model, we would use tokens
+holding the list of rights that a serie of requests could perform, like "update cart",
+"pay" or "send email". Any service that knws the root public key
+and the authorization policies can verify the token and check that it matches the
+request. At this point it works in the same way as JWT.
 
-Example?
+But now a microservice can take the token it received, generate an attenuated token
+from it, and send the attenuated token with its own requests to other services.
+
+As an example, let's imagine a ecommerce deployment, where we have 3 services, to
+manage the cart, perform payment and send emails.
+When we send a request to the cart management service to pay for the current cart,
+we would add a token containing the check
+`check if operation($op), ["update cart", "pay", "send email"].contains($op)`.
+The cart service verifies the request, adding the `operation("update cart")` fact
+to the authorizer. It sees that payment must be done, and a confirmation email
+sent to the customer.
+So it attenuates the token, adding the check
+`check if operation($op), ["pay", "send email"].contains($op)`, and sends
+that token along with a request to pay to the payment service.
+
+The payment service can then verifies that the request is authorized for a payment
+operation, but it cannot use that token to query the cart service. Once the payment
+is done, the payment service can attenuate further the token, adding the check
+`check if operation("send email")` and send it with a request to the email service
+to send a confirmation email to the customer. The email service cannot use that token
+to modify the cart or request a payment, it is limited only to the task it can perform.
+
+By relying on attenuation, we can make sure that each service only has the rights for
+the tasks under its responsibility or that of servces further in the chain, tying
+authorization to each request and limiting the blast radius of a service compromise.
