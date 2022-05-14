@@ -48,13 +48,14 @@ to talk to more trusted services, and they will accept it.
 
 Those partial solutions to microservice authorization show which features we
 actually need:
+
 - authorization must be tied to the request, not only the microservice sending the request
 - authorization should be decentralized
 - a service should not be able to query more trusted services
 
 We can meet those demands using Biscuit tokens. in this model, we would use tokens
-holding the list of rights that a serie of requests could perform, like "update cart",
-"pay" or "send email". Any service that knws the root public key
+holding the list of rights that a series of requests could perform, like "update cart",
+"pay" or "send email". Any service that knows the root public key
 and the authorization policies can verify the token and check that it matches the
 request. At this point it works in the same way as JWT.
 
@@ -73,7 +74,7 @@ So it attenuates the token, adding the check
 `check if operation($op), ["pay", "send email"].contains($op)`, and sends
 that token along with a request to pay to the payment service.
 
-The payment service can then verifies that the request is authorized for a payment
+The payment service can then verify that the request is authorized for a payment
 operation, but it cannot use that token to query the cart service. Once the payment
 is done, the payment service can attenuate further the token, adding the check
 `check if operation("send email")` and send it with a request to the email service
@@ -81,5 +82,5 @@ to send a confirmation email to the customer. The email service cannot use that 
 to modify the cart or request a payment, it is limited only to the task it can perform.
 
 By relying on attenuation, we can make sure that each service only has the rights for
-the tasks under its responsibility or that of servces further in the chain, tying
+the tasks under its responsibility or that of services further in the chain, tying
 authorization to each request and limiting the blast radius of a service compromise.
