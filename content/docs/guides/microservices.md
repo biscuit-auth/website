@@ -19,7 +19,8 @@ It can trigger other requests to other services, and those can then contact
 another set of services.
 
 Authorizing those requests is challenging, because these services have varying
-levels of trust. The API gateway would typically be highly trusted, while a service
+levels of trust. The API gateway, where user request are initially received,
+ would typically be highly trusted, while a service
 at the end of a chain should only be trusted to perform its own task. If one of those
 services were compromised, we want to limit its access to other services and data.
 
