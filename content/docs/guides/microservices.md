@@ -47,6 +47,8 @@ tokens can be verified decentrally, so that reduces scaling issues. But this
 reintroduces security holes: now any service can use the token it just received
 to talk to more trusted services, and they will accept it.
 
+<img src="/img/microservices-jwt.svg" style="width: 100%" />
+
 Those partial solutions to microservice authorization show which features we
 actually need:
 

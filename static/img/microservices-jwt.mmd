@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant User
+    participant A
+    participant B
+    User->>A: request 1 [JWT]
+    A->>B: request 2 [JWT]
+    loop Impersonation
+        B->>B: Keeps the JWT after validation
+    end
+    B-->>A: response 2
+    A-->>User: response 1
+    B->>A: 😈 impersonation request [JWT]
+
