@@ -3,29 +3,29 @@ sequenceDiagram
     participant A
     participant B
     participant C
-    User->>A: request 1
+    User->>A: update cart
     Note over User,A: check if operation($op), <br />["update cart", "pay", "send email"]<br/>.contains($op)
-    loop Authorization
+    loop
         A->>A: operation("update cart") ✔️
     end
-    A->>B: request 2
-    Note over A,B: <br/>check if operation($op),<br/>["update cart", "pay", "send email"].contains($op)<br/>-<br/>check if operation($op), ["pay","send email"].contains($op)
-    loop Authorization
-        B->>B: operation("pay") ✔️
+    A->>B: pay
+    Note over A,B: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)
+    loop
+        B->>B: operation( "pay" ) ✔️ 
     end
-    B->>C: request 3
-    Note over B,C: <br/>check if operation($op),<br/>["update cart", "pay", "send email"].contains($op)<br/>-<br/>check if operation($op), ["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
-    loop Authorization
+    B->>C: send email
+    Note over B,C: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
+    loop
         C->>C: operation("send email") ✔️
     end
      
-    Note over C: Compromised service C retains Biscuit from request 3
+    Note over C: Compromised service C retains Biscuit from request
     C-->>B: response 3
     B-->>A: response 2
     A-->>User: response 1
-    C->>A: 😈 impersonation request
-    Note over C,A: <br/>check if operation($op),<br/>["update cart", "pay", "send email"].contains($op)<br/>-<br/>check if operation($op), ["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
-    loop Authorization
+    C->>A: 😈 update cart
+    Note over C,A: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
+    loop
         A->>A: operation("update cart") ❌
     end
 
