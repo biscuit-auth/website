@@ -77,6 +77,8 @@ So it attenuates the token, adding the check
 `check if operation($op), ["pay", "send email"].contains($op)`, and sends
 that token along with a request to pay to the payment service.
 
+<img src="/img/microservices-biscuit1.svg" style="width: 100%" />
+
 The payment service can then verify that the request is authorized for a payment
 operation, but it cannot use that token to query the cart service. Once the payment
 is done, the payment service can attenuate further the token, adding the check
