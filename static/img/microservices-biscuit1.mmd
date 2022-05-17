@@ -1,31 +1,28 @@
 sequenceDiagram
-    participant User
-    participant A
-    participant B
-    participant C
-    User->>A: update cart
-    Note over User,A: check if operation($op), <br />["update cart", "pay", "send email"]<br/>.contains($op)
+    participant Cart API
+    participant Payment service
+    participant Email service
+    Note over Cart API: check if operation($op), <br />["update cart", "pay", "send email"]<br/>.contains($op)
     loop
-        A->>A: operation("update cart") ✔️
+        Cart API->>Cart API: operation("update cart") ✔️
     end
-    A->>B: pay
-    Note over A,B: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)
+    Cart API->>Payment service: pay
+    Note over Cart API,Payment service: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)
     loop
-        B->>B: operation( "pay" ) ✔️ 
+        Payment service->>Payment service: operation( "pay" ) ✔️ 
     end
-    B->>C: send email
-    Note over B,C: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
+    Payment service->>Email service: send email
+    Note over Payment service,Email service: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
     loop
-        C->>C: operation("send email") ✔️
+        Email service->>Email service: operation("send email") ✔️
     end
      
-    Note over C: Compromised service C retains Biscuit from request
-    C-->>B: response 3
-    B-->>A: response 2
-    A-->>User: response 1
-    C->>A: 😈 update cart
-    Note over C,A: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
+    Note over Email service: Compromised service C retains Biscuit from request
+    Email service-->>Payment service: Ok
+    Payment service-->>Cart API: Ok
+    Email service->>Cart API: 😈 update cart
+    Note over Email service,Cart API: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
     loop
-        A->>A: operation("update cart") ❌
+        Cart API->>Cart API: operation("update cart") ❌
     end
 
