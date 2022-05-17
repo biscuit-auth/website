@@ -26,6 +26,10 @@ jobs:
           ls ../static
           ls ../static/assets
           cd ..
+      - name: Install MermaidJS CLI
+        run: |
+          npm install @mermaid-js/mermaid-cli
+          ./mmd.sh
       - name: Install Zola
         run: |
           #sudo snap install --edge zola

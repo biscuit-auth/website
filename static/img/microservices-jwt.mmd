@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant User
+    participant A
+    participant B
+    User->>A: request 1 [JWT]
+    A->>B: request 2 [JWT]
+    Note over B: Compromised service B retains JWT from request 2
+    B-->>A: response 2
+    A-->>User: response 1
+    B->>A: 😈 impersonation request [JWT]
+
