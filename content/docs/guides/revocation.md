@@ -67,7 +67,41 @@ every service
 So handling revocation is adding some shared state, but much more limited than what we would
 have with a fully centralized architecture.
 
-How to implement revocation in our infrastructure?
+## How to implement revocation in our infrastructure?
+
+We need a reliable way to transmit revocation information to services. That will depend on
+how quickly we want to disseminate it, and how much complexity we can bear.
+
+### The basic solution: download the revocation list at startup
+
+In some cases, like communication betwen automated services, revocation is rare, mostly when
+a service is stopped, so the revocation list is mostly static and small. If we can accept some
+delay in synchronization, we can have services download the revocation list at startup. They
+will check tokens from an in memory list, that will stay the same for the entire life of the
+service.
+
+The tradeoff here is that if we need to revoke a token urgently, we will need to redeploy
+a lot of services at once.
+
+Since the revocation list is small and static, it can be stored as a file in an object
+store like S3, and downloaded via HTTP. That file can be updated independently whenever
+a service stops, or when one of the token expires.
+
+### Slightly more advanced: download the revocation list regularly
+
+The natural next step from the previous solution: instead of downloading the list once, it
+is downloaded regularly tokeep it up to date. There is still a gap between revocation and
+its deployment, but that gap is configurable, we can decide how often a service checks
+the new list.
+
+The list can still be stored in an object store. It is a good idea to rely on HTTP caching
+solutions like the `ETag` or `If-Modified-Since` headers. If the revocation list grows
+and/or becomes more dynamic, this solution will incur a lot of traffic.
+
+### Download diffs
+
+### Queue based systems
+
 
 TODO:
 - we need all services to know about the revocation information quickly enough (once a token
