@@ -14,6 +14,61 @@ toc = false
 top = false
 +++
 
+## Why should we plan for token revocation?
+
+There are two competing approaches to session management in authorization, that will drive
+architectural decisions:
+- in *stateful* systems, all authorizations are performed through one service or database
+that olds the list of currently active sessions
+- in *stateless* systems, authorization can be performed independently in any service, only
+using information from the token and the service. In particular, the service cannot know
+about all of the currently active sessions
+
+Those two solutions are often compared on their ability to close a session. Why? Can't we
+just set an expiration date? Even with expiration date we would still need a way to close
+a session, to implement the log out functionality. That feature is comon, expected by users,
+and needed in multiple situations (public computer, disconnecting sessions from a stolen
+phone...)?
+
+In stateful systems, closing a session is easy: delete the session's information from the
+database and that's it. In stateless systems, this is more complex: how do we make sure
+all services know that the session is invalid? That means reintroducing some shared state,
+so is the stateless design impossible after all? Shouldn't we go back to stateful systems?
+
+If the architecture we are designing can rely on a central state, it will be the simplest
+approach and probably the right solution. But there are good reasons to choose the stateless
+design:
+- **scaling**: a central authorization service that is queried on every request is a single point
+of failure for the entire system. If it is down, nobody can log in, but existing sessions will
+fail too. A stateless approach will decouple session creation from authorization, so existing
+sessions can still work when the authentication service fails.
+- **isolation**: the service receiving the request might be less trusted and should not be
+able to access session information.
+- **authentication delegation**: authentication could be in a separate service (example: SSO)
+that can't be queried on every request. That service could even be managed by a different
+company.
+
+In those cases, separating authorization from session creation makes sense, but then how do
+we close a session? It is usually done through token revocation: the authorizer needs to
+know a list of tokens that must be refused, and that list changes dynamically, so we are
+reintroducing some state in the system.
+
+But revocation has properties that make it nice to implement in stateless architectures:
+- we do not need to know about all of the tokens, only those that were revoked, which will
+be much smaller
+- the list of revoked tokens will naturally grow, but if tokens have an expiration date, they
+can be purged from the list after a while
+- it is read oriented and highly cacheable: once a token was added to the revocation list,
+we won't modify its entry (except when purging), so we don't need synchronization or consensus
+- revocation lists do not hold any critical or private information, they can be shared with
+every service
+
+TODO:
+expiration tips: short expiration with regular token exchange
+do not limit tokens per IP but per world region and per user agent: IP can change a lot in 
+a session(mobile, etc) but sessions rarely jump quickly over the world or change user agent
+
+
 ## Revocation identifiers
 
 Biscuit tokens are bearer tokens. Revoking bearer tokens is usually done through revocation lists: a list of
