@@ -28,7 +28,8 @@ Those two solutions are often compared on their ability to close a session. Why?
 just set an expiration date? Even with expiration date we would still need a way to close
 a session, to implement the log out functionality. That feature is common, expected by users,
 and needed in multiple situations (public computer, disconnecting sessions from a stolen
-phone...)?
+phone...)? Even for purely service to service communication, we will need to close the access
+once the client service is decommissioned.
 
 In stateful systems, closing a session is easy: delete the session's information from the
 database and that's it. In stateless systems, this is more complex: how do we make sure
@@ -63,11 +64,34 @@ we won't modify its entry (except when purging), so we don't need synchronizatio
 - revocation lists do not hold any critical or private information, they can be shared with
 every service
 
-TODO:
-expiration tips: short expiration with regular token exchange
-do not limit tokens per IP but per world region and per user agent: IP can change a lot in 
-a session(mobile, etc) but sessions rarely jump quickly over the world or change user agent
+So handling revocation is adding some shared state, but much more limited than what we would
+have with a fully centralized architecture.
 
+How to implement revocation in our infrastructure?
+
+TODO:
+- we need all services to know about the revocation information quickly enough (once a token
+is revoked, it should soon be refused on every service)
+- start simple: get the revocation list at startup, then see how to update it
+- push VS pull?
+  - push: the authentication system sends the list of recently revoked tokens to every service,
+  possibly through a pub/sub or queue system. Drawback of this approach: we need a good inventory
+  of the system and a robust way of sending information to deployed services. Otherwise, one
+  of them might not receive updates. Advantage: as soon as a token is revoked, the revocation
+  information is pushed to services, so we're not wasting time
+  - pull: services regularly download the revocation list. Advantage: every service is responsible
+  for downloading the list, no need for a good inventory. Drawbacks: there can be a slight delay
+  in receiving updates. We might also receive alarge list (can we ask for the more recent list instead?)
+
+expiration tips: short expiration with regular token exchange
+do not limit tokens per IP but per world region and per user agent: IP can change a lot in
+a session(mobile, etc) but sessions rarely jump quickly over the world or change user agent
+- revocation ids in biscuit:
+  - might need a list of currently active tokens, or at least their root revocation id, so it can
+  be added to the revocation list when removing the session
+  - how to handle revocation of an attenuated token? We cannot just accept a list of revocation ids,
+  otherwise someone could revoke their attenuated token and all of the ancestor tokens. Send the
+  token to the authentication service, and let it find the last block's revocation id?
 
 ## Revocation identifiers
 
