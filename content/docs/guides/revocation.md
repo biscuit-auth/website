@@ -19,14 +19,14 @@ top = false
 There are two competing approaches to session management in authorization, that will drive
 architectural decisions:
 - in *stateful* systems, all authorizations are performed through one service or database
-that olds the list of currently active sessions
+that holds the list of currently active sessions
 - in *stateless* systems, authorization can be performed independently in any service, only
 using information from the token and the service. In particular, the service cannot know
 about all of the currently active sessions
 
 Those two solutions are often compared on their ability to close a session. Why? Can't we
 just set an expiration date? Even with expiration date we would still need a way to close
-a session, to implement the log out functionality. That feature is comon, expected by users,
+a session, to implement the log out functionality. That feature is common, expected by users,
 and needed in multiple situations (public computer, disconnecting sessions from a stolen
 phone...)?
 
@@ -58,7 +58,7 @@ But revocation has properties that make it nice to implement in stateless archit
 be much smaller
 - the list of revoked tokens will naturally grow, but if tokens have an expiration date, they
 can be purged from the list after a while
-- it is read oriented and highly cacheable: once a token was added to the revocation list,
+- it is read-oriented and highly cacheable: once a token was added to the revocation list,
 we won't modify its entry (except when purging), so we don't need synchronization or consensus
 - revocation lists do not hold any critical or private information, they can be shared with
 every service
