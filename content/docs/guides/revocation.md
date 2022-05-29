@@ -197,19 +197,10 @@ offset in this queue to avoid reading everything again. This requires regular ma
 the queue to remove expired tokens. With ephemeral queues, the service would need to get the initial
 state out of band then receive the stream of updates.
 
+## How the revocation service receives and stores data
+
+
 TODO:
-- we need all services to know about the revocation information quickly enough (once a token
-is revoked, it should soon be refused on every service)
-- start simple: get the revocation list at startup, then see how to update it
-- push VS pull?
-  - push: the authentication system sends the list of recently revoked tokens to every service,
-  possibly through a pub/sub or queue system. Drawback of this approach: we need a good inventory
-  of the system and a robust way of sending information to deployed services. Otherwise, one
-  of them might not receive updates. Advantage: as soon as a token is revoked, the revocation
-  information is pushed to services, so we're not wasting time
-  - pull: services regularly download the revocation list. Advantage: every service is responsible
-  for downloading the list, no need for a good inventory. Drawbacks: there can be a slight delay
-  in receiving updates. We might also receive alarge list (can we ask for the more recent list instead?)
 
 expiration tips: short expiration with regular token exchange
 do not limit tokens per IP but per world region and per user agent: IP can change a lot in
@@ -220,7 +211,3 @@ a session(mobile, etc) but sessions rarely jump quickly over the world or change
   - how to handle revocation of an attenuated token? We cannot just accept a list of revocation ids,
   otherwise someone could revoke their attenuated token and all of the ancestor tokens. Send the
   token to the authentication service, and let it find the last block's revocation id?
-
-## How the revocation service receives and stores data
-
-
