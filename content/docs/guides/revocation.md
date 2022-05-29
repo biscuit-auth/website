@@ -121,14 +121,19 @@ delay before revocation is actually deployed.
 ### Queue based systems
 
 When we want a more dynamic solution, where revocation spreads as soon as possible, we should
-instead rely on a queue based system, like RabbitMQ or Kafka. In this architecture, every
-service subscribes on a queue on startup, and receive newly revoked tokens as they are published.
+instead rely on a queue based system, like RabbitMQ or Kafka, or even simpler with Server Sent
+Events or WebSockets. In this architecture, every service subscribes on a queue on startup, and
+receive newly revoked tokens as they are published.
 
 This is the safest solution, as tokens are revoked everywhere as quickly as possible. It is also
 more complex to deploy because it needs a queueing system that must be monitored, scaled, etc.
 
-how to get the initial state
-how to purge the queue (if queues are not ephemeral)
+How to use it will depend on the kind of queue provided by your system. With durable queues, a
+new service would read all of the messages from the beginning, then receive a new message for a new
+revoked token. If the service disconnects or restarts, it could reuse a saved local state and an
+offset in this queue to avoid reading everything again. This requires regular maintenance on
+the queue to remove expired tokens. With ephemeral queues, the service would need to get the initial
+state out of band then receive the stream of updates.
 
 TODO:
 - we need all services to know about the revocation information quickly enough (once a token
