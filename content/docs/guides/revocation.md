@@ -36,6 +36,9 @@ The biscuit spec (and libraries) provide you with:
  - a way to identify groups of tokens derived from the same parent token
  - a way to reject tokens based on their ids during authorization
 
+Biscuit's revocation ids are unique and generated directly from the token's structure, there is no need to add
+them explicitely, as would be done with Macaroons or the  "jti" claim in JWT.
+
 The biscuit spec _does not mandate_ how to publish revoked ids within your system;
 that depends a lot on the architecture and constraints of the systems.
 You can start simple with static revocation lists read through environment variables, and migrate to more complex systems as needed.
@@ -199,15 +202,26 @@ state out of band then receive the stream of updates.
 
 ## How the revocation service receives and stores data
 
+The revocation service establishes the list of revoked tokens and regularly purges expired ones.
+While this looks simple, there are details to consider.
+
+First, the service that creates tokens (user authentication, or microservice manager) should
+store the first block's revocation id, along with some metadata, like the creation date,
+expiration date and expected usage (user id, service id, etc). If a token expires, it is removed
+from the list. If a usr logs out or a service is shut down, the revocation id and expiration
+date are sent to the revocation service.
+
+If we want to revoke an attenuated token, there are more steps. The user cannot just provide
+the revocation ids, because we would have no way of knowing if the user is trying to revoke
+a parent token. In that case, the entire token should be presented, then we look up the root
+block's expiration date in the data we already have, we extract the list of revocation ids
+from the token, and send the latest one with the expiration date to the revocation service.
+
+All tokens should come with an expiration date, to prevent the revocation list from growing
+indefinitely.
 
 TODO:
 
 expiration tips: short expiration with regular token exchange
 do not limit tokens per IP but per world region and per user agent: IP can change a lot in
 a session(mobile, etc) but sessions rarely jump quickly over the world or change user agent
-- revocation ids in biscuit:
-  - might need a list of currently active tokens, or at least their root revocation id, so it can
-  be added to the revocation list when removing the session
-  - how to handle revocation of an attenuated token? We cannot just accept a list of revocation ids,
-  otherwise someone could revoke their attenuated token and all of the ancestor tokens. Send the
-  token to the authentication service, and let it find the last block's revocation id?
