@@ -105,8 +105,30 @@ and/or becomes more dynamic, this solution will incur a lot of traffic.
 
 ### Download diffs
 
+When the revocation list grows, it might be easier to only download the list of recently
+revoked tokens. Since that list is append-only, the easiest way might be to store the
+list in a database table with an incremented id column and give the latest id with the
+revocation list. When services try to download the revocation list, they can send
+their last known id, and the server can send the most recent changes.
+
+While this relies on a central revocation service, it can be lighter than a stateful system
+because that central service is queried out of band, on regular intervals, instead of
+queried on each request of each service.
+
+This can still be implemented over HTTP and rely on caching. It still suffers from a small
+delay before revocation is actually deployed.
+
 ### Queue based systems
 
+When we want a more dynamic solution, where revocation spreads as soon as possible, we should
+instead rely on a queue based system, like RabbitMQ or Kafka. In this architecture, every
+service subscribes on a queue on startup, and receive newly revoked tokens as they are published.
+
+This is the safest solution, as tokens are revoked everywhere as quickly as possible. It is also
+more complex to deploy because it needs a queueing system that must be monitored, scaled, etc.
+
+how to get the initial state
+how to purge the queue (if queues are not ephemeral)
 
 TODO:
 - we need all services to know about the revocation information quickly enough (once a token
@@ -131,6 +153,9 @@ a session(mobile, etc) but sessions rarely jump quickly over the world or change
   - how to handle revocation of an attenuated token? We cannot just accept a list of revocation ids,
   otherwise someone could revoke their attenuated token and all of the ancestor tokens. Send the
   token to the authentication service, and let it find the last block's revocation id?
+
+## How the revocation service receives and stores data
+
 
 ## Revocation identifiers
 
