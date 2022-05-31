@@ -220,3 +220,27 @@ from the token, and send the latest one with the expiration date to the revocati
 
 All tokens should come with an expiration date, to prevent the revocation list from growing
 indefinitely.
+
+### OAuth specific usage
+
+In OAuth based systems, API clients hold an access token, used to query the API, and a refresh
+token, used to get a new access token. The idea here is that the access token is used often
+and potentially on less trusted services, so it has a short expiration, while the refresh
+token has a longer lifetime because it is only used once in a while, and only with the
+authorization server.
+
+While it is common to see applications with a permanent refresh token, this will causes
+issues with the revocation list, causing it to grow, and current practices evolved
+towards a different approach.
+
+It is now recommended to have a refresh token with an expiration date, that can be long,
+and have that refresh token be single use. When it is sent to the authorization server
+to get a new access token, the authorization server will revoke the old refresh token
+and issue new refresh and access tokens. The interesting property here is that if the
+authorization server sees the same refresh token twice, it means that the token was
+stolen: either the thief or the legitimate client already used the refresh token, and
+the other one is ow requesting an access token too. In that case, the authorization
+server must revoke all current refresh and access tokens for this client.
+
+This solution also has the nice side effect that refresh token expiration can be much
+shorter, since it is changed any time we change an access token.
