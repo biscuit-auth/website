@@ -10,37 +10,37 @@ template = "docs/page.html"
 
 [extra]
 lead = "How to revoke a token"
-toc = false
+toc = true
 top = false
 +++
 
 ## Revocation identifiers
 
-Once a token has been created, we will need a way to invalidate need, either due to its lifecycle,
-like logging out, or decommissioning a service, or because it was compromised. Tokens can come with
-an expiration date, but those are not enough, as there will always be some delay between the leak
+Once a token has been created, we need a way to invalidate it, either due to its lifecycle,
+like logging out or decommissioning a service, or because it was compromised. Tokens can come with
+an expiration date, but they are not sufficient, as there will always be some delay between the leak
 and the expiration date. So we need a way to revoke currently existing tokens.
 
-Biscuit tokens are bearer tokens. Revoking bearer tokens is usually done through revocation lists: a list of
+Revoking bearer tokens lik biscuits is usually done through revocation lists: a list of
 tokens that are no longer accepted is shared with all verifying parties. When authorizing a biscuit token,
-the library will make sure the token has not been revoked.
+the library will look it up in the list and refuse the request if it finds it.
 
-Such a mechanism relies on being able to uniquely identify tokens: we want to be able to revoke only the tokens
-that are not valid anymore, without revoking other tokens (even tokens with the same payload but have been issued
+Such a mechanism relies on being able to uniquely identify tokens: we want to revoke only the tokens
+that are not valid anymore, without affecting other tokens (even tokens with the same content that have been issued
 to another holder). With offline attenuation, biscuits introduce another constraint: revoking a token should also
 revoke all derived tokens (else it would be trivial to circument revocation).
 
-The biscuit spec (and libraries) provide you with:
+The biscuit spec (and libraries) provides you with:
 
  - a way to uniquely identify tokens (two biscuits with the same payload and secret key will be different)
  - a way to identify groups of tokens derived from the same parent token
- - a way to reject tokens based on their ids during authorization
+ - a way to reject tokens based on that identification during authorization
 
-Biscuit's revocation ids are unique and generated directly from the token's structure, there is no need to add
+Biscuit's revocation identifiers are unique and generated directly from the token's structure, there is no need to add
 them explicitely, as would be done with Macaroons or the  "jti" claim in JWT.
 
-The biscuit spec _does not mandate_ how to publish revoked ids within your system;
-that depends a lot on the architecture and constraints of the systems.
+The biscuit spec _does not mandate_ how to publish revocation ids within your system;
+that depends a lot on the architecture and constraints.
 You can start simple with static revocation lists read through environment variables, and migrate to more complex systems as needed.
 We describe in this document various ways to achieve it.
 
@@ -74,10 +74,8 @@ check if time($date), $date <= 2018-12-20T00:00:00+00:00;
 
 ### Providing a revocation list during biscuit authorization
 
-#### In haskell
-
-[Rejecting revoked ids in haskell](../../Usage/haskell/#reject-revoked-tokens)
-
+* [in haskell](../../Usage/haskell/#reject-revoked-tokens)
+* [in rust](../../Usage/rust/#reject-revoked-tokens)
 
 ## Why should we plan for token revocation?
 
@@ -87,16 +85,16 @@ architectural decisions:
 that holds the list of currently active sessions
 - in *stateless* systems, authorization can be performed independently in any service, only
 using information from the token and the service. In particular, the service cannot know
-about all of the currently active sessions
+about all of the currently active sessions (there may not even be a concept of session)
 
 Those two solutions are often compared on their ability to close a session. Why? Can't we
-just set an expiration date? Even with expiration date we would still need a way to close
+just set an expiration date? Unfortunately, even an with expiration date we would still need a way to close
 a session, to implement the log out functionality. That feature is common, expected by users,
-and needed in multiple situations (public computer, disconnecting sessions from a stolen
-phone...)? Even for purely service to service communication, we will need to close the access
+and needed in multiple situations (ex: public computer, disconnecting sessions from a stolen
+phone). Even for purely service to service communication, we will need to close the access
 once the client service is decommissioned.
 
-In stateful systems, closing a session is easy: delete the session's information from the
+In stateful systems, closing a session is easy: we delete the session's information from the
 database and that's it. In stateless systems, this is more complex: how do we make sure
 all services know that the session is invalid? That means reintroducing some shared state,
 so is the stateless design impossible after all? Shouldn't we go back to stateful systems?
@@ -120,8 +118,8 @@ know a list of tokens that must be refused, and that list changes dynamically, s
 reintroducing some state in the system.
 
 But revocation has properties that make it nice to implement in stateless architectures:
-- we do not need to know about all of the tokens, only those that were revoked, which will
-be much smaller
+- we do not need to know about all of the tokens, only those that were revoked, so the list
+will be much smaller
 - the list of revoked tokens will naturally grow, but if tokens have an expiration date, they
 can be purged from the list after a while
 - it is read-oriented and highly cacheable: once a token was added to the revocation list,
@@ -140,7 +138,7 @@ how quickly we want to disseminate it, and how much complexity we can bear.
 ### The basic solution: read the revocation list at startup
 
 In some cases, like communication between automated services, revocation is rare, mostly when
-a service is stopped, or a token is leaked, so the revocation list is mostly static and small. If we can accept some
+a service is stopped or a token is leaked, so the revocation list is mostly static and small. If we can accept some
 manual operations, and a (slight) delay in synchronization, we can have services read the revocation list at startup. They
 will check tokens from an in memory list, that will stay the same for the entire life of the
 service (until it is restarted).
@@ -150,8 +148,9 @@ a lot of services at once.
 
 In the case where there is only one service accepting tokens, the revocation list can be read from config (a config file or environment variables).
 
-In the case where more services accept tokens, it will become necessary to have a centrally defined list that is then distributed to all services.
-Since the revocation list is small and static, it can be stored as a file in an object
+In the case where more services accept tokens, it will become necessary to have a centrally
+defined list that is then distributed to all services.
+Since the revocation list is small and changes rarely, it can be stored as a file in an object
 store like S3, and downloaded via HTTP. That file can be updated independently whenever
 a service stops, or when one of the token expires or is leaked.
 
@@ -178,7 +177,8 @@ their last known id, and the server can send the most recent changes.
 
 While this relies on a central revocation service, it can be lighter than a stateful system
 because that central service is queried out of band, on regular intervals, instead of
-queried on each request of each service.
+queried on each request of each service. Services will also be able to serve requests
+when the revocation service is down.
 
 This can still be implemented over HTTP and rely on caching. It still suffers from a small
 delay before revocation is actually deployed.
@@ -186,14 +186,15 @@ delay before revocation is actually deployed.
 ### Queue based systems
 
 When we want a more dynamic solution, where revocation spreads as soon as possible, we should
-instead rely on a queue based system, like RabbitMQ or Kafka, or even simpler with Server Sent
+instead rely on a queue based system like RabbitMQ or Kafka, or even simpler with Server Sent
 Events or WebSockets. In this architecture, every service subscribes on a queue on startup, and
 receive newly revoked tokens as they are published.
 
 This is the safest solution, as tokens are revoked everywhere as quickly as possible. It is also
-more complex to deploy because it needs a queueing system that must be monitored, scaled, etc.
+more complex to deploy because it needs a queueing system that must be monitored, scaled, etc. And
+every service must then integrate the client to connect to that queue.
 
-How to use it will depend on the kind of queue provided by your system. With durable queues, a
+Its usage will depend on the kind of queue provided by your system. With durable queues, a
 new service would read all of the messages from the beginning, then receive a new message for a new
 revoked token. If the service disconnects or restarts, it could reuse a saved local state and an
 offset in this queue to avoid reading everything again. This requires regular maintenance on
@@ -208,20 +209,14 @@ While this looks simple, there are details to consider.
 First, the service that creates tokens (user authentication, or microservice manager) should
 store the first block's revocation id, along with some metadata, like the creation date,
 expiration date and expected usage (user id, service id, etc). If a token expires, it is removed
-from the list. If a usr logs out or a service is shut down, the revocation id and expiration
+from the list. If a user logs out or a service is shut down, the revocation id and expiration
 date are sent to the revocation service.
 
 If we want to revoke an attenuated token, there are more steps. The user cannot just provide
-the revocation ids, because we would have no way of knowing if the user is trying to revoke
+the revocation ids, because we would have no way of knowing if they are trying to revoke
 a parent token. In that case, the entire token should be presented, then we look up the root
 block's expiration date in the data we already have, we extract the list of revocation ids
 from the token, and send the latest one with the expiration date to the revocation service.
 
 All tokens should come with an expiration date, to prevent the revocation list from growing
 indefinitely.
-
-TODO:
-
-expiration tips: short expiration with regular token exchange
-do not limit tokens per IP but per world region and per user agent: IP can change a lot in
-a session(mobile, etc) but sessions rarely jump quickly over the world or change user agent
