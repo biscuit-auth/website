@@ -239,7 +239,7 @@ to get a new access token, the authorization server will revoke the old refresh 
 and issue new refresh and access tokens. The interesting property here is that if the
 authorization server sees the same refresh token twice, it means that the token was
 stolen: either the thief or the legitimate client already used the refresh token, and
-the other one is ow requesting an access token too. In that case, the authorization
+the other one is now requesting an access token too. In that case, the authorization
 server must revoke all current refresh and access tokens for this client.
 
 This solution also has the nice side effect that refresh token expiration can be much
