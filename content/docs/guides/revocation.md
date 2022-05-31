@@ -21,7 +21,7 @@ like logging out or decommissioning a service, or because it was compromised. To
 an expiration date, but they are not sufficient, as there will always be some delay between the leak
 and the expiration date. So we need a way to revoke currently existing tokens.
 
-Revoking bearer tokens lik biscuits is usually done through revocation lists: a list of
+Revoking bearer tokens like biscuits is usually done through revocation lists: a list of
 tokens that are no longer accepted is shared with all verifying parties. When authorizing a biscuit token,
 the library will look it up in the list and refuse the request if it finds it.
 
@@ -37,7 +37,7 @@ The biscuit spec (and libraries) provides you with:
  - a way to reject tokens based on that identification during authorization
 
 Biscuit's revocation identifiers are unique and generated directly from the token's structure, there is no need to add
-them explicitely, as would be done with Macaroons or the  "jti" claim in JWT.
+them explicitely, as would be done with Macaroons or the  `jti` claim in JWT.
 
 The biscuit spec _does not mandate_ how to publish revocation ids within your system;
 that depends a lot on the architecture and constraints.
