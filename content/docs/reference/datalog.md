@@ -20,6 +20,16 @@ In Datalog, data is represented by facts. They come in the format `fact_name(42,
 
 All of the tasks around Datalog consists in selecting data from facts, and generating new ones.
 
+### Namespacing
+
+Fact names can contain colons (`:`). While they don’t mean anything particular to the datalog engine, they are meant as a namespace
+separator: when your rules start to grow, or if you want to provide reusable rules that don’t clash with others, you can _namespace_
+your datalog facts and rules:
+
+```
+service_a:fact_name(42);
+```
+
 ## Data types
 
 A fact contains data of the following types:
