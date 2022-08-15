@@ -120,7 +120,7 @@ cat << EOF > authority-block
 EOF
 biscuit generate --private-key-file ./login-service-private-key \
   ./authority-block \
-  --param "social_network_pubkey=$(< ./social-network-public-key)::pubkey"
+  --param "social_network_pubkey=$(< ./social-network-public-key)::pubkey" \
   > login-service-token
  
 # the user generates a request from the login-service token and asks the
