@@ -44,12 +44,12 @@ user("1234"); // the user is identified as "1234"
 check if operation("read"); // the token is restricted to read-only operations
 
 // The authorizer loads facts representing the request
-resource("admin.txt");
+resource("admin.doc");
 operation("read");
 
 // The authorizer loads the user's rights
-right("1234", "admin.txt", "read");
-right("1234", "admin.txt", "write");
+right("1234", "admin.doc", "read");
+right("1234", "admin.doc", "write");
 
 // Finally, the authorizer tests policies
 // by looking for a set of facts matching them
