@@ -29,7 +29,7 @@ import Auth.Biscuit
 
 main :: IO ()
 main = do
-  secretKey <- generateSecretKey
+  secretKey <- newSecret
   let publicKey = toPublic secretKey
   -- will print the hex-encoded secret key
   print $ serializeSecretKeyHex secretKey
