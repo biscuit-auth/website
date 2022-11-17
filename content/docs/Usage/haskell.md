@@ -29,7 +29,7 @@ import Auth.Biscuit
 
 main :: IO ()
 main = do
-  secretKey <- generateSecretKey
+  secretKey <- newSecret
   let publicKey = toPublic secretKey
   -- will print the hex-encoded secret key
   print $ serializeSecretKeyHex secretKey
@@ -43,7 +43,7 @@ main = do
 {-# LANGUAGE QuasiQuotes #-}
 import Auth.Biscuit
 
-myBiscuit :: SecretKey -> Biscuit
+myBiscuit :: SecretKey -> IO (Biscuit Open Verified)
 myBiscuit secretKey =
   -- datalog blocks are declared inline and are parsed
   -- at compile time
