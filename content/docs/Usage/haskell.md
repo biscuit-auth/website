@@ -151,8 +151,9 @@ checkBiscuit b =
 ```
 
 You can also provide custom queries that will be run against all the
-generated facts.  Be careful, only _authority_ and _authorizer_ facts are
-queried; block facts are ignored since they can't be trusted.
+generated facts.  Be careful, only facts from the _authority block_
+and the _authorizer_ are queried; block facts are ignored since they
+can't be trusted.
 
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
