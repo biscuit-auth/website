@@ -233,4 +233,4 @@ than the expiration date specified in the check (`check if time($time), $time <=
 
 ## Next steps
 
-You can learn more about datalog by following [the datalog tutorial](../datalog/) or reading [the datalog reference](../../datalog/reference/).
+You can learn more about datalog by following [the datalog tutorial](../datalog/) or reading [the datalog reference](../../reference/datalog/).
