@@ -67,7 +67,7 @@ myCheck b = do
   -- special `${}` syntax. This allows dynamic datalog generation
   -- without string concatenation
   result <- authorizeBiscuit b [authorizer|
-                                 time(${now});
+                                 time({now});
                                  operation("read");
                                  allow if true;
                                |]
@@ -86,7 +86,7 @@ import Data.Time (UTCTime)
 -- only `Open` biscuits can be attenuated
 addTTL :: UTCTime -> Biscuit Open c -> IO (Biscuit Open c)
 addTTL ttl b =
-  addBlock [block|check if time($time), $time < ${ttl}; |] b
+  addBlock [block|check if time($time), $time < {ttl}; |] b
 ```
 
 ## Seal a token
