@@ -14,12 +14,14 @@ toc = true
 top = false
 +++
 
+Biscuit tokens can be used in haskell through [`biscuit-haskell`](https://hackage.haskell.org/package/biscuit-haskell).
+
 ## Install
 
 In the cabal file:
 
 ```
-biscuit-haskell ^>= 0.2.1
+biscuit-haskell ^>= 0.3.0
 ```
 
 ## Create a key pair
@@ -64,7 +66,7 @@ myCheck :: Biscuit p Verified -> IO Bool
 myCheck b = do
   now    <- getCurrentTime
   -- datalog blocks can reference haskell variables with the
-  -- special `${}` syntax. This allows dynamic datalog generation
+  -- special `{}` syntax. This allows dynamic datalog generation
   -- without string concatenation
   result <- authorizeBiscuit b [authorizer|
                                  time({now});
@@ -142,8 +144,8 @@ checkBiscuit b =
   result <- authorizeBiscuit b [authorizer| allow if user($user); |]
   case result of
     Left a  -> throwError …
-    Right success ->
-      case getSingleVariableValue (getBindings success) "user" of
+    Right AuthorizedBiscuit{authorizationSuccess} ->
+      case getSingleVariableValue (getBindings authorizationSuccess) "user" of
         Just userId -> pure userId
         -- ^ this will only match if a unique user id is
         -- retrieved from the matched variables
@@ -151,9 +153,12 @@ checkBiscuit b =
 ```
 
 You can also provide custom queries that will be run against all the
-generated facts.  Be careful, only facts from the _authority block_
-and the _authorizer_ are queried; block facts are ignored since they
-can't be trusted.
+generated facts. By default, only facts from the _authority block_
+and the _authorizer_ are queried. Block facts can be queried either
+by appending `trusting previous` to the query (be careful, this will
+return facts coming from untrusted sources), or by appending
+`trusting {publicKey}`, to return facts coming from blocks signed by
+the specified key pair.
 
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
