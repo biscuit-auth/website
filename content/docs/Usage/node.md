@@ -16,7 +16,7 @@ top = false
 
 The NodeJS version of Biscuit can be found on [Github](https://github.com/biscuit-auth/biscuit-wasm),
 and on [NPM](https://www.npmjs.com/package/@biscuit-auth/biscuit-wasm). It wraps the
-[Biscuit Rust library]([Github](https://github.com/biscuit-auth/biscuit-rust)) in WebAsembly, and it
+[Biscuit Rust library]([Github](https://github.com/biscuit-auth/biscuit-rust)) in WebAssembly, and it
 provides both CommonJS and EcmaScript module interfaces.
 
 The methods that can fail (like `Authorizer.authorize()`) will throw an exception, containing a
