@@ -18,7 +18,7 @@ Biscuit is published as specification, along with several implementations.
 Amongst them, [`biscuit-rust`][biscuit-rust] is the reference implementation. It
 is used when programming in rust, but it also powers [`biscuit-wasm`][biscuit-wasm]
 which provides support for javascript applications (both client-side and
-server-side), [`biscuit-web-components`][biscuit-web-compenents] which provides
+server-side), [`biscuit-web-components`][biscuit-web-components] which provides
 in-browser interactive tooling.
 
 ## Biscuit v3
@@ -41,7 +41,7 @@ biscuit v3, the generated tokens will work with implementations only supporting
 implementations. It is even possible to attenuate a `v2` biscuit with `v3`
 features.
 
-## `biscuit-rust-3.0.0`
+## biscuit-rust v3.0.0
 
 The last stable release of `biscuit-rust` was `v2.2.0`, published ten months
 ago. While support for third-party blocks and other `v3` features make for
@@ -143,7 +143,7 @@ for right in rights {
 This feature is what makes possible to provide safe interpolation in `biscuit-
 wasm`.
 
-## `biscuit-wasm-0.4.0`
+## biscuit-wasm v0.4.0
 
 In addition to the [`biscuit-rust`][biscuit-rust] release, a release of
 [`biscuit-wasm`][biscuit-wasm] is planned for the upcoming days.
@@ -224,6 +224,6 @@ biscuit. There is a lot to discover!
 [biscuit-cli]: https://github.com/biscuit-auth/biscuit-cli
 [biscuit-dotnet]: https://github.com/dmunch/biscuit-net
 [biscuit-web-components]: https://github.com/biscuit-auth/biscuit-web-components
-[third-party-blocks]: ./third-party-blocks-why-how-when-who
+[third-party-blocks]: ../third-party-blocks-why-how-when-who
 [matrix]: https://matrix.to/#/!MXwhyfCFLLCfHSYJxg:matrix.org
 [outscale]: https://outscale.com
