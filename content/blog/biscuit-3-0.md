@@ -193,7 +193,29 @@ more convenient, but when paired with language injection, it also means that
 editing a datalog snippet inside your programming language benefits from syntax
 highlighting.
 
-<!-- TODO screenshots: datalog file, JS file, markdown file -->
+<figure>
+
+![A code editor with a datalog program in it](/img/biscuit-3-editor-2.png)
+
+<figcaption>Typing the contents of a biscuit token from within a code editor</figcaption>
+
+</figure>
+
+<figure>
+
+![A datalog block within a markdown document](/img/biscuit-3-editor-3.png)
+
+<figcaption>Datalog syntax highlighting within a markdown code fence</figcaption>
+
+</figure>
+
+<figure>
+
+![A datalog snippet inside a javascript typed template string](/img/biscuit-3-editor-1.png)
+
+<figcaption>Datalog syntax highlighting within javascript tagged template string</figcaption>
+
+</figure>
 
 In addition to the editor-agnostic grammar, editor-specific queries are needed
 for highlighting and AST manipulation. As of now, those queries are only written
