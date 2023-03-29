@@ -40,6 +40,23 @@ The last stable release of `biscuit-rust` was `v2.2.0`, published ten months ago
 the bulk of the changes, the library itself has been improved. The biggest improvement would be the datalog macros (introduced in `v2.2.0`) which are
 now covering all use-cases in a performant fashion.
 
+```rust
+let user_id = "1234";
+let expiration = SystemTime::now() + Duration::from_secs(86400);
+let mut authority = biscuit!(r#"
+  user({user_id});
+  check if time($time), $time < {expiration};
+  "#
+);
+
+let rights = ["read", "write"];
+for right in rights {
+  biscuit_merge!(&mut authority, r#"
+    right({right});
+  "#);
+}
+```
+
 ## `biscuit-wasm-0.4.0`
 
 In addition to the `biscuit-rust` release, a release of `biscuit-wasm` is planned for the upcoming days. `biscuit-wasm-0.4.0` will bundle all of the
@@ -48,13 +65,17 @@ rust: tagged templates.
 
 ```javascript
 let user_id = "1234";
-let token =
+let authority =
   biscuit`user(${user_id});
-          check if time($time), $time < ${new Date("2023-03-29T09:00:00Z")}`
-  .build(secretKey);
+          check if time($time), $time < ${new Date("2023-03-29T09:00:00Z")}`;
+for (let right of ["read", "write"]) {
+   authority.add_fact(fact`right(${right})`);  
+}
+
+let token = authority.build(secretKey);
 let auth = authorizer`time(${new Date()}); allow if user($u);`;
 auth.authorize();
-let facts = auth.query(`rule u($id) <- user($id)`);
+let facts = auth.query(rule`u($id) <- user($id)`);
 ```
 
 ## Other ongoing projects
