@@ -14,14 +14,18 @@ lead = "The reference implementation of rust has been released, will full suppor
 
 ## The biscuit specification and the library ecosystem
 
-Biscuit is published as specification, along with several implementations. Amongst them, [`biscuit-rust`](todo) is the reference implementation.
-It is used when programming in rust, but it also powers [`biscuit-wasm`](todo) which provides support for javascript applications (both client-side
-and server-side), [`biscuit-web-components`](todo) which provides in-browser interactive tooling.
+Biscuit is published as specification, along with several implementations.
+Amongst them, [`biscuit-rust`][biscuit-rust] is the reference implementation. It
+is used when programming in rust, but it also powers [`biscuit-wasm`][biscuit-wasm]
+which provides support for javascript applications (both client-side and
+server-side), [`biscuit-web-components`][biscuit-web-compenents] which provides
+in-browser interactive tooling.
 
 ## Biscuit v3
 
-Motivated by [third-party blocks](todo), a new specification version was released. In addition to third-party blocks, a few other changes have been
-included in the new version.
+Motivated by [third-party blocks][third-party-blocks], a new specification
+version was released. In addition to third-party blocks, a few other changes
+have been included in the new version.
 
 - support for `check all`
 - support for bitwise operators
@@ -30,15 +34,20 @@ included in the new version.
 
 ### A word on biscuit versions
 
-The currently supported biscuit versions are `v2` and `v3`. Those two versions are compatible and `v3` is opt-in: if you don't use any new feature from
-biscuit v3, the generated tokens will work with implementations only supporting `v2` biscuits. Of course, `v2` biscuits continue being supported by new
-implementations. It is even possible to attenuate a `v2` biscuit with `v3` features.
+The currently supported biscuit versions are `v2` and `v3`. Those two versions
+are compatible and `v3` is opt-in: if you don't use any new feature from
+biscuit v3, the generated tokens will work with implementations only supporting
+`v2` biscuits. Of course, `v2` biscuits continue being supported by new
+implementations. It is even possible to attenuate a `v2` biscuit with `v3`
+features.
 
 ## `biscuit-rust-3.0.0`
 
-The last stable release of `biscuit-rust` was `v2.2.0`, published ten months ago. While support for third-party blocks and other `v3` features make for
-the bulk of the changes, the library itself has been improved. The biggest improvement would be the datalog macros (introduced in `v2.2.0`) which are
-now covering all use-cases in a performant fashion.
+The last stable release of `biscuit-rust` was `v2.2.0`, published ten months
+ago. While support for third-party blocks and other `v3` features make for
+the bulk of the changes, the library itself has been improved. The biggest
+improvement would be the datalog macros (introduced in `v2.2.0`) which are now
+covering all use-cases in a performant fashion.
 
 ### Third-party blocks
 
@@ -47,7 +56,7 @@ rules. This is an exciting development, since it makes distributed auth
 patterns possible with no out-of-band synchronisation required: all required
 information can be carried in a single biscuit token.
 
-See more on [the post introducing third-party blocks](./third-party-blocks-why-how-when-who).
+See more on [the post introducing third-party blocks][third-party-blocks].
 
 ```biscuit-datalog
 // authority block, emitted by the login service.
@@ -136,11 +145,11 @@ wasm`.
 
 ## `biscuit-wasm-0.4.0`
 
-In addition to the `biscuit-rust` release, a release of `biscuit-wasm`
-is planned for the upcoming days. `biscuit-wasm-0.4.0` will bundle all of
-the improvements from `biscuit-rust-3.0.0` and will also pack JS-specific
-improvements. The most important one is the JS counterpart to datalog macros in
-rust: tagged templates.
+In addition to the [`biscuit-rust`][biscuit-rust] release, a release of
+[`biscuit-wasm`][biscuit-wasm] is planned for the upcoming days.
+`biscuit-wasm-0.4.0` will bundle all of the improvements from
+`biscuit-rust-3.0.0` and will also pack JS-specific improvements. The most
+important one is the JS counterpart to datalog macros in rust: tagged templates.
 
 This is javascript, so there is no way to move datalog parsing to compile-time,
 but at least parameter injection is handled nicely.
@@ -167,39 +176,54 @@ let facts = auth.query(rule`u($id) <- user($id)`);
 While biscuit-rust and biscuit-wasm are where most of the work happens, there
 are a few areas where things have happened.
 
-- [biscuit-cli](todo) allows manipulating and inspecting biscuits on the command
-  line;
-- [biscuit-dotnet](todo) has been released recently, providing biscuit support
-  to the dotnet platform;
-- [biscuit-web-components](todo) provide an embeddable editor and token
-  inspector.
+- [biscuit-cli][biscuit-cli] allows manipulating and inspecting biscuits on the
+  command line;
+- [biscuit-dotnet][biscuit-dotnet] has been released recently, providing biscuit
+  support to the dotnet platform;
+- [biscuit-web-components][biscuit-web-components] provide an embeddable editor
+  and token inspector.
 
 ### Syntax highlighting with tree-sitter
 
-[Tree-sitter](todo) allows to provide syntax highlighting and more advanced
-features (AST-based navigation) in a cross-editor way. There are plugins for
-emacs and neovim, and modern editors like helix support it out of the box. Not
-only this makes editing biscuit-datalog files more convenient, but when paired
-with language injection, it also means that editing a datalog snippet inside
-your programming language benefits from syntax highlighting.
+[Tree-sitter](https://tree-sitter.github.io) allows to provide syntax
+highlighting and more advanced features (AST-based navigation) in a cross-editor
+way. There are plugins for emacs and neovim, and modern editors like helix
+support it out of the box. Not only this makes editing biscuit-datalog files
+more convenient, but when paired with language injection, it also means that
+editing a datalog snippet inside your programming language benefits from syntax
+highlighting.
 
 <!-- TODO screenshots: datalog file, JS file, markdown file -->
 
-## A word on [Outscale](https://outscale.com)
+In addition to the editor-agnostic grammar, editor-specific queries are needed
+for highlighting and AST manipulation. As of now, those queries are only written
+for the [helix](https://helix-editor.com) editor, but it is a fun project to add
+support for other editors. Reach out to `clementd` on [matrix][matrix] if you
+want to try!
 
-I ([Clément Delafargue](todo)) have joined [Outscale](https://outscale.com)
+## A word on [Outscale][outscale]
+
+I ([Clément Delafargue](https://clementd.wtf)) have joined [Outscale][outscale]
 last week, and working on biscuit is now a part of my job, since Outscale is
 investing in biscuit. That's great news since it allows me to dedicate way more
 time to biscuit. Some of my coworkers will also contribute to biscuit, so we
 are planning to carry out improvements in several areas, including tutorials
 and documentation.
 
-[Outscale](https://oustcale.com) is a French IaaS cloud provider, a subsidiary
+[Outscale][outscale] is a French IaaS cloud provider, a subsidiary
 of Dassault Systèmes, providing services to customers with strong data security
 and sovereignity constraints.
 
 ## Let's have a chat!
 
-Please come have a chat on [our matrix room](https://matrix.to/#/!
-MXwhyfCFLLCfHSYJxg:matrix.org) if you have questions about biscuit. There is a
-lot to discover!
+Please come have a chat on [our matrix room][matrix] if you have questions about
+biscuit. There is a lot to discover!
+
+[biscuit-rust]: https://github.com/biscuit-auth/biscuit-rust
+[biscuit-wasm]: https://github.com/biscuit-auth/biscuit-wasm
+[biscuit-cli]: https://github.com/biscuit-auth/biscuit-cli
+[biscuit-dotnet]: https://github.com/dmunch/biscuit-net
+[biscuit-web-components]: https://github.com/biscuit-auth/biscuit-web-components
+[third-party-blocks]: ./third-party-blocks-why-how-when-who
+[matrix]: https://matrix.to/#/!MXwhyfCFLLCfHSYJxg:matrix.org
+[outscale]: https://outscale.com
