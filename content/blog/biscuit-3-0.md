@@ -143,6 +143,33 @@ for right in rights {
 This feature is what makes possible to provide safe interpolation in `biscuit-
 wasm`.
 
+### Authorizer snapshots
+
+Another addition to the biscuit spec is *authorizer snapshots*. It is possible
+to save the current state of an authorizer to a file, and then to load it back.
+
+This allows authorizer evaluation: create an authorizer, pre-evaluate rules,
+store it somewhere, and then resume execution once you have more context. This
+can be useful in systems that enforce a strict authentication/authorization
+separation.
+
+Another use-case is *post-hoc inspection*. After performing authorization, you
+can dump the full context to a file, and inspect it with the CLI afterwards. If
+you have ever tried to debug authorization issues after the fact, then you might
+find this useful.
+
+```
+> biscuit inspect-snapshot snapshot-file
+time(2023-03-30T09:39:39Z);
+user("1234");
+right("file1", "read");
+time(2023-03-30T09:39:39Z);
+
+check if time($time), $time < 2023-03-31T00:00:00Z;
+
+allow if right("file2", "read");
+```
+
 ## biscuit-wasm v0.4.0
 
 In addition to the [`biscuit-rust`][biscuit-rust] release, a release of
