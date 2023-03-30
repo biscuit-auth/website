@@ -18,7 +18,7 @@ Biscuit is published as specification, along with several implementations.
 Amongst them, [`biscuit-rust`][biscuit-rust] is the reference implementation. It
 is used when programming in rust, but it also powers [`biscuit-wasm`][biscuit-wasm]
 which provides support for javascript applications (both client-side and
-server-side), [`biscuit-web-components`][biscuit-web-components] which provides
+server-side), and [`biscuit-web-components`][biscuit-web-components] which provides
 in-browser interactive tooling.
 
 ## Biscuit v3
