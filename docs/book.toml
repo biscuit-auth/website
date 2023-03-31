@@ -1,0 +1,6 @@
+[book]
+authors = ["Clement Delafargue", "Geoffroy Couprie"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Biscuit"
