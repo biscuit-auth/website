@@ -259,7 +259,7 @@ time to biscuit. Some of my coworkers will also contribute to biscuit, so we
 are planning to carry out improvements in several areas, including tutorials
 and documentation.
 
-[Outscale][outscale] is a French IaaS cloud provider, a subsidiary
+[Outscale][outscale] is a French IaaS cloud provider, a brand
 of Dassault Systèmes, providing services to customers with strong data security
 and sovereignity constraints.
 
