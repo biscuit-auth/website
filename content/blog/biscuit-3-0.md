@@ -273,6 +273,6 @@ biscuit. There is a lot to discover!
 [biscuit-cli]: https://github.com/biscuit-auth/biscuit-cli
 [biscuit-dotnet]: https://github.com/dmunch/biscuit-net
 [biscuit-web-components]: https://github.com/biscuit-auth/biscuit-web-components
-[third-party-blocks]: ../third-party-blocks-why-how-when-who
+[third-party-blocks]: ../third-party-blocks-why-how-when-who/
 [matrix]: https://matrix.to/#/!MXwhyfCFLLCfHSYJxg:matrix.org
 [outscale]: https://outscale.com
