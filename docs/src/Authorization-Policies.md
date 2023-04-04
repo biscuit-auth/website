@@ -95,7 +95,7 @@ retrieve files, with users having access to "buckets" holding a list of files.
 
 Here is a first example token, that will hold a user id. This token only
 contains one block, that has been signed with the root private key. The
-verifier's side knows the root public key and, upon receiving the request,
+authorizer's side knows the root public key and, upon receiving the request,
 will deserialize the token and verify its signature, thus authenticating
 the token.
 
@@ -111,7 +111,7 @@ A block can contain:
  - `checks` each block can define new checks (queries that need to match in order to make the biscuit valid)
 
 Let's assume the user is sending this token with a `PUT /bucket_5678/folder1/hello.txt` HTTP
-request. The verifier would then load the token's facts and rules, along with
+request. The authorizer would then load the token's facts and rules, along with
 facts from the request:
 
 ```
@@ -121,13 +121,13 @@ resource("bucket_5678", "/folder1/hello.txt");
 time(2020-11-17T12:00:00+00:00);
 ```
 
-The verifier would also be able to load authorization data from its database,
+The authorizer would also be able to load authorization data from its database,
 like ownership information: `owner("user_1234", "bucket_1234")`,
 `owner("user_1234", "bucket_5678")` `owner("user_ABCD", "bucket_ABCD")`.
 In practice,this data could be filtered by limiting it to facts related to
 the current ressource, or extracting the user id from the token with a query.
 
-The verifier can also load its own rules, like creating one specifying rights
+The authorizer can also load its own rules, like creating one specifying rights
 if we own a specific folder:
 
 ```
@@ -154,7 +154,7 @@ owner("user_ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
 ```
 
-At last, the verifier provides a policy to test that we have the rights for this
+At last, the authorizer provides a policy to test that we have the rights for this
 operation:
 
 ```
@@ -176,7 +176,7 @@ access:
 
 <bc-token-printer biscuit="EqEBCjcKC2J1Y2tldF81Njc4ChIvZm9sZGVyMS9oZWxsby50eHQYAyISChAIBBIDGIAIEgMYgQgSAhgAEiQIABIgCxu0Xjo6dUhbxvvSZWXktNjkYwNVCJdX4Oc0VjbzFMYaQDdAHC244NGJcyhz75EqL56BnrOrquIOS5kW-hMoTVmFP846WGSQEeMhnyWhB6_ibg8HCtlrZ2beihSul3lEnwQiIgogFHWo9rDbhDCZbh3gsUjbn-8rCGhpmukxsphfZKJKoZM="></bc-token-printer>
 
-Without a `user`, the verifier would be unable to generate more `right` facts
+Without a `user`, the authorizer would be unable to generate more `right` facts
 and would only have the one provided by the token.
 
 But we could also take the first token, and restrict it by adding a block containing
@@ -198,10 +198,10 @@ owner("user_ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
 ```
 
-The verifier's policy would still succeed, but the check from block 1 would
+The authorizer's policy would still succeed, but the check from block 1 would
 fail because it cannot find `operation("read")`.
 
-By playing with the facts provided on the token and verifier sides, generating
+By playing with the facts provided on the token and authorizer sides, generating
 data through rules, and restricting access with a series of checks, it is
 possible to build powerful rights management systems, with fine grained controls,
 in a small, cryptographically secured token.

@@ -61,24 +61,24 @@ func CreateToken(root *ed25519.PrivateKey) (*biscuit.Biscuit, error) {
 func Authorize(token *biscuit.Biscuit, root *ed25519.PublicKey) error {
 	authorizer, err := token.Authorizer(*root)
 	if err != nil {
-		return fmt.Errorf("failed to create verifier: %v", err)
+		return fmt.Errorf("failed to create authorizer: %v", err)
 	}
 
 	fact1, err := parser.FromStringFact(`resource("/a/file1.txt")`)
 	if err != nil {
-		return fmt.Errorf("failed to parse verifier fact: %v", err)
+		return fmt.Errorf("failed to parse authorizer fact: %v", err)
 	}
 	authorizer.AddFact(fact1)
 
 	fact2, err := parser.FromStringFact(`operation("read")`)
 	if err != nil {
-		return fmt.Errorf("failed to parse verifier fact: %v", err)
+		return fmt.Errorf("failed to parse authorizer fact: %v", err)
 	}
 	authorizer.AddFact(fact2)
 
 	policy, err := parser.FromStringPolicy(`allow if resource("/a/file1.txt")`)
 	if err != nil {
-		return fmt.Errorf("failed to parse verifier policy: %v", err)
+		return fmt.Errorf("failed to parse authorizer policy: %v", err)
 	}
 	authorizer.AddPolicy(policy)
 
