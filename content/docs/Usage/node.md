@@ -83,8 +83,12 @@ const sealedToken = token.sealToken();
 
 ## Reject revoked tokens
 
-TODO
+```js
+const revocationIds = token.getRevocationIdentifiers();
+```
 
 ## Query data from the authorizer
 
-TODO
+```js
+const fact = authorizer.query(rule("data($id) <- user($id)"));
+```
