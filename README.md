@@ -7,3 +7,5 @@
 - `npm run build`
 - go to the root directory
 - `zola build`
+- go to the docs directory
+- `mdbook build`
