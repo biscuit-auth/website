@@ -25,14 +25,8 @@ deserialized from JSON.
 
 ## Install
 
-In `package.json`:
-
-```json
-{
-    "dependencies": {
-        "biscuit-wasm": "0.1.1"
-    }
-}
+```sh
+npm install @biscuit-auth/biscuit-wasm
 ```
 
 ## Create a root key
