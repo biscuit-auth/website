@@ -29,6 +29,14 @@ deserialized from JSON.
 npm install @biscuit-auth/biscuit-wasm
 ```
 
+⚠️ Due to some Wasm side dependencies, Node versions before v19 require the following:
+
+```js
+import { webcrypto } from 'node:crypto'
+
+globalThis.crypto = webcrypto
+```
+
 ## Create a root key
 
 ```javascript
