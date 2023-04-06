@@ -32,54 +32,53 @@ npm install @biscuit-auth/biscuit-wasm
 ⚠️ Due to some Wasm side dependencies, Node versions before v19 require the following:
 
 ```js
-import { webcrypto } from 'node:crypto'
+import { webcrypto } from 'node:crypto';
 
-globalThis.crypto = webcrypto
+globalThis.crypto = webcrypto;
 ```
 
 ## Create a root key
 
-```javascript
-const {KeyPair} = require('@biscuit-auth/biscuit-wasm');
+```js
+const { KeyPair } = require('@biscuit-auth/biscuit-wasm');
 
-let root = new KeyPair();
+const root = new KeyPair();
 ```
 
 ## Create a token
 
-```javascript
-const {Biscuit, KeyPair} = require('@biscuit-auth/biscuit-wasm');
+```js
+const { check, fact, Biscuit, KeyPair } = require('@biscuit-auth/biscuit-wasm');
 
-let builder = Biscuit.builder();
-builder.add_authority_fact("user(1234)");
-builder.add_authority_check_("check if operation(\"read\");");
-    
-let token = builder.build(root);
+const builder = Biscuit.builder();
+builder.addFact(fact("user(1234)"));
+builder.addCheck(check("check if operation(\"read\")"));
+
+const token = builder.build(root.getPrivateKey());
 ```
 
 ## Create an authorizer
 
-```javascript
-let authorizer = token.authorizer();
+```js
+const authorizer = token.getAuthorizer();
 
-authorizer.add_code("allow if user(1234); deny if true;");
-var accepted_policy = authorizer.authorize();
+authorizer.addCode("allow if user(1234); deny if true;");
+const acceptedPolicy = authorizer.authorize();
 ```
 
 ## Attenuate a token
 
-```javascript
-let block = token.create_block();
+```js
+const { block } = require('@biscuit-auth/biscuit-wasm');
 
 // restrict to read only
-block.add_check("check if operation(\"read\")");
-let attenuated_token = token.append(block);
+const attenuatedToken = token.appendBlock(block("check if operation(\"read\")"));
 ```
 
 ## Seal a token
 
-```javascript
-let sealed_token = token.seal();
+```js
+const sealedToken = token.sealToken();
 ```
 
 ## Reject revoked tokens
