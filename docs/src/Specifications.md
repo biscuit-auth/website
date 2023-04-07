@@ -42,7 +42,7 @@ block with more checks, thus restricting the rights of the new token, but they
 cannot remove existing blocks without invalidating the signature.
 
 The token is protected by public key cryptography operations: the initial creator
-of a token holds a secret key, and any verifier for the token needs only to know
+of a token holds a secret key, and any authorizer for the token needs only to know
 the corresponding public key.
 Any attenuation operation will employ ephemeral key pairs that are meant to be
 destroyed as soon as they are used.
@@ -101,7 +101,7 @@ variables bound to the corresponding values).
 
 A _check_ is a list of _query_ for which the token validation will fail if it cannot
 produce any fact. A single query needs to match for the fact to succeed.
-If any of the cheks fails, the entire verification fails.
+If any of the checks fails, the entire verification fails.
 
 An _allow policy_ or _deny policy_ is a list of _query_. If any of the queries produces something,
 the policy matches, and we stop there, otherwise we test the next one. If an
@@ -137,7 +137,7 @@ rules application does not generate any new facts, we can stop.
 
 An _integer_ is a signed 64 bits integer. It supports the following operations:
 lower than, greater than, lower than or equal, greater than or equal, equal,
-not equal, set inclusion, addition, subtraction, mutiplication, division,
+not equal, set inclusion, addition, subtraction, multiplication, division,
 bitwise and, bitwise or, bitwise xor.
 
 A _string_ is a suite of UTF-8 characters. It supports the following
@@ -155,7 +155,7 @@ A _boolean_ is `true` or `false`. It supports the following operations:
 `==`, `!=`, `||`, `&&`, set inclusion.
 
 A _set_ is a deduplicated list of terms of the same type. It cannot contain
-variables or other sets. It supports equal, not equal, , intersection, union,
+variables or other sets. It supports equal, not equal, intersection, union,
 set inclusion.
 
 #### Grammar
@@ -237,18 +237,18 @@ Example:
 
 - the token contains `right("file1", "read")` in the first block
 - the token holder adds a block with the fact `right("file2", "read")`
-- the verifier adds:
+- the authorizer adds:
   - `resource("file2")`
   - `operation("read")`
   - `check if resource($res), operation($op), right($res, $op)`
 
-The verifier's check will fail because when it is evaluated, it only sees
+The authorizer's check will fail because when it is evaluated, it only sees
 `right("file1", "read")` from the authority block.
 
 #### Scope annotations
 
 Rules (and blocks) can specify _trusted origins_ through a special `trusting` annotation. By default,
-only the current block, the authority block and the verifier are trusted. This default can be overriden:
+only the current block, the authority block and the authorizer are trusted. This default can be overriden:
 
  - at the block level
  - at the rule level (which takes precedence over block-level annotations)
@@ -271,7 +271,7 @@ are _always_ trusted.
 This scope annotation is then turned into a set of block ids before evaluation. Authorizer facts and rules are assigned a dedicated
 block id that's distinct from the authority and from the extra blocks.
 
-Only facts which origin is a _subset_ of these trusted origins are matched. The authorizer block id and the current block id are always
+Only facts whose origin is a _subset_ of these trusted origins are matched. The authorizer block id and the current block id are always
 part of these trusted origins.
 
 ### Checks
@@ -316,23 +316,23 @@ check if
   resource("file1")  // restrict to file1 resource
 ```
 
-The verifier side provides the `resource` and `operation` facts with information
+The authorizer side provides the `resource` and `operation` facts with information
 from the request.
 
-If the verifier provided the facts `resource("file2")` and
+If the authorizer provided the facts `resource("file2")` and
 `operation("read")`, the rule application of the first check would see
 `resource("file2"), operation("read"), right("file2", "read")`
 with `X = "file2"`, so it would succeed, but the second check would fail
 because it expects `resource("file1")`.
 
-If the verifier provided the facts `resource("file1")` and
+If the authorizer provided the facts `resource("file1")` and
 `operation("read")`, both checks would succeed.
 
 #### Broad authority rules
 
 In this example, we have a token with very large rights, that will be attenuated
-before giving to a user. The authority block can define rules that will generate
-facts depending on data provided by the verifier. This helps reduce the size of
+before being given to a user. The authority block can define rules that will generate
+facts depending on data provided by the authorizer. This helps reduce the size of
 the token.
 
 ```
@@ -354,7 +354,7 @@ check if
   owner("alice", $0) // defines a token only usable by alice
 ```
 
-These rules will define authority facts depending on verifier data.
+These rules will define authority facts depending on authorizer data.
 If we had the facts `resource("file1")` and
 `owner("alice", "file1")`, the authority rules will define
 `right("file1", "read")` and `right("file1", "write")`,
@@ -487,12 +487,12 @@ A fact defined in a block `n` has for origin `{n}` (a set containing only `n`).
 A fact generated by a rule defined in block `rule_block_id` that matched on facts `fact_0…, fact_n` has for origin
   `Union({rule_block_id}, origin(fact_0) …, origin(fact_n))`.
 
-### Verifier
+### Authorizer
 
-The verifier provides information on the operation, such as the type of access
+The authorizer provides information on the operation, such as the type of access
 ("read", "write", etc), the resource accessed, and more ambient data like the
 current time, source IP address, revocation lists.
-The verifier can also provide its own checks. It provides allow and deny policies
+The authorizer can also provide its own checks. It provides allow and deny policies
 for the final decision on request validation.
 
 #### Deserializing the token
@@ -501,7 +501,7 @@ The token must first be deserialized according to the protobuf format definition
 of `Biscuit`.
 
 The cryptographic signature must be checked immediately after
-deserializing. The verifier must check that the public key of the authority
+deserializing. The authorizer must check that the public key of the authority
 block is the root public key it is expecting.
 
 A `Biscuit` contains in its `authority` and `blocks` fields
@@ -513,7 +513,7 @@ The authorizer will first create a default symbol table, and will append to that
 from the `symbols` field of each block, starting from the `authority` block and all the
 following blocks, ordered by their index.
 
-The verifier will create a Datalog "world", and add to this world its own facts and rules:
+The authorizer will create a Datalog "world", and add to this world its own facts and rules:
 ambient data from the request, lists of users and roles, etc.
 
 - the facts from the authority block
@@ -524,7 +524,7 @@ ambient data from the request, lists of users and roles, etc.
 
 ##### Revocation identifiers
 
-The verifier will generate a list of facts indicating revocation identifiers for
+The authorizer will generate a list of facts indicating revocation identifiers for
 the token. The revocation identifier for a block is its signature (as it uniquely
 identifies the block) serialized to a byte array (as in the Protobuf schema).
 For each of these if, a fact `revocation_id(<index of the block>, <byte array>)` will be generated.
@@ -551,7 +551,7 @@ Returning the result:
 
 #### Queries
 
-The verifier can also run queries over the loaded data. A query is a datalog rule,
+The authorizer can also run queries over the loaded data. A query is a datalog rule,
 and the query's result is the produced facts.
 
 TODO: describe error codes
@@ -560,7 +560,7 @@ TODO: describe error codes
 
 #### deserializing
 
-TODO: same as the verifier, but we do not need to know the root key
+TODO: same as the authorizer, but we do not need to know the root key
 
 ## Format
 
@@ -904,7 +904,7 @@ access to the token itself and can't use the token's symbol table.
 
 ### Public key tables
 
-Public keys carried in `SignedBlock`s are stored as is, as they are required for verification.
+Public keys carried in `SignedBlock` are stored as is, as they are required for verification.
 
 Public keys carried in datalog scope annotations are stored in a table, to reduce token size.
 
