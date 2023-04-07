@@ -1,8 +1,0 @@
-sequenceDiagram
-    User->>+Login service: Login request
-    Login service->>-User: Token requiring a membership proof
-    User->>+Social network: Request membership proof
-    Social network->>-User: Membership proof (as a third-party block)
-    User->>User: Appends membership proof to the login service token
-    User->>+File server: Request file
-    File server->>-User: File contents
