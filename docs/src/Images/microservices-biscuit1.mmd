@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant Cart API
+    participant Payment service
+    participant Email service
+    Note over Cart API: check if operation($op), <br />["update cart", "pay", "send email"]<br/>.contains($op)
+    loop
+        Cart API->>Cart API: operation("update cart") ✔️
+    end
+    Cart API->>Payment service: pay
+    Note over Cart API,Payment service: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)
+    loop
+        Payment service->>Payment service: operation( "pay" ) ✔️ 
+    end
+    Payment service->>Email service: send email
+    Note over Payment service,Email service: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
+    loop
+        Email service->>Email service: operation("send email") ✔️
+    end
+     
+    Note over Email service: Compromised service C retains Biscuit from request
+    Email service-->>Payment service: Ok
+    Payment service-->>Cart API: Ok
+    Email service->>Cart API: 😈 update cart
+    Note over Email service,Cart API: <br/>check if operation($op),<br/>["update cart", "pay", "send email"]<br/>.contains($op)<br/>-<br/>check if operation($op),<br/>["pay","send email"].contains($op)<br/>-<br/>check if operation("send email")
+    loop
+        Cart API->>Cart API: operation("update cart") ❌
+    end
+

@@ -4,12 +4,12 @@
 
 Creating a biscuit requires two things:
 
-- a secret key that will allow receiving parties to trust the biscuit contents
+- a private key that will allow receiving parties to trust the biscuit contents
 - an authority block carrying information (and possibly restrictions)
 
-### Creating a secret key
+### Creating a private key
 
-The secret key can be generated with the biscuit CLI:
+The private key can be generated with the biscuit CLI:
 
 ```
 ❯ biscuit keypair
@@ -18,33 +18,33 @@ Private key: 473b5189232f3f597b5c2f3f9b0d5e28b1ee4e7cce67ec6b7fbf5984157a6b97
 Public key: 41e77e842e5c952a29233992dc8ebbedd2d83291a89bb0eec34457e723a69526
 ```
 
-The secret key is used to generate biscuits, while the public key can be distributed to all services who will use biscuits to authorize requests.
+The private key is used to generate biscuits, while the public key can be distributed to all services who will use biscuits to authorize requests.
 
 ### Creating a biscuit token
 
-The most important part of a biscuit is its _authority block_. It contains data that is signed with the secret key, and that can be trusted by receiving parties. The authority block is declared in
+The most important part of a biscuit is its _authority block_. It contains data that is signed with the private key, and that can be trusted by receiving parties. The authority block is declared in
 _datalog_. Datalog is a declarative logic language that is a subset of Prolog.
 A Datalog program contains "facts", which represent data, and "rules", which can generate new facts from existing ones.
 
 In our example, we will create a token that identifies its carrier as a _user_ whose user id is `"1234"`.
-To do so, we will create a file named `authority.datalog`, with the following contents:
+To do so, we will create a file named `authority.biscuit-datalog`, with the following contents:
 
-`authority.datalog`
+`authority.biscuit-datalog`
 
-```
+```rust
 user("1234");
 ```
 
 This is a datalog _fact_: the fact name is `user`, and it has a single attribute (`"1234"`). Facts can have several attributes, of various types (ints, strings, booleans, byte arrays, dates, sets).
 
-Now we have a secret key and an authority block, we can go ahead and generate a biscuit:
+Now we have a private key and an authority block, we can go ahead and generate a biscuit:
 
 ```
-❯ biscuit generate --private-key-file key.secret authority.datalog
+❯ biscuit generate --private-key 473b5189232f3f597b5c2f3f9b0d5e28b1ee4e7cce67ec6b7fbf5984157a6b97 authority.biscuit-datalog
 En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==
 ```
 
-You can inspect the generated biscuit with `biscuit inspect`
+You can inspect the generated biscuit with `biscuit inspect`:
 
 ```
 ❯ biscuit inspect -
@@ -81,9 +81,9 @@ To do so, the service provides an authorizer, built with:
 
 In our case, we'll assume the token is used for a `write` operation on the `resource1` resource.
 
-_authorizer.datalog_
+_authorizer.biscuit-datalog_
 
-```
+```rust
 // request-specific data
 operation("write");
 resource("resource1");
@@ -105,11 +105,11 @@ is_allowed($user, $res, $op) <-
 allow if is_allowed($user, $resource, $op);
 ```
 
-There's a bit more happening here: The first three facts give info about the request. Then we have ACLs (they can be declared statically for a small, static user base, or fetched from DB based on the token user).
+There's a bit more happening here: the first three facts give info about the request. Then we have ACLs (they can be declared statically for a small, static user base, or fetched from DB based on the token user).
 
 `is_allowed` is more interesting: it's a _rule_. If, given a user, a resource and an operation, there's a `right` fact that puts them all together, then we know the request can go through.
 
-With all that done, we can go ahead and check our biscuit
+With all that done, we can go ahead and check our biscuit:
 
 ```
 ❯ biscuit inspect - --verify-with-file authorizer.datalog --public-key 41e77e842e5c952a29233992dc8ebbedd2d83291a89bb0eec34457e723a69526
@@ -129,7 +129,7 @@ a2532bf570cfed3e38aa0757c6dba67363f73bdde90876864ae054b37fdff27b1027b354e8f764ba
 Matched allow policy: allow if is_allowed($user, $resource, $op)
 ```
 
-<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==" readonly="true" showAuthorizer="true">
+<bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==" readonly="true" rootPublicKey="41e77e842e5c952a29233992dc8ebbedd2d83291a89bb0eec34457e723a69526" showAuthorizer="true">
   <code class="authorizer">
 // request-specific data
 operation("write");
@@ -163,9 +163,9 @@ token will only be usable for a given period of time. In the authorizer above, w
 a `time` fact, that was not used in a policy or a check. We can add a block that will make
 sure the token is not used after a certain date.
 
-_block1.datalog_
+_block1.biscuit-datalog_
 
-```
+```rust
 check if time($time), $time <= 2021-12-20T00:00:00Z;
 ```
 
@@ -174,7 +174,7 @@ The check requires two things to suceed: first, the current time must be declare
 We can create a new token by appending this block to our existing token:
 
 ```
-❯ biscuit attenuate - --block-file 'block1.datalog'
+❯ biscuit attenuate - --block-file 'block1.biscuit-datalog'
 Please input a base64-encoded biscuit, followed by <enter> and ^D
 En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDSIiCiBPsG53WHcpxeydjSpFYNYnvPAeM1tVBvOEG9SQgMrzbw==
 En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDRqUAQoqGAMyJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIICP_40GCgQaAggCEiQIABIgkzpUMZubXcd8K7mWNchjb0D2QXeYoWtlZw2KMryKubUaQOFlx4iPKUqKeJrEH4MKO7tjM3H9z1rYbOj-gKGTtYJ4bac0kIoWl9v_7q7qN7fQJJgj0IU4jx4_QhxIk9SeigMiIgogqvHkuXrYkoMRvKgT9zNV4BEKC5W2K8L7NcGiX44ASwE=
@@ -184,7 +184,8 @@ You can inspect this new token:
 
 <bc-token-printer biscuit="En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBw-OHV3egI0IVjiC1vdB7WZ__t0FCvB2s-81PexdwuqxpAolMr9XDP7T44qgdXxtumc2P3O93pCHaGSuBUs3_f8nsQJ7NU6PdkujZIMStzEJ36CDnxawSZjUAKoTO-a1cCDRqUAQoqGAMyJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIICP_40GCgQaAggCEiQIABIgkzpUMZubXcd8K7mWNchjb0D2QXeYoWtlZw2KMryKubUaQOFlx4iPKUqKeJrEH4MKO7tjM3H9z1rYbOj-gKGTtYJ4bac0kIoWl9v_7q7qN7fQJJgj0IU4jx4_QhxIk9SeigMiIgogqvHkuXrYkoMRvKgT9zNV4BEKC5W2K8L7NcGiX44ASwE=" readonly="true"></bc-token-printer>
 
-Now, let's try to check it again (pay special attention to the `time` fact we added in the authorizer)
+Now, let's try to check it again (pay special attention to the `time` fact we added in the authorizer):
+
 ```
 ❯ biscuit inspect - --verify-with-file authorizer.datalog --public-key 41e77e842e5c952a29233992dc8ebbedd2d83291a89bb0eec34457e723a69526
 Please input a base64-encoded biscuit, followed by <enter> and ^D
@@ -217,6 +218,6 @@ The following checks failed:
 Here it failed because the date provided in the authorizer (`time(2021-12-21T20:00:00Z)`) is greater
 than the expiration date specified in the check (`check if time($time), $time <= 2021-12-20T00:00:00+00:00`).
 
-## Next steps
+## Going furhter
 
-You can learn more about datalog by following [the datalog tutorial](../datalog/) or reading [the datalog reference](../../reference/datalog/).
+You can learn more about datalog by reading [the datalog reference](./Datalog.md).

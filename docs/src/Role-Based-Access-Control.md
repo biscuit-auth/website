@@ -8,7 +8,7 @@ This makes permissions more manageable than giving them to users directly: a rol
 
 Let us imagine a space-faring package delivery company. Each member of the company has specific duties, represented by roles, that can perform specific actions.
 
-```
+```rust
 // let's define roles and associated permissions for a package delivery company
 role("admin", ["billing:read", "billing:write", "address:read", "address:write"] );
 // accountants can check the billing info and the address for invoicing
@@ -34,7 +34,7 @@ We want to check if an operation is authorized, depending on the user requesting
 
 From that user id, we would look up in the database the user's roles, and for each role the authorized operations, and load that as facts. We can then check that we have the rights to perform the operation:
 
-{% datalog() %}
+```rust
 role("admin", ["billing:read", "billing:write", "address:read", "address:write"] );
 role("accounting", ["billing:read", "billing:write", "address:read"]);
 role("support", ["address:read", "address:write"]);
@@ -66,7 +66,7 @@ allow if
   right($id, $principal, $op);
 
 deny if true;
-{% end %}
+```
 
 Why are we loading data from the database and checking the rights here, while we could do all of that as part of a SQL query? After all, Datalog is doing similar work, joining facts like we would join tables.
 
@@ -79,13 +79,13 @@ Verifying inside the policy would work, but we would not get another benefit of 
 
 <details>
 <summary>Answer</summary>
-{% display() %}
+```rust
 can_deliver($name) <-
   role($role, $permissions),
   $permissions.contains("package:deliver"),
   user_roles($id, $name, $roles),
   $roles.contains($role);
-{% end %}
+```
 </details>
 
 ## Resource specific roles
@@ -96,25 +96,25 @@ We have high priority packages that need special handling, so not everybody can 
 We will create different roles for normal and high priority packages. There are multiple ways this can be done, depending on your API and data model.
 You could have a generic role or role assignment with a "resource type" field, like this:
 
-{% display() %}
+```rust
 user_roles(3, "Leela", "high priority", ["pilot", "delivery"]);
 user_roles(3, "Leela", "low priority", ["pilot", "delivery"]);
 user_roles(4, "Fry", "low priority", ["delivery"]);
-{% end %}
+```
 
 Or we could have roles defined per resource, and users are assigned those roles:
 
-{% display() %}
+```rust
 role("low priority", "pilot", ["spaceship:drive", "address:read"]);
 role("high priority", "pilot", ["spaceship:drive", "address:read"]);
 
 user_roles(3, "Leela", "low priority", ["pilot", "delivery"]);
 user_roles(3, "Leela", "high priority", ["pilot", "delivery"]);
-{% end %}
+```
 
 Or even different types of roles:
 
-{% display() %}
+```rust
 // using a numeric id as foreign key in users
 role_high_priority("pilot", ["spaceship:drive", "address:read"]);
 role_low_priority("pilot", ["spaceship:drive", "address:read"]);
@@ -122,11 +122,11 @@ role_low_priority("pilot", ["spaceship:drive", "address:read"]);
 // we need user_role or something else
 user_high_priority(3, "Leela", ["pilot", "delivery"]);
 user_low_priority(3, "Leela", ["pilot", "delivery"]);
-{% end %}
+```
 
 Let's use the second version, and see how data is fetched from the database:
 
-{% display() %}
+```rust
 // we got this from a cookie or Authorization header
 user(3);
 // we know from the request which kind of operation we want
@@ -150,11 +150,11 @@ right($id, $principal, $operation, $priority) <-
   role($priority, $role, $permissions),
   $roles.contains($role),
   $permissions.contains($operation);
-{% end %}
+```
 
 You can explore the full example here:
 
-{% datalog() %}
+```rust
 role("low priority", "admin", ["billing:read", "billing:write", "address:read", "address:write"] );
 role("low priority","accounting", ["billing:read", "billing:write", "address:read"]);
 role("low priority","support", ["address:read", "address:write"]);
@@ -198,7 +198,7 @@ allow if
   right($id, $principal, $op, $priority);
 
 deny if true;
-{% end %}
+```
 
 ## Attenuation
 
@@ -208,7 +208,7 @@ Attenuation in Biscuit provides a good escape hatch to avoid that complexity. As
 
 Leela can instead take her own token, attenuate it to allow the delivery of high priority packages for a limited time. She can even seal the token to avoid other attenuations. We would end up with the following:
 
-{% datalog() %}
+```rust
 // we got this from the first block of the token
 user(3);
 
@@ -251,6 +251,6 @@ allow if
   right($id, $principal, $op, $priority);
 
 deny if true
-{% end %}
+```
 
 Attenuating a token does not increase rights: if suddenly Leela loses the delivery role, the check of the attenuated token could succeed but authorization would fail both for Leela and Bender because the `right` fact would not be generated.

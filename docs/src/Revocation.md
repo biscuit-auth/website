@@ -32,7 +32,7 @@ We describe in this document various ways to achieve it.
 
 ### Listing revocation ids for a token
 
-The [CLI](../../Usage/cli/#verify-a-token) can be used to inspect revocation ids:
+The [CLI](./Command-Line.md#verify-a-token) can be used to inspect revocation ids:
 
 ```
 ❯ biscuit inspect test9_expired_token.bc --raw-input
@@ -60,8 +60,8 @@ check if time($date), $date <= 2018-12-20T00:00:00+00:00;
 
 ### Providing a revocation list during biscuit authorization
 
-* [in haskell](../../Usage/haskell/#reject-revoked-tokens)
-* [in rust](../../Usage/rust/#reject-revoked-tokens)
+* [In haskell](./Haskell.md#reject-revoked-tokens)
+* [In rust](./Rust.md#reject-revoked-tokens)
 
 ## Why should we plan for token revocation?
 

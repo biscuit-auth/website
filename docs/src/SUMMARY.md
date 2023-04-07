@@ -5,9 +5,7 @@
 - [Getting Started](./Getting-Started.md)
     - [Introduction](./Introduction.md)
     - [My First Biscuit](./My-First-Biscuit.md)
-    - [Datalog Tutorial](./Datalog-Tutorial.md)
     - [Authorization Policies](./Authorization-Policies.md)
-    - [Bearer Token](./Bearer-Token.md)
 
 ## Recipes
 
@@ -33,6 +31,7 @@
 ## Reference
 
 - [Reference](./Reference.md)
+    - [Specifications](./Specifications.md)
     - [Cryptography](./Cryptography.md)
     - [Datalog](./Datalog.md)
 

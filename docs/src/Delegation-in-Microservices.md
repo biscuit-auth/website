@@ -7,8 +7,8 @@ It can trigger other requests to other services, and those can then contact
 another set of services.
 
 Authorizing those requests is challenging, because these services have varying
-levels of trust. The API gateway, where user request are initially received,
- would typically be highly trusted, while a service
+levels of trust. The API gateway, where user requests are initially received,
+would typically be highly trusted, while a service
 at the end of a chain should only be trusted to perform its own task. If one of those
 services were compromised, we want to limit its access to other services and data.
 
@@ -35,7 +35,7 @@ tokens can be verified decentrally, so that reduces scaling issues. But this
 reintroduces security holes: now any service can use the token it just received
 to talk to more trusted services, and they will accept it.
 
-<img src="/img/microservices-jwt.svg" style="width: 100%" />
+![microservices-jwt](Images/microservices-jwt.svg)
 
 Those partial solutions to microservice authorization show which features we
 actually need:
@@ -65,7 +65,7 @@ So it attenuates the token, adding the check
 `check if operation($op), ["pay", "send email"].contains($op)`, and sends
 that token along with a request to pay to the payment service.
 
-<img src="/img/microservices-biscuit1.svg" style="width: 100%" />
+![microservices-biscuit1](Images/microservices-biscuit1.svg)
 
 The payment service can then verify that the request is authorized for a payment
 operation, but it cannot use that token to query the cart service. Once the payment

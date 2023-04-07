@@ -25,7 +25,7 @@ The token then contains one block, and a final proof:
 - proof:
   - new private key
 
-<img src="/img/authority.svg" style="width: 100%" />
+![authority](Images/authority.svg)
 
 To verify that token, we need to know the root public key. With that key,
 we check the signature of the first block. Then we take the public key
@@ -55,7 +55,7 @@ The token now contains:
 - proof:
   - new private key
 
-<img src="/img/block1.svg" style="width: 100%" />
+![block1](Images/block1.svg)
 
 To verify that token, we proceed as previously, using the root public key to
 check the signature of the first block, then the public key from the first
