@@ -9,8 +9,15 @@ template = "blog/page.html"
 authors = ["clementd"]
 
 [extra]
-lead = "The reference implementation of rust has been released, will full support for the latest spec additions"
+lead = "The Biscuit reference implementation in Rust has been released, with full support for the latest spec additions"
 +++
+
+Biscuit is a specification for a cryptographically verified authorization token
+supporting offline attenuation, and a language for authorization policies based on Datalog.
+It is used to build decentralized authorization systems, such as microservices architectures,
+or advanced delegation patterns with user facin systems.
+After 5 years of development, Biscuit is now at its third major version, opening up
+new patterns of authorization.
 
 ## The biscuit specification and the library ecosystem
 
