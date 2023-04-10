@@ -15,7 +15,7 @@ lead = "The Biscuit reference implementation in Rust has been released, with ful
 Biscuit is a specification for a cryptographically verified authorization token
 supporting offline attenuation, and a language for authorization policies based on Datalog.
 It is used to build decentralized authorization systems, such as microservices architectures,
-or advanced delegation patterns with user facin systems.
+or advanced delegation patterns with user facing systems.
 After 5 years of development, Biscuit is now at its third major version, opening up
 new patterns of authorization.
 
