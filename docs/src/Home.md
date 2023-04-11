@@ -1,6 +1,6 @@
 # Home
 
-Biscuit is an open-source, token-based authentication and authorization system.  
+Biscuit is an open-source, token-based authorization system.  
 
 With Biscuit, you can:
 
@@ -8,5 +8,5 @@ With Biscuit, you can:
 - allow offline attenuation where, from each token, a new one with narrower rights can be generated 
 - create strong security policy enforcement based on a logic language
 
-Biscuit can be used with the command line and is implemented in Rust, Haskell, Go, Java, WebAssembly and C.
+Biscuit can be used with the command line and support is available in Rust, Haskell, Go, Java, WebAssembly and C.
 
