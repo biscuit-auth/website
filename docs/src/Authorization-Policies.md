@@ -15,11 +15,13 @@ Allow/deny policies can only be defined in the application, while checks can com
 
 ### First code example
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 resource("file1.txt");
 check if resource($file), $file.ends_with("txt");
 allow if true;
-```
+</code></pre>
+</bc-datalog-editor> 
 
 ## Datalog in Biscuit
 
@@ -31,11 +33,13 @@ The first part of the authorization logic comes with checks. They are queries ov
 
 As an example, we could have a check that tests the presence of a file resource, and verifies that its filename matches a specific pattern, using a string expression:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 check if
   resource($path),
   $path.matches("file[0-9]+.txt")
-```
+</code></pre>
+</bc-datalog-editor> 
 
 This check matches only if there exists a `resource($path)` fact for which `$path` matches a pattern.
 
@@ -45,7 +49,8 @@ The validation in Biscuit relies on a list of allow or deny policies that are ev
 
 Example policies:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 // verifies that we have rights for this request
 allow if
   resource($res),
@@ -54,7 +59,8 @@ allow if
 
 // otherwise, allow if we're admin
 allow if is_admin();
-```
+</code></pre>
+</bc-datalog-editor> 
 
 ### Blocks
 
@@ -89,31 +95,36 @@ Here the token carries a single block, `authority`, that is the initial block co
 
 Let's assume the user is sending this token with a `PUT /bucket_5678/folder1/hello.txt` HTTP request. The authorizer would then load the token's facts and rules, along with facts from the request:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 user("user_1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
 time(2020-11-17T12:00:00+00:00);
-```
+</code></pre>
+</bc-datalog-editor> 
 
 The authorizer would also be able to load authorization data from its database, like ownership information: `owner("user_1234", "bucket_1234")`, `owner("user_1234", "bucket_5678")` `owner("user_ABCD", "bucket_ABCD")`. In practice, this data could be filtered by limiting it to facts related to the current ressource, or extracting the user id from the token with a query.
 
 The authorizer can also load its own rules, like creating one specifying rights if we own a specific folder:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 // the resource owner has all rights on the resource
 right($bucket, $path, $operation) <-
   resource($bucket, $path),
   operation($operation),
   user($id),
   owner($id, $bucket)
-```
+</code></pre>
+</bc-datalog-editor> 
 
 This rule will generate a `right` fact if it finds data matching the variables.
 
 We end up with a system with the following facts:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 user("user_1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
@@ -122,16 +133,19 @@ owner("user_1234", "bucket_1234");
 owner("user_1234", "bucket_5678");
 owner("user_ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
-```
+</code></pre>
+</bc-datalog-editor> 
 
 At last, the authorizer provides a policy to test that we have the rights for this operation:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 allow if
   right($bucket, $path, $operation),
   resource($bucket, $path),
   operation($operation);
-```
+</code></pre>
+</bc-datalog-editor> 
 
 Here we can find matching facts, so the request succeeds. If the request was done on `bucket_ABCD`, we would not be able to generate the `right` fact for it and the request would fail.
 
@@ -149,7 +163,8 @@ But we could also take the first token, and restrict it by adding a block contai
 
 With that token, if the holder tried to do a `PUT /bucket_5678/folder1/hello.txt` request, we would end up with the following facts:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 user("user_1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
@@ -158,7 +173,8 @@ owner("user_1234", "bucket_1234");
 owner("user_1234", "bucket_5678");
 owner("user_ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
-```
+</code></pre>
+</bc-datalog-editor> 
 
 The authorizer's policy would still succeed, but the check from block 1 would fail because it cannot find `operation("read")`.
 

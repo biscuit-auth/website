@@ -37,7 +37,8 @@ Those authorization policies can be hardcoded in your application or be dynamica
 
 Authorizer
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 // We receive a request to read "admin.doc"
 // The request contains a token with the following content
 user("1234"); // the user is identified as "1234"
@@ -58,7 +59,8 @@ allow if
   resource($res),
   operation($op),
   right($user_id, $res, $op);
-```
+</code></pre>
+</bc-datalog-editor> 
 
 Result
 
@@ -66,7 +68,8 @@ Result
 
 Facts
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 operation("read");
 
 resource("admin.doc");
@@ -75,7 +78,8 @@ right("1234","admin.doc","read");
 right("1234","admin.doc","write");
 
 user("1234");
-```
+</code></pre>
+</bc-datalog-editor> 
 
 ## Biscuit is so much more
 
