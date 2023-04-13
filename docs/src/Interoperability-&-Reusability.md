@@ -11,13 +11,15 @@ While there are no well-defined patterns that have emerged yet,
 a good practice is to prefix fact names with the organization name,
 separated by a colon (`:`). So for instance:
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 // can collide with other facts
 user("1234");
 
 // makes it clear that the user is tied to a specific organization
 wayne_industries:user("1234");
-```
+</code></pre>
+</bc-datalog-editor> 
 
 ## A few notes
 

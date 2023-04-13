@@ -12,9 +12,11 @@ Fact names can contain colons (`:`). While they don’t mean anything particular
 separator: when your rules start to grow, or if you want to provide reusable rules that don’t clash with others, you can _namespace_
 your datalog facts and rules:
 
-```
+<bc-datalog-editor>
+<pre><code>
 service_a:fact_name(42);
-```
+</code></pre>
+</bc-datalog-editor> 
 
 ## Data types
 
@@ -34,19 +36,23 @@ When we execute the rule `right($resource, "write") <- user($user_id), owner($us
 
 With the following facts:
 
-```
+<bc-datalog-editor>
+<pre><code>
 user(1);
 owner(1, "file1.txt");
 owner(1, "file2.txt");
 owner(2, "file3.txt");
-```
+</code></pre>
+</bc-datalog-editor> 
 
 It will generate the facts:
 
-```
+<bc-datalog-editor>
+<pre><code>
 right("file1.txt", "write");
 right("file2.txt", "write");
-```
+</code></pre>
+</bc-datalog-editor> 
 
 A rule contains data of the following types:
 
@@ -107,7 +113,8 @@ If no policy matched, the request is rejected.
 
 They have a format similar to rules:
 
-```
+<bc-datalog-editor>
+<pre><code>
 // check
 check if right("file1.txt", "read");
 
@@ -116,4 +123,5 @@ allow if user("admin");
 
 // deny policy
 deny if true;
-```
+</code></pre>
+</bc-datalog-editor> 
