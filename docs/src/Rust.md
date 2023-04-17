@@ -8,7 +8,7 @@ The Rust version of Biscuit can be found on [Github](https://github.com/biscuit-
 In `Cargo.toml`:
 
 ```toml
-biscuit-auth = "2.1"
+biscuit-auth = "3.0"
 ```
 
 ## Create a root key
@@ -23,36 +23,57 @@ let root_keypair = KeyPair::new();
 
 ```rust
 
-use biscuit_auth::{Biscuit, KeyPair, error};
+use biscuit_auth::{biscuit, biscuit_merge, Biscuit, KeyPair, error};
 
 fn create_token(root: &KeyPair) -> Result<Biscuit, error::Token> {
-    let mut builder = Biscuit::builder(root);
-    builder.add_authority_fact(r#"user("1234")"#)?;
-    builder.add_authority_check_(r#"check if operation("read");"#)?;
-    
-    builder.build()
+    let user_id = "1234";
+    // the authority block can be built from a datalog snippet
+    // the snippet is parsed at compile-time, efficient building
+    // code is generated
+    let mut authority = biscuit!(
+      r#"
+      // parameters can directly reference in-scope variables
+      user({user_id});
+
+      // parameters can be manually supplied as well
+      right({user_id}, "file1", {operation});
+      "#,
+      operation = "read",
+    );
+
+    // it is possible to modify a builder by adding a datalog snippet
+    biscuit_merge!(
+      &mut authority,
+      r#"check if operation("read");"#
+    );
+
+    authority.build(&root)
 }
 ```
 
 ## Create an authorizer
 
 ```rust
-use biscuit_auth::{Biscuit, error, builder::Fact};
+use biscuit_auth::{authorizer, Biscuit, error, builder::Fact};
 
 fn authorize(token: &Biscuit) -> Result<(), error::Token> {
-    let mut authorizer = token.authorizer()?;
+    let operation = "read";
 
-    // add a time($date) fact with the current date
-    authorizer.set_time()?;
+    // same as the `biscuit!` macro. There is also a `authorizer_merge!`
+    // macro for dynamic authorizer construction
+    let mut authorizer = authorizer!(
+      r#"operation({operation});"#
+    );
 
-    // facts can be created directly from a string generated with `format!()`
-    // but this way is safer if you create facts from user data,because it
-    // prevents injections
-    let mut operation: Fact = "operation($op)".try_into()?;
-    operation.set("op", "read")?;
+    // register a fact containing the current time for TTL checks
+    authorizer.set_time();
 
-    authorizer.add_fact(operation)?;
-    authorizer.allow()?;
+    // add a `allow if true;` policy
+    // meaning that we are relying entirely on checks carried in the token itself
+    authorizer.add_allow_all()?;
+
+    // link the token to the authorizer
+    authorizer.add_token(token)?;
 
     authorizer.authorize()?;
 
@@ -63,14 +84,17 @@ fn authorize(token: &Biscuit) -> Result<(), error::Token> {
 ## Attenuate a token
 
 ```rust
-use biscuit_auth::{Biscuit, error, builder::Check};
+use biscuit_auth::{block, Biscuit, BlockBuilder, error, builder::Check};
 use std::time::{Duration, SystemTime};
 
 fn attenuate(token: &Biscuit) -> Result<Biscuit, error::Token> {
-    let mut builder = token.create_block();
+    let res = "file1";
+    // same as `biscuit!` and `authorizer!`, a `block_merge!` macro is available
+    let mut builder = block!(
+      r#"check if resource(res);"#
+    );
 
-    builder.add_check("check if time($time), $time < $ttl")?;
-    builder.set("ttl", System::now() + Duration::from_secs(60))?;
+    builder.check_expiration_date(System::now() + Duration::from_secs(60));
     
     token.append(builder)
 }
@@ -85,6 +109,8 @@ let sealed_token = token.seal()?;
 ## Reject revoked tokens
 
 The `Biscuit::revocation_identifiers` method returns the list of revocation identifiers as byte arrays.
+Don't forget to parse them from a textual representation (for instance
+hexadecimal) if you store them as text values.
 
 ```rust
 let identifiers: Vec<Vec<u8>> = token.revocation_identifiers();
