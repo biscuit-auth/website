@@ -1,5 +1,5 @@
 # Getting Started
 
-- [Introduction](./Introduction.md)
-- [My First Biscuit](./My-First-Biscuit.md)
-- [Authorization-Policies](./Authorization-Policies.md)
+- [Introduction](./getting-started/Introduction.md)
+- [My First Biscuit](./getting-started/My-First-Biscuit.md)
+- [Authorization-Policies](./getting-started/Authorization-Policies.md)

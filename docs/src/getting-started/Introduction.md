@@ -1,6 +1,6 @@
 # Introduction
 
-![Biscuit banner](Images/banner.jpg)
+![Biscuit banner](../Images/banner.jpg)
 
 
 Biscuit is a set of building blocks for your authorization layer. By making a coherent experience from the authorization token up to the tools to write policies, it spares you the time spent binding together token scopes, authorization servers, and making sure authorization policies execute correctly in every service. You only need to focus on writing, debugging and deploying your rules.
@@ -97,8 +97,8 @@ To sum up, Biscuit provides tools to build a complete, cross platform authorizat
 
 *[My First Biscuit](./My-First-Biscuit.md):* Create and verify your first biscuit in a step-by-step guide.
 
-*[Datalog Reference](./Datalog.md):* Learn about the logic language who's powering biscuits.
+*[Datalog Reference](../reference/Datalog.md):* Learn about the logic language who's powering biscuits.
 
-*[Recipes](./Recipes.md):* Have a look at different ways to use biscuits to implement your security policies.
+*[Recipes](../Recipes.md):* Have a look at different ways to use biscuits to implement your security policies.
 
-*[How to Contribute](./How-to-Contribute.md):* Find out how to contribute to Biscuit.
+*[How to Contribute](https://www.biscuitsec.org/docs/contributing/how-to-contribute/):* Find out how to contribute to Biscuit.

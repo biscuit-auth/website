@@ -1,9 +1,9 @@
 # Usage
 
-- [Command Line](./Command-Line.md)
-- [C](./C.md)
-- [Go](./Go.md)
-- [Haskell](./Haskell.md)
-- [Java](./Java.md)
-- [NodeJS](./NodeJS.md)
-- [Rust](./Rust.md)
+- [Command Line](./usage/Command-Line.md)
+- [C](./usage/C.md)
+- [Go](./usage/Go.md)
+- [Haskell](./usage/Haskell.md)
+- [Java](./usage/Java.md)
+- [NodeJS](./usage/NodeJS.md)
+- [Rust](./usage/Rust.md)

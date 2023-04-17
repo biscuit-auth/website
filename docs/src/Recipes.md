@@ -1,7 +1,5 @@
 # Recipes
 
-- [Common Patterns](./Common-Patterns.md)
-- [Interoperability & Reusability](./Interoperability-&-Reusability.md)
-- [Delegation in Microservices](./Delegation-in-Microservices.md)
-- [Role Based Access Control](./Role-Based-Access-Control.md)
-- [Revocation](./Revocation.md)
+- [Common Patterns](./recipes/Common-Patterns.md)
+- [Interoperability & Reusability](./recipes/Interoperability-&-Reusability.md)
+- [Role Based Access Control](./recipes/Role-Based-Access-Control.md)

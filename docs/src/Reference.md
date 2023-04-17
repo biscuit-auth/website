@@ -1,5 +1,5 @@
 # Reference
 
-- [Specifications](./Specifications.md)
-- [Cryptography](./Cryptography.md)
-- [Datalog](./Datalog.md)
+- [Specifications](./reference/Specifications.md)
+- [Cryptography](./reference/Cryptography.md)
+- [Datalog](./reference/Datalog.md)

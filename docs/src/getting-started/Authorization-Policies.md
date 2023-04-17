@@ -25,7 +25,7 @@ allow if true;
 
 ## Datalog in Biscuit
 
-Please see the [datalog reference page](./Datalog.md) for more info.
+Please see the [datalog reference page](../reference/Datalog.md) for more info.
 
 ### Checks
 

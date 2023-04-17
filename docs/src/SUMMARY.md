@@ -5,40 +5,32 @@
 ## Getting Started
 
 - [Getting Started](./Getting-Started.md)
-    - [Introduction](./Introduction.md)
-    - [My First Biscuit](./My-First-Biscuit.md)
-    - [Authorization Policies](./Authorization-Policies.md)
+    - [Introduction](getting-started/Introduction.md)
+    - [My First Biscuit](getting-started/My-First-Biscuit.md)
+    - [Authorization Policies](getting-started/Authorization-Policies.md)
 
 ## Recipes
 
 - [Recipes](./Recipes.md)
-    - [Common Patterns](./Common-Patterns.md)
-    - [Interoperability & Reusability](./Interoperability-&-Reusability.md)
-    - [Delegation in Microservices](./Delegation-in-Microservices.md)
-    - [Role Based Access Control](./Role-Based-Access-Control.md)
-    - [Revocation](./Revocation.md)
+    - [Common Patterns](./recipes/Common-Patterns.md)
+    - [Interoperability & Reusability](./recipes/Interoperability-&-Reusability.md)
+    - [Role Based Access Control](./recipes/Role-Based-Access-Control.md)
 
 ## Usage
 
 - [Usage](./Usage.md)
-    - [Command Line](./Command-Line.md)
-    - [C](./C.md)
-    - [Go](./Go.md)
-    - [Haskell](./Haskell.md)
-    - [Java](./Java.md)
-    - [NodeJS](./NodeJS.md)
-    - [Rust](./Rust.md)
+    - [Command Line](usage/Command-Line.md)
+    - [C](usage/C.md)
+    - [Go](usage/Go.md)
+    - [Haskell](usage/Haskell.md)
+    - [Java](usage/Java.md)
+    - [NodeJS](usage/NodeJS.md)
+    - [Rust](usage/Rust.md)
 
 
 ## Reference
 
 - [Reference](./Reference.md)
-    - [Specifications](./Specifications.md)
-    - [Cryptography](./Cryptography.md)
-    - [Datalog](./Datalog.md)
-
-## Contributing
-
-- [Contributing](./Contributing.md)
-    - [How to Contribute](./How-to-Contribute.md)
-    - [Code of Conduct](./Code-of-Conduct.md)
+    - [Specifications](reference/Specifications.md)
+    - [Cryptography](reference/Cryptography.md)
+    - [Datalog](reference/Datalog.md)
