@@ -9,13 +9,6 @@
     - [My First Biscuit](getting-started/My-First-Biscuit.md)
     - [Authorization Policies](getting-started/Authorization-Policies.md)
 
-## Recipes
-
-- [Recipes](./Recipes.md)
-    - [Common Patterns](./recipes/Common-Patterns.md)
-    - [Interoperability & Reusability](./recipes/Interoperability-&-Reusability.md)
-    - [Role Based Access Control](./recipes/Role-Based-Access-Control.md)
-
 ## Usage
 
 - [Usage](./Usage.md)
@@ -27,6 +20,12 @@
     - [NodeJS](usage/NodeJS.md)
     - [Rust](usage/Rust.md)
 
+## Recipes
+
+- [Recipes](./Recipes.md)
+    - [Common Patterns](./recipes/Common-Patterns.md)
+    - [Interoperability & Reusability](./recipes/Interoperability-&-Reusability.md)
+    - [Role Based Access Control](./recipes/Role-Based-Access-Control.md)
 
 ## Reference
 
