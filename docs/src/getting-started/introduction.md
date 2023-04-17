@@ -1,6 +1,6 @@
 # Introduction
 
-![Biscuit banner](../Images/banner.jpg)
+![Biscuit banner](../images/banner.jpg)
 
 
 Biscuit is a set of building blocks for your authorization layer. By making a coherent experience from the authorization token up to the tools to write policies, it spares you the time spent binding together token scopes, authorization servers, and making sure authorization policies execute correctly in every service. You only need to focus on writing, debugging and deploying your rules.
@@ -22,8 +22,8 @@ With that, you could have a token carried along with a series of requests betwee
 Offline attenuation unlocks powerful delegation patterns, without needing to support them directly in the origin service.
 
 For examples of token attenuation, see:
-- [Rust](./Rust.md#attenuate-a-token)
-- [Haskell](./Haskell#attenuate-a-token)
+- [Rust](../usage/rust.md#attenuate-a-token)
+- [Haskell](../usage/haskell.md#attenuate-a-token)
 
 ## Biscuit is a policy language
 
@@ -95,10 +95,10 @@ To sum up, Biscuit provides tools to build a complete, cross platform authorizat
 
 ## Going further
 
-*[My First Biscuit](./My-First-Biscuit.md):* Create and verify your first biscuit in a step-by-step guide.
+*[My First Biscuit](./my-first-biscuit.md):* Create and verify your first biscuit in a step-by-step guide.
 
-*[Datalog Reference](../reference/Datalog.md):* Learn about the logic language who's powering biscuits.
+*[Datalog Reference](../reference/datalog.md):* Learn about the logic language who's powering biscuits.
 
-*[Recipes](../Recipes.md):* Have a look at different ways to use biscuits to implement your security policies.
+*[Recipes](../recipes.md):* Have a look at different ways to use biscuits to implement your security policies.
 
 *[How to Contribute](https://www.biscuitsec.org/docs/contributing/how-to-contribute/):* Find out how to contribute to Biscuit.

@@ -1,35 +1,35 @@
 # Summary
 
-[Home](./Home.md)
+[Home](./home.md)
 
 ## Getting Started
 
-- [Getting Started](./Getting-Started.md)
-    - [Introduction](getting-started/Introduction.md)
-    - [My First Biscuit](getting-started/My-First-Biscuit.md)
-    - [Authorization Policies](getting-started/Authorization-Policies.md)
+- [Getting Started](./getting-started.md)
+    - [Introduction](getting-started/introduction.md)
+    - [My First Biscuit](getting-started/my-first-biscuit.md)
+    - [Authorization Policies](getting-started/authorization-policies.md)
 
 ## Usage
 
-- [Usage](./Usage.md)
-    - [Command Line](usage/Command-Line.md)
-    - [C](usage/C.md)
-    - [Go](usage/Go.md)
-    - [Haskell](usage/Haskell.md)
-    - [Java](usage/Java.md)
-    - [NodeJS](usage/NodeJS.md)
-    - [Rust](usage/Rust.md)
+- [Usage](./usage.md)
+    - [Command Line](usage/command-line.md)
+    - [C](usage/c.md)
+    - [Go](usage/go.md)
+    - [Haskell](usage/haskell.md)
+    - [Java](usage/java.md)
+    - [NodeJS](usage/nodejs.md)
+    - [Rust](usage/rust.md)
 
 ## Recipes
 
-- [Recipes](./Recipes.md)
-    - [Common Patterns](./recipes/Common-Patterns.md)
-    - [Interoperability & Reusability](./recipes/Interoperability-&-Reusability.md)
-    - [Role Based Access Control](./recipes/Role-Based-Access-Control.md)
+- [Recipes](./recipes.md)
+    - [Common Patterns](./recipes/common-patterns.md)
+    - [Interoperability & Reusability](./recipes/interoperability-reusability.md)
+    - [Role Based Access Control](./recipes/role-based-access-control.md)
 
 ## Reference
 
-- [Reference](./Reference.md)
-    - [Specifications](reference/Specifications.md)
-    - [Cryptography](reference/Cryptography.md)
-    - [Datalog](reference/Datalog.md)
+- [Reference](./reference.md)
+    - [Specifications](reference/specifications.md)
+    - [Cryptography](reference/cryptography.md)
+    - [Datalog](reference/datalog.md)
