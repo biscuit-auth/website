@@ -86,7 +86,7 @@ authorizer.* This way, *facts defined in a non-authority block cannot fulfil aut
 
 This model guarantees that adding a block can only restrict what a token can do: by default, the only effect of adding a block to a token is to add new checks.
 
-It is possible for a rule, a check or a policy to consider facts defined in non-authority third-party blocks by explicitly providing the external public part of the keypair that signed the block. This allows considering facts from a non authority block while still making sure they come from a trusted party.
+It is possible for a rule, a check or a policy to consider facts defined in non-authority third-party blocks by explicitly providing the external public part of the keypair that signed the block. This allows considering facts from a non-authority block while still making sure they come from a trusted party.
 
 ## Example tokens
 
