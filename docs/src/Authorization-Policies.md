@@ -80,7 +80,7 @@ Here is how security is guaranteed:
 - All the facts and rules from the authorizer are loaded in the datalog engine.
 - Rules are repeatedly applied until no new fact is generated. By default, *rules are only applied on facts defined in the
   authority block, the authorizer or the block that defined the rule.* This way, *facts defined in a non-authority block can only be seen from the block itself.*
-- Checks are applied on the facts. By default, *facts are only applied on facts defined in the authority block, the authorizer or the block that defined the check.* This way, *facts defined in a non-authority block can only fulfil checks from the same block*.
+- Checks are applied on the facts. By default, *checks are only applied on facts defined in the authority block, the authorizer or the block that defined the check.* This way, *facts defined in a non-authority block can only fulfil checks from the same block*.
 - Authorizer policies are applied on the facts. By default, *policies are only applied on facts defined in the authority block or the
 authorizer.* This way, *facts defined in a non-authority block cannot fulfil authorizer policies.*
 
