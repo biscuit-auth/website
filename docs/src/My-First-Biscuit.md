@@ -31,9 +31,11 @@ To do so, we will create a file named `authority.biscuit-datalog`, with the foll
 
 `authority.biscuit-datalog`
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 user("1234");
-```
+</code></pre>
+</bc-datalog-editor> 
 
 This is a datalog _fact_: the fact name is `user`, and it has a single attribute (`"1234"`). Facts can have several attributes, of various types (ints, strings, booleans, byte arrays, dates, sets).
 
@@ -83,7 +85,8 @@ In our case, we'll assume the token is used for a `write` operation on the `reso
 
 _authorizer.biscuit-datalog_
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 // request-specific data
 operation("write");
 resource("resource1");
@@ -103,7 +106,8 @@ is_allowed($user, $res, $op) <-
 // is allowed to perform the current operation
 // on the current resource
 allow if is_allowed($user, $resource, $op);
-```
+</code></pre>
+</bc-datalog-editor> 
 
 There's a bit more happening here: the first three facts give info about the request. Then we have ACLs (they can be declared statically for a small, static user base, or fetched from DB based on the token user).
 
@@ -165,9 +169,11 @@ sure the token is not used after a certain date.
 
 _block1.biscuit-datalog_
 
-```rust
+<bc-datalog-editor>
+<pre><code>
 check if time($time), $time <= 2021-12-20T00:00:00Z;
-```
+</code></pre>
+</bc-datalog-editor> 
 
 The check requires two things to suceed: first, the current time must be declared through the `time()` fact, and the current time must be smaller than `2021-12-20T00:00:00Z`.
 

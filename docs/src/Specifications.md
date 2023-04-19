@@ -299,7 +299,8 @@ is `read` (and will not allow any other `operation` fact), and then that we have
 the `read` right over the resource.
 The second caveat checks that the resource is `file1`.
 
-```
+<bc-datalog-editor>
+<pre><code>
 authority:
   right("file1", "read");
   right("file2", "read");
@@ -314,7 +315,8 @@ check if
 Block 2:
 check if
   resource("file1")  // restrict to file1 resource
-```
+</code></pre>
+</bc-datalog-editor> 
 
 The authorizer side provides the `resource` and `operation` facts with information
 from the request.
@@ -335,7 +337,8 @@ before being given to a user. The authority block can define rules that will gen
 facts depending on data provided by the authorizer. This helps reduce the size of
 the token.
 
-```
+<bc-datalog-editor>
+<pre><code>
 authority:
 // if there is an ambient resource and we own it, we can read it
 right($0, "read") <- resource($0), owner($1, $0);
@@ -352,7 +355,8 @@ Block 2:
 check if
   resource($0),
   owner("alice", $0) // defines a token only usable by alice
-```
+</code></pre>
+</bc-datalog-editor> 
 
 These rules will define authority facts depending on authorizer data.
 If we had the facts `resource("file1")` and
@@ -380,7 +384,8 @@ by "or". A single query needs to match for the policy to match.
 We can define queries or rules with expressions on some predicate values, and
 restrict usage based on ambient values:
 
-```
+<bc-datalog-editor>
+<pre><code>
 authority:
 right("/folder/file1", "read");
 right("/folder/file2", "read");
@@ -393,7 +398,8 @@ check if time($0), $0 < 2019-02-05T23:00:00Z // expiration date
 check if source_IP($0), ["1.2.3.4", "5.6.7.8"].contains($0) // set membership
 ----------
 check if resource($0), $0.starts_with("/folder/") // prefix operation on strings
-```
+</code></pre>
+</bc-datalog-editor> 
 
 Executing an expression must always return a boolean, and all variables
 appearing in an expression must also appear in other predicates of the
