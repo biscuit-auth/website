@@ -74,6 +74,8 @@ A block can contain:
 - `rules`: They can generate new facts from existing ones. Each block can define new rules.
 - `checks`: They are queries that need to match in order to make the biscuit valid. Each block can define new checks.
 
+*In most cases, the purpose of a block is to add checks that depend on facts provided by the authorizer.*
+
 Here is how security is guaranteed:
 
 - All the facts and rules from the token are loaded in the datalog engine; they are tied to the block that defined them.
@@ -84,7 +86,34 @@ Here is how security is guaranteed:
 - Authorizer policies are applied on the facts. By default, *policies are only applied on facts defined in the authority block or the
 authorizer.* This way, *facts defined in a non-authority block cannot fulfil authorizer policies.*
 
+![datalog block scoping](/images/block-scoping.svg)
+
 This model guarantees that adding a block can only restrict what a token can do: by default, the only effect of adding a block to a token is to add new checks.
+
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+// the token emitter grants read access to file1
+right("file1", "read");
+// the authority block trusts facts from itself and the authorizer
+check if action("read");
+</code></pre>
+<pre><code class="block">
+right("file2", "read");
+// blocks trust facts from the authority block and the authorizer
+check if action("read");
+// blocks trust their own facts
+check if right("file2", "read");
+</code></pre>
+<pre><code class="authorizer">
+resource("file1");
+action("read");
+// the authorizer does not trust facts from additional blocks
+check if right("file2", "read");
+// the authorizer trusts facts from the authority block
+check if right("file1", "read");
+allow if true;
+</code></pre>
+</bc-datalog-playground> 
 
 It is possible for a rule, a check or a policy to consider facts defined in non-authority third-party blocks by explicitly providing the external public part of the keypair that signed the block. This allows considering facts from a non-authority block while still making sure they come from a trusted party.
 
