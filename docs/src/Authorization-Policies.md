@@ -81,7 +81,7 @@ Here is how security is guaranteed:
 - Rules are repeatedly applied until no new fact is generated. By default, *rules are only applied on facts defined in the
   authority block, the authorizer or the block that defined the rule.* This way, *facts defined in a non-authority block can only be seen from the block itself.*
 - Checks are applied on the facts. By default, *facts are only applied on facts defined in the authority block, the authorizer or the block that defined the check.* This way, *facts defined in a non-authority block can only fulfil checks from the same block*.
-- Authorizer policies are applied on the facts. By default, *policies are only applied of facts defined in the authority block or the
+- Authorizer policies are applied on the facts. By default, *policies are only applied on facts defined in the authority block or the
 authorizer.* This way, *facts defined in a non-authority block cannot fulfil authorizer policies.*
 
 This model guarantees that adding a block can only restrict what a token can do: by default, the only effect adding a block to a token has is to add new checks.
