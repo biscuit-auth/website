@@ -65,7 +65,8 @@ allow if is_admin();
 ### Blocks
 
 A token is made of blocks of cryptographically verified data. 
-Each token has at least one block called the authority block. Only the authority block can be created by the token emitter, while other blocks can be freely added by intermediate parties. The order in which following blocks are added to the token does not matter.
+Each token has at least one block called the authority block. Only the authority block is created and signed by the token emitter, while other blocks can be freely added by intermediate parties. By default, blocks added after the authority block are
+self-contained and can only restrict what the token can do.
 
 A block can contain:
 
@@ -75,12 +76,17 @@ A block can contain:
 
 Here is how security is guaranteed:
 
-- The authority block contains facts, rules and checks representing the basic rights. 
-- They are loaded into the Datalog engine, along with the authorizer's facts, rules, checks and policies, and executed and verified in that context.
-- For every following block (or non-authority block), their facts and rules are loaded in the Datalog engine, the rules are executed and the checks applied.
-- The content of following blocks is isolated from the rest. Meaning that while following blocks know the facts and rules contained in the authority block and the authorizer, the authority block and the authorizer do not know the facts and rules contained in following blocks. Only checks contained in following blocks can be seen from outside that block. 
+- All the facts and rules from the token are loaded in the datalog engine; they are tied to the block that defined them.
+- All the facts and rules from the authorizer are loaded in the datalog engine.
+- Rules are repeatedly applied until no new fact is generated. By default, *rules are only applied on facts defined in the
+  authority block, the authorizer or the block that defined the rule.* This way, *facts defined in a non-authority block can only be seen from the block itself.*
+- Checks are applied on the facts. By default, *checks are only applied on facts defined in the authority block, the authorizer or the block that defined the check.* This way, *facts defined in a non-authority block can only fulfil checks from the same block*.
+- Authorizer policies are applied on the facts. By default, *policies are only applied on facts defined in the authority block or the
+authorizer.* This way, *facts defined in a non-authority block cannot fulfil authorizer policies.*
 
-That way, a token cannot increase its rights when adding blocks. The only way they can change execution is by adding checks covering previous blocks.
+This model guarantees that adding a block can only restrict what a token can do: by default, the only effect of adding a block to a token is to add new checks.
+
+It is possible for a rule, a check or a policy to consider facts defined in non-authority third-party blocks by explicitly providing the external public part of the keypair that signed the block. This allows considering facts from a non-authority block while still making sure they come from a trusted party.
 
 ## Example tokens
 
