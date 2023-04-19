@@ -64,23 +64,23 @@ allow if is_admin();
 
 ### Blocks
 
-A token is made of blocks of data cryptographically verified.
+A token is made of blocks of cryptographically verified data. 
+Each token has at least one block called the authority block. Only the authority block can be created by the token emitter, while other blocks can be freely added by intermediate parties. The order in which following blocks are added to the token does not matter.
 
 A block can contain:
 
-- `facts`: each block can define new facts
-- `rules` each block can define new rules
-- `checks` each block can define new checks (queries that need to match in order to make the biscuit valid)
+- `facts`: They represent data. Each block can define new facts.
+- `rules`: They can generate new facts from existing ones. Each block can define new rules.
+- `checks`: They are queries that need to match in order to make the biscuit valid. Each block can define new checks.
 
-Their order affects execution: rules and checks can only apply to facts created in their own block or previous blocks.
+Here is how security is guaranteed:
 
-This is how security is guaranteed:
+- The authority block contains facts, rules and checks representing the basic rights. 
+- They are loaded into the Datalog engine, along with the authorizer's facts, rules, checks and policies, and executed and verified in that context.
+- For every following block (or non-authority block), their facts and rules are loaded in the Datalog engine, the rules are executed and the checks applied.
+- The content of following blocks is isolated from the rest. Meaning that while following blocks know the facts and rules contained in the authority block and the authorizer, the authority block and the authorizer do not know the facts and rules contained in following blocks. Only checks contained in following blocks can be seen from outside that block. 
 
-- The first block contains facts representing the basic rights. They are loaded into the Datalog engine, along with the authorizer's facts, rules, checks and policies. They will not execute on the following block data.
-- They are all executed and verified in that context.
-- For every following block, we load their facts and rules, execute their rules and apply their checks. They can only see facts from previous blocks.
-
-That way, a token cannot increase its rights when adding blocks; the only way they can change execution is by adding checks covering previous blocks.
+That way, a token cannot increase its rights when adding blocks. The only way they can change execution is by adding checks covering previous blocks.
 
 ## Example tokens
 
