@@ -1,44 +1,35 @@
 # Summary
 
-[Home](./Home.md)
+[Home](./home.md)
 
 ## Getting Started
 
-- [Getting Started](./Getting-Started.md)
-    - [Introduction](./Introduction.md)
-    - [My First Biscuit](./My-First-Biscuit.md)
-    - [Authorization Policies](./Authorization-Policies.md)
-
-## Recipes
-
-- [Recipes](./Recipes.md)
-    - [Common Patterns](./Common-Patterns.md)
-    - [Interoperability & Reusability](./Interoperability-&-Reusability.md)
-    - [Delegation in Microservices](./Delegation-in-Microservices.md)
-    - [Role Based Access Control](./Role-Based-Access-Control.md)
-    - [Revocation](./Revocation.md)
+- [Getting Started](./getting-started.md)
+    - [Introduction](getting-started/introduction.md)
+    - [My First Biscuit](getting-started/my-first-biscuit.md)
+    - [Authorization Policies](getting-started/authorization-policies.md)
 
 ## Usage
 
-- [Usage](./Usage.md)
-    - [Command Line](./Command-Line.md)
-    - [C](./C.md)
-    - [Go](./Go.md)
-    - [Haskell](./Haskell.md)
-    - [Java](./Java.md)
-    - [NodeJS](./NodeJS.md)
-    - [Rust](./Rust.md)
+- [Usage](./usage.md)
+    - [Command Line](usage/command-line.md)
+    - [C](usage/c.md)
+    - [Go](usage/go.md)
+    - [Haskell](usage/haskell.md)
+    - [Java](usage/java.md)
+    - [NodeJS](usage/nodejs.md)
+    - [Rust](usage/rust.md)
 
+## Recipes
+
+- [Recipes](./recipes.md)
+    - [Common Patterns](./recipes/common-patterns.md)
+    - [Interoperability & Reusability](./recipes/interoperability-reusability.md)
+    - [Role Based Access Control](./recipes/role-based-access-control.md)
 
 ## Reference
 
-- [Reference](./Reference.md)
-    - [Specifications](./Specifications.md)
-    - [Cryptography](./Cryptography.md)
-    - [Datalog](./Datalog.md)
-
-## Contributing
-
-- [Contributing](./Contributing.md)
-    - [How to Contribute](./How-to-Contribute.md)
-    - [Code of Conduct](./Code-of-Conduct.md)
+- [Reference](./reference.md)
+    - [Specifications](reference/specifications.md)
+    - [Cryptography](reference/cryptography.md)
+    - [Datalog](reference/datalog.md)
