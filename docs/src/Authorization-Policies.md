@@ -76,7 +76,7 @@ A block can contain:
 
 Here is how security is guaranteed:
 
-- All the facts and rules from the token are loaded in the datalog engine, they are associated to the block that defined them.
+- All the facts and rules from the token are loaded in the datalog engine; they are tied to the block that defined them.
 - All the facts and rules from the authorizer are loaded in the datalog engine.
 - Rules are repeatedly applied until no new fact is generated. By default, *rules are only applied on facts defined in the
   authority block, the authorizer or the block that defined the rule.* This way, *facts defined in a non-authority block can only be seen from the block itself.*
