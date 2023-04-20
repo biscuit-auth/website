@@ -45,22 +45,19 @@ jobs:
       - name: Build docs
         run: |
           ./mdbook build docs
-      - uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read --follow-symlinks --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.CELLAR_BUCKET }}
-          AWS_S3_ENDPOINT: https://cellar-c2.services.clever-cloud.com/
-          AWS_ACCESS_KEY_ID: ${{ secrets.CELLAR_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.CELLAR_KEY_SECRET }}
-          SOURCE_DIR: 'public'
-      - uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read --follow-symlinks --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.CELLAR_DOCS_BUCKET }}
-          AWS_S3_ENDPOINT: https://cellar-c2.services.clever-cloud.com/
-          AWS_ACCESS_KEY_ID: ${{ secrets.CELLAR_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.CELLAR_KEY_SECRET }}
-          SOURCE_DIR: 'docs/book'
+      - name: Deploy biscuitsec.org to netlify
+        run: |
+          zip -r biscuitsec.zip public
+          curl -H "Content-Type: application/zip" \
+               -H "Authorization: Bearer ${{ secrets.NETLIFY_TOKEN }}" \
+               --data-binary @biscuitsec.zip \
+               https://api.netlify.com/api/v1/sites/biscuitsec.netlify.app/deploys
+      - name: Deploy doc.biscuitsec.org to netlify
+        run: |
+          zip -r doc.biscuitsec.zip docs/book
+          curl -H "Content-Type: application/zip" \
+               -H "Authorization: Bearer ${{ secrets.NETLIFY_TOKEN }}" \
+               --data-binary @doc.biscuitsec.zip \
+               https://api.netlify.com/api/v1/sites/doc-biscuitsec.netlify.app/deploys
+ 
 
