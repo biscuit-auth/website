@@ -129,15 +129,15 @@ request. The verifier would then load the token's facts and rules, along with
 facts from the request:
 
 ```
-user("user_1234");
+user("1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
 time(2020-11-17T12:00:00+00:00);
 ```
 
 The verifier would also be able to load authorization data from its database,
-like ownership information: `owner("user_1234", "bucket_1234")`,
-`owner("user_1234", "bucket_5678")` `owner("user_ABCD", "bucket_ABCD")`.
+like ownership information: `owner("1234", "bucket_1234")`,
+`owner("1234", "bucket_5678")` `owner("ABCD", "bucket_ABCD")`.
 In practice,this data could be filtered by limiting it to facts related to
 the current ressource, or extracting the user id from the token with a query.
 
@@ -158,13 +158,13 @@ This rule will generate a `right` fact if it finds data matching the variables.
 We end up with a system with the following facts:
 
 ```
-user("user_1234");
+user("1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
-current_time(2020-11-17T12:00:00+00:00);
-owner("user_1234", "bucket_1234");
-owner("user_1234", "bucket_5678");
-owner("user_ABCD", "bucket_ABCD");
+time(2020-11-17T12:00:00+00:00);
+owner("1234", "bucket_1234");
+owner("1234", "bucket_5678");
+owner("ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
 ```
 
@@ -202,13 +202,13 @@ With that token, if the holder tried to do a `PUT /bucket_5678/folder1/hello.txt
 request, we would end up with the following facts:
 
 ```
-user("user_1234");
+user("1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
-current_time(2020-11-17T12:00:00+00:00);
-owner("user_1234", "bucket_1234");
-owner("user_1234", "bucket_5678");
-owner("user_ABCD", "bucket_ABCD");
+time(2020-11-17T12:00:00+00:00);
+owner("1234", "bucket_1234");
+owner("1234", "bucket_5678");
+owner("ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
 ```
 
