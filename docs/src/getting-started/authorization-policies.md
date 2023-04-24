@@ -132,14 +132,14 @@ Let's assume the user is sending this token with a `PUT /bucket_5678/folder1/hel
 
 <bc-datalog-editor>
 <pre><code>
-user("user_1234");
+user("1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
 time(2020-11-17T12:00:00+00:00);
 </code></pre>
 </bc-datalog-editor> 
 
-The authorizer would also be able to load authorization data from its database, like ownership information: `owner("user_1234", "bucket_1234")`, `owner("user_1234", "bucket_5678")` `owner("user_ABCD", "bucket_ABCD")`. In practice, this data could be filtered by limiting it to facts related to the current ressource, or extracting the user id from the token with a query.
+The authorizer would also be able to load authorization data from its database, like ownership information: `owner("1234", "bucket_1234")`, `owner("1234", "bucket_5678")` `owner("ABCD", "bucket_ABCD")`. In practice, this data could be filtered by limiting it to facts related to the current ressource, or extracting the user id from the token with a query.
 
 The authorizer can also load its own rules, like creating one specifying rights if we own a specific folder:
 
@@ -160,13 +160,13 @@ We end up with a system with the following facts:
 
 <bc-datalog-editor>
 <pre><code>
-user("user_1234");
+user("1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
-current_time(2020-11-17T12:00:00+00:00);
-owner("user_1234", "bucket_1234");
-owner("user_1234", "bucket_5678");
-owner("user_ABCD", "bucket_ABCD");
+time(2020-11-17T12:00:00+00:00);
+owner("1234", "bucket_1234");
+owner("1234", "bucket_5678");
+owner("ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
 </code></pre>
 </bc-datalog-editor> 
@@ -200,13 +200,13 @@ With that token, if the holder tried to do a `PUT /bucket_5678/folder1/hello.txt
 
 <bc-datalog-editor>
 <pre><code>
-user("user_1234");
+user("1234");
 operation("write");
 resource("bucket_5678", "/folder1/hello.txt");
-current_time(2020-11-17T12:00:00+00:00);
-owner("user_1234", "bucket_1234");
-owner("user_1234", "bucket_5678");
-owner("user_ABCD", "bucket_ABCD");
+time(2020-11-17T12:00:00+00:00);
+owner("1234", "bucket_1234");
+owner("1234", "bucket_5678");
+owner("ABCD", "bucket_ABCD");
 right("bucket_5678", "/folder1/hello.txt", "write");
 </code></pre>
 </bc-datalog-editor> 
