@@ -29,6 +29,9 @@
 {{ macros_head::favicons() }}
 {% block math %}{{ macros_math::math() }}{% endblock math %}
 <script type="module" src="/index.js"></script>
+{% block rss %}
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="blog/atom.xml", trailing_slash=false) }}">
+{% endblock %}
 </head>
 {% block body %}{% set page_class="home" %}{% endblock body %}
 <body class="{{ page_class }}">
