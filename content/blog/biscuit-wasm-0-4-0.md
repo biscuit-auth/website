@@ -27,7 +27,7 @@ Javascript support for biscuit tokens is provided through webassembly: [biscuit-
 
 ## Datalog tagged templates
 
-Javascript provides a powerful mechanism: [tagged templates][tagged-templates].
+Javascript provides a powerful mechanism to embed snippets of non JS code inside a JS codebase: [tagged templates][tagged-templates]. They are commonly used when working with HTML, CSS or SQL within a JS file.
 
 Biscuit-wasm takes full advantage of tagged templates to provide a convenient way to embed datalog snippets in JS applications. It also takes care of injecting dynamic values inside
 datalog statements, to avoid any risk of datalog injection.
