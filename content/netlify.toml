@@ -1,0 +1,205 @@
+
+[[redirects]]
+  force = true
+  from = "/docs/getting-started/introduction/"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/introduction.html"
+
+[[redirects]]
+  force = true
+  from = "docs/getting-started/introduction/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/introduction.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/getting-started/token/"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/introduction.html"
+
+[[redirects]]
+  force = true
+  from = "docs/getting-started/token/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/introduction.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/getting-started/my-first-biscuit/"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/my-first-biscuit.html"
+
+[[redirects]]
+  force = true
+  from = "docs/getting-started/my-first-biscuit/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/my-first-biscuit.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/getting-started/policies/"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/authorization-policies.html"
+
+[[redirects]]
+  force = true
+  from = "docs/getting-started/policies/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/authorization-policies.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/getting-started/datalog/"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/authorization-policies.html"
+
+[[redirects]]
+  force = true
+  from = "docs/getting-started/datalog/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/getting-started/authorization-policies.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/Usage/c/"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/c.html"
+
+[[redirects]]
+  force = true
+  from = "docs/Usage/c/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/c.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/Usage/go/"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/go.html"
+
+[[redirects]]
+  force = true
+  from = "docs/Usage/go/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/go.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/Usage/node/"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/nodejs.html"
+
+[[redirects]]
+  force = true
+  from = "docs/Usage/node/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/nodejs.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/Usage/cli/"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/command-line.html"
+
+[[redirects]]
+  force = true
+  from = "docs/Usage/cli/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/command-line.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/Usage/haskell/"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/haskell.html"
+
+[[redirects]]
+  force = true
+  from = "docs/Usage/haskell/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/haskell.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/Usage/java/"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/java.html"
+
+[[redirects]]
+  force = true
+  from = "docs/Usage/java/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/java.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/Usage/rust/"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/rust.html"
+
+[[redirects]]
+  force = true
+  from = "docs/Usage/rust/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/usage/rust.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/guides/common-patterns/"
+  status = 301
+  to = "https://doc.biscuitsec.org/recipes/common-patterns.html"
+
+[[redirects]]
+  force = true
+  from = "docs/guides/common-patterns/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/recipes/common-patterns.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/guides/interop/"
+  status = 301
+  to = "https://doc.biscuitsec.org/recipes/interoperability-reusability.html"
+
+[[redirects]]
+  force = true
+  from = "docs/guides/interop/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/recipes/interoperability-reusability.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/guides/rbac/"
+  status = 301
+  to = "https://doc.biscuitsec.org/recipes/role-based-access-control.html"
+
+[[redirects]]
+  force = true
+  from = "docs/guides/rbac/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/recipes/role-based-access-control.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/reference/cryptography/"
+  status = 301
+  to = "https://doc.biscuitsec.org/reference/cryptography.html"
+
+[[redirects]]
+  force = true
+  from = "docs/reference/cryptography/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/reference/cryptography.html"
+
+[[redirects]]
+  force = true
+  from = "/docs/reference/datalog/"
+  status = 301
+  to = "https://doc.biscuitsec.org/reference/datalog.html"
+
+[[redirects]]
+  force = true
+  from = "docs/reference/datalog/index.html"
+  status = 301
+  to = "https://doc.biscuitsec.org/reference/datalog.html"
+
