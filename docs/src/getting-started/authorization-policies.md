@@ -56,7 +56,6 @@ allow if
   resource($res),
   operation($op),
   right($res, $op);
-
 // otherwise, allow if we're admin
 allow if is_admin();
 </code></pre>

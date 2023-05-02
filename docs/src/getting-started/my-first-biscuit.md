@@ -91,7 +91,6 @@ _authorizer.biscuit-datalog_
 operation("write");
 resource("resource1");
 time(2021-12-21T20:00:00Z);
-
 // server-side ACLs
 right("1234", "resource1", "read");
 right("1234", "resource1", "write");
@@ -101,7 +100,6 @@ is_allowed($user, $res, $op) <-
   resource($res),
   operation($op),
   right($user, $res, $op);
-
 // the request can go through if the current user
 // is allowed to perform the current operation
 // on the current resource
