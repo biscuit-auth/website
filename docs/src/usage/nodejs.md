@@ -5,6 +5,9 @@ and on [NPM](https://www.npmjs.com/package/@biscuit-auth/biscuit-wasm). It wraps
 [Biscuit Rust library](https://github.com/biscuit-auth/biscuit-rust) in WebAssembly, and it
 provides both CommonJS and EcmaScript module interfaces.
 
+⚠️ support for WebAssembly modules in NodeJS is disabled by default and needs to be explicitly enabled with a command-line flag: `node --experimental-wasm-modules index.js`.
+
+
 The methods that can fail (like `Authorizer.authorize()`) will throw an exception, containing a
 copy of the [Rust library error](https://docs.rs/biscuit-auth/latest/biscuit_auth/error/enum.Token.html)
 deserialized from JSON.
