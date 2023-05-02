@@ -2,15 +2,23 @@
 
 ## Install
 
-### From source
+### From pre-built packages
+
+Pre-built packages are available: <https://github.com/biscuit-auth/biscuit-cli/releases/latest>
+
+### With `cargo`
 
 ```
 cargo install biscuit-cli
 ```
 
-### From pre-built packages
+### From source
 
-Pre-built packages are available: <https://github.com/biscuit-auth/biscuit-cli/releases/latest>
+```
+git clone https://github.com/biscuit-auth/biscuit-cli.git
+cd biscuit-cli
+cargo install --path .
+```
 
 ## Create a key pair
 
