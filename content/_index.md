@@ -8,7 +8,7 @@ lead = '<b>Biscuit</b> is an authorization token with decentralized verification
 url = "/docs/getting-started/introduction/index.html"
 url_button = "Get started"
 repo_version = "Specification"
-repo_license = "Open-source MIT License."
+repo_license = "Open-source Apache-2.0 License."
 repo_url = "https://github.com/biscuit-auth/biscuit"
 token = "En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiAs2CFWr5WyHHWEiMhTXxVNw4gP7PlADPaGfr_AQk9WohpA6LZTjFfFhcFQrMsp2O7bOI9BOzP-jIE5PGhha62HDfX4t5FLQivX5rUhH5iTv2c-rd0kDSazrww4cD1UCeytDSIiCiCfMgpVPOuqq371l1wHVhCXoIscKW-wrwiKN80vR_Rfzg=="
 
