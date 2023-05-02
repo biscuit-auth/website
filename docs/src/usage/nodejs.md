@@ -16,60 +16,136 @@ In `package.json`:
 ```json
 {
     "dependencies": {
-        "biscuit-wasm": "0.1.1"
+        "@biscuit-auth/biscuit-wasm": "0.4.0"
     }
 }
+```
+
+⚠️ Due to some WASM-side dependencies, NodeJS versions before v19 require the following:
+
+```js
+import { webcrypto } from 'node:crypto';
+globalThis.crypto = webcrypto;
 ```
 
 ## Create a root key
 
 ```javascript
-const {KeyPair} = require('@biscuit-auth/biscuit-wasm');
+const { KeyPair } = require('@biscuit-auth/biscuit-wasm');
 
-let root = new KeyPair();
+const root = new KeyPair();
 ```
 
 ## Create a token
 
 ```javascript
-const {Biscuit, KeyPair} = require('@biscuit-auth/biscuit-wasm');
+const { biscuit, KeyPair } = require('@biscuit-auth/biscuit-wasm');
 
-let builder = Biscuit.builder();
-builder.add_authority_fact("user(1234)");
-builder.add_authority_check_("check if operation(\"read\");");
-    
+const root = new KeyPair();
+const userId = "1234";
+// a token can be created from a datalog snippet
+const biscuitBuilder = biscuit`
+  user(${userId});
+  check if resource("file1");
+`;
+
+// facts, checks and rules can be added one by one on an existing builder.
+for (let right of ["read", "write"]) {
+    biscuitBuilder.addFact(fact`right(${right})`);
+}
+
 let token = builder.build(root);
+console.log(token.toBase64());
 ```
 
-## Create an authorizer
+## Authorize a token
 
 ```javascript
-let authorizer = token.authorizer();
+const { authorizer, Biscuit } = require('@biscuit-auth/biscuit-wasm');
 
-authorizer.add_code("allow if user(1234); deny if true;");
-var accepted_policy = authorizer.authorize();
+const token = Biscuit.fromBase64("<base64 string>");
+
+const userId = "1234";
+const auth = authorizer`
+  resource("file1");
+  operation("read");
+  allow if user(${userId}), right("read");
+`;
+auth.addToken(token);
+
+// returns the index of the matched policy. Here there is only one policy,
+// so the value will be `0`
+const acceptedPolicy = authorizer.authorize();
+
+// the authorization process is restricted to protect from DoS attacks. The restrictions can be configured
+const acceptedPolicyCustomLimits = authorizer.authorizeWithLimits({
+  max_facts: 100, // default: 1000
+  max_iterations: 10, // default: 100
+  max_time_micro: 100000 // default: 1000 (1ms)
+});
 ```
 
 ## Attenuate a token
 
 ```javascript
-let block = token.create_block();
+const { block, Biscuit } = require('@biscuit-auth/biscuit-wasm');
+
+const token = Biscuit.fromBase64("<base64 string>");
 
 // restrict to read only
-block.add_check("check if operation(\"read\")");
-let attenuated_token = token.append(block);
+const attenuatedToken = token.append(block`check if operation("read")`);
+console.log(attenuatedToken.toBase64());
 ```
 
 ## Seal a token
 
+A sealed token cannot be attenuated further.
+
 ```javascript
-let sealed_token = token.seal();
+const { Biscuit } = require('@biscuit-auth/biscuit-wasm');
+
+const token = Biscuit.fromBase64("<base64 string>");
+
+const sealedToken = token.sealToken();
 ```
 
 ## Reject revoked tokens
 
-TODO
+
+```javascript
+const { Biscuit } = require('@biscuit-auth/biscuit-wasm');
+
+const token = Biscuit.fromBase64("<base64 string>");
+
+// revocationIds is a list of hex-encoded revocation identifiers,
+// one per block
+const revocationIds = token.getRevocationIdentifiers();
+
+if (containsRevokedIds(revocationIds)) {
+    // trigger an error
+}
+
+```
 
 ## Query data from the authorizer
 
-TODO
+```javascript
+const { authorizer, rule, Biscuit } = require('@biscuit-auth/biscuit-wasm');
+
+const token = Biscuit.fromBase64("<base64 string>");
+
+const userId = "1234";
+const auth = authorizer`
+  resource("file1");
+  operation("read");
+  allow if user(${userId}), right("read");
+`;
+auth.addToken(token);
+
+// returns the index of the matched policy. Here there is only one policy,
+// so the value will be `0`
+const acceptedPolicy = auth.authorize();
+
+const results = auth.query(rule`u($id) <- user($id)`);
+console.log(results.map(fact => fact.toString()));
+```

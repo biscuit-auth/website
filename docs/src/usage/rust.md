@@ -8,7 +8,7 @@ The Rust version of Biscuit can be found on [Github](https://github.com/biscuit-
 In `Cargo.toml`:
 
 ```toml
-biscuit-auth = "3.0"
+biscuit-auth = "3.1"
 ```
 
 ## Create a root key

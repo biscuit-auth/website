@@ -10,6 +10,7 @@ cargo install biscuit-cli
 
 ### From pre-built packages
 
+Pre-built packages are available: <https://github.com/biscuit-auth/biscuit-cli/releases/latest>
 
 ## Create a key pair
 
@@ -60,13 +61,14 @@ $ echo 'right("file1");' | biscuit generate --raw --private-key-file private-key
 ## Inspect a token
 
 ```
-❯ biscuit inspect --raw-input biscuit-file.bc --public-key-file public-key-file
-Authority block:
-== Datalog ==
-right("file1");
-
-== Revocation id ==
-a1675990f0b23015019a49b6b003c14fcfd2be134c9899b8146f4f702f8089486ca20766e188cd3388eb8ef653327a78e2dc0f6e42d31be8d97b1c5a8488eb0e
+$ biscuit inspect --raw-input biscuit-file.bc --public-key-file public-key-file
+> Open biscuit
+> Authority block:
+> == Datalog ==
+> right("file1");
+>
+> == Revocation id ==
+> a1675990f0b23015019a49b6b003c14fcfd2be134c9899b8146f4f702f8089486ca20766e188cd3388eb8ef653327a78e2dc0f6e42d31be8d97b1c5a8488eb0e
 
 ==========
 
@@ -74,13 +76,14 @@ a1675990f0b23015019a49b6b003c14fcfd2be134c9899b8146f4f702f8089486ca20766e188cd33
 🙈 Datalog check skipped 🛡️
 ```
 
-## Verify a token
+## Authorize a token
 
 ```
 $ biscuit inspect --raw-input biscuit-file.bc \
    --public-key-file public-key-file \
-   --verify-with 'allow if right("file1");' \
+   --authorize-with 'allow if right("file1");' \
    --include-time
+> Open biscuit
 > Authority block:
 > == Datalog ==
 > right("file1");
@@ -109,4 +112,7 @@ $ biscuit attenuate --raw-input biscuit-file.bc  --add-ttl "1 day" --block ""
 
 ## Seal a token
 
-TODO
+```
+# this will prevent a biscuit from being attenuated further
+$ biscuit seal --raw-input biscuit-file.bc
+```
