@@ -35,23 +35,18 @@ Those authorization policies can be hardcoded in your application or be dynamica
 
 ### Authorization policy example
 
-Authorizer
-
-<bc-datalog-editor>
-<pre><code>
+<bc-datalog-playground>
+<pre><code class="authorizer">
 // We receive a request to read "admin.doc"
 // The request contains a token with the following content
 user("1234"); // the user is identified as "1234"
 check if operation("read"); // the token is restricted to read-only operations
-
 // The authorizer loads facts representing the request
 resource("admin.doc");
 operation("read");
-
 // The authorizer loads the user's rights
 right("1234", "admin.doc", "read");
 right("1234", "admin.doc", "write");
-
 // Finally, the authorizer tests policies
 // by looking for a set of facts matching them
 allow if
@@ -60,26 +55,7 @@ allow if
   operation($op),
   right($user_id, $res, $op);
 </code></pre>
-</bc-datalog-editor> 
-
-Result
-
-**Success**
-
-Facts
-
-<bc-datalog-editor>
-<pre><code>
-operation("read");
-
-resource("admin.doc");
-
-right("1234","admin.doc","read");
-right("1234","admin.doc","write");
-
-user("1234");
-</code></pre>
-</bc-datalog-editor> 
+</bc-datalog-playground> 
 
 ## Biscuit is so much more
 

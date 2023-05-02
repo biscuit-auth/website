@@ -36,8 +36,8 @@ We want to check if an operation is authorized, depending on the user requesting
 
 From that user id, we would look up in the database the user's roles, and for each role the authorized operations, and load that as facts. We can then check that we have the rights to perform the operation:
 
-<bc-datalog-editor>
-<pre><code>
+<bc-datalog-playground>
+<pre><code class="authorizer">
 role("admin", ["billing:read", "billing:write", "address:read", "address:write"] );
 role("accounting", ["billing:read", "billing:write", "address:read"]);
 role("support", ["address:read", "address:write"]);
@@ -70,7 +70,7 @@ allow if
 
 deny if true;
 </code></pre>
-</bc-datalog-editor> 
+</bc-datalog-playground> 
 
 Why are we loading data from the database and checking the rights here, while we could do all of that as part of a SQL query? After all, Datalog is doing similar work, joining facts like we would join tables.
 
@@ -168,8 +168,8 @@ right($id, $principal, $operation, $priority) <-
 
 You can explore the full example here:
 
-<bc-datalog-editor>
-<pre><code>
+<bc-datalog-playground>
+<pre><code class="authorizer">
 role("low priority", "admin", ["billing:read", "billing:write", "address:read", "address:write"] );
 role("low priority","accounting", ["billing:read", "billing:write", "address:read"]);
 role("low priority","support", ["address:read", "address:write"]);
@@ -214,7 +214,7 @@ allow if
 
 deny if true;
 </code></pre>
-</bc-datalog-editor> 
+</bc-datalog-playground> 
 
 ## Attenuation
 
@@ -224,8 +224,8 @@ Attenuation in Biscuit provides a good escape hatch to avoid that complexity. As
 
 Leela can instead take her own token, attenuate it to allow the delivery of high priority packages for a limited time. She can even seal the token to avoid other attenuations. We would end up with the following:
 
-<bc-datalog-editor>
-<pre><code>
+<bc-datalog-playground>
+<pre><code class="authorizer">
 // we got this from the first block of the token
 user(3);
 
@@ -269,6 +269,6 @@ allow if
 
 deny if true
 </code></pre>
-</bc-datalog-editor> 
+</bc-datalog-playground> 
 
 Attenuating a token does not increase rights: if suddenly Leela loses the delivery role, the check of the attenuated token could succeed but authorization would fail both for Leela and Bender because the `right` fact would not be generated.

@@ -299,36 +299,39 @@ is `read` (and will not allow any other `operation` fact), and then that we have
 the `read` right over the resource.
 The second caveat checks that the resource is `file1`.
 
-<bc-datalog-editor>
-<pre><code>
-authority:
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
   right("file1", "read");
   right("file2", "read");
   right("file1", "write");
-----------
-Block 1:
+</code></pre>
+<pre><code class="block">
 check if
   resource($0),
   operation("read"),
-  right($0, "read")  // restrict to read operations
-----------
-Block 2:
-check if
-  resource("file1")  // restrict to file1 resource
+  right($0, "read");  // restrict to read operations
 </code></pre>
-</bc-datalog-editor> 
+<pre><code class="block">
+check if
+  resource("file1");  // restrict to file1 resource
+</code></pre>
+<pre><code class="authorizer">
+  resource("file1");
+  operation("read");
+</code></pre>
+</bc-datalog-playground> 
 
 The authorizer side provides the `resource` and `operation` facts with information
 from the request.
+
+Here the authorizer provides the facts `resource("file1")` and
+`operation("read")`, both checks succeed.
 
 If the authorizer provided the facts `resource("file2")` and
 `operation("read")`, the rule application of the first check would see
 `resource("file2"), operation("read"), right("file2", "read")`
 with `X = "file2"`, so it would succeed, but the second check would fail
-because it expects `resource("file1")`.
-
-If the authorizer provided the facts `resource("file1")` and
-`operation("read")`, both checks would succeed.
+because it expects `resource("file1")`. Try it out!
 
 #### Broad authority rules
 
@@ -337,30 +340,34 @@ before being given to a user. The authority block can define rules that will gen
 facts depending on data provided by the authorizer. This helps reduce the size of
 the token.
 
-<bc-datalog-editor>
-<pre><code>
-authority:
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
 // if there is an ambient resource and we own it, we can read it
 right($0, "read") <- resource($0), owner($1, $0);
 // if there is an ambient resource and we own it, we can write to it
 right($0, "write") <- resource($0), owner($1, $0);
-----------
-Block 1:
+</code></pre>
+<pre><code class="block">
 check if
   right($0, $1),
   resource($0),
-  operation($1)
-----------
-Block 2:
+  operation($1);
+</code></pre>
+<pre><code class="block">
 check if
   resource($0),
-  owner("alice", $0) // defines a token only usable by alice
+  owner("alice", $0); // defines a token only usable by alice
 </code></pre>
-</bc-datalog-editor> 
+<pre><code class="authorizer">
+resource("file1");
+operation("read");
+owner("alice", "file1");
+</code></pre>
+</bc-datalog-playground> 
 
 These rules will define authority facts depending on authorizer data.
-If we had the facts `resource("file1")` and
-`owner("alice", "file1")`, the authority rules will define
+Here, we have the facts `resource("file1")` and
+`owner("alice", "file1")`, the authority rules then define
 `right("file1", "read")` and `right("file1", "write")`,
 which will allow check 1 and check 2 to succeed.
 
@@ -384,22 +391,24 @@ by "or". A single query needs to match for the policy to match.
 We can define queries or rules with expressions on some predicate values, and
 restrict usage based on ambient values:
 
-<bc-datalog-editor>
-<pre><code>
-authority:
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
 right("/folder/file1", "read");
 right("/folder/file2", "read");
 right("/folder2/file3", "read");
-----------
-check if resource($0), right($0, $1)
-----------
-check if time($0), $0 < 2019-02-05T23:00:00Z // expiration date
-----------
-check if source_IP($0), ["1.2.3.4", "5.6.7.8"].contains($0) // set membership
-----------
-check if resource($0), $0.starts_with("/folder/") // prefix operation on strings
 </code></pre>
-</bc-datalog-editor> 
+<pre><code class="block">
+check if resource($0), right($0, $1);
+check if time($0), $0 < 2019-02-05T23:00:00Z; // expiration date
+check if source_ip($0), ["1.2.3.4", "5.6.7.8"].contains($0); // set membership
+check if resource($0), $0.starts_with("/folder/"); // prefix operation on strings
+</code></pre>
+<pre><code class="authorizer">
+resource("/folder/file1");
+time(2019-02-01T23:00:00Z);
+source_ip("1.2.3.4");
+</code></pre>
+</bc-datalog-playground> 
 
 Executing an expression must always return a boolean, and all variables
 appearing in an expression must also appear in other predicates of the
