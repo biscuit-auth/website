@@ -54,7 +54,7 @@ for (let right of ["read", "write"]) {
     biscuitBuilder.addFact(fact`right(${right})`);
 }
 
-let token = builder.build(root);
+const token = builder.build(root);
 console.log(token.toBase64());
 ```
 
