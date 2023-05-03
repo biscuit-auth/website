@@ -194,7 +194,7 @@ check if time($time), $time < 2023-05-04T00:00:00Z;
 
 ### Datalog playground
 
-The datalog playground allows you to type in and evaluate datalog code with
+The datalog playground allows you to type in and evaluate datalog code without
 providing a token. It displays the evaluation results, as well as all the facts
 generated during evaluation.
 
