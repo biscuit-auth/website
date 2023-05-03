@@ -19,6 +19,7 @@
     - [Java](usage/java.md)
     - [NodeJS](usage/nodejs.md)
     - [Rust](usage/rust.md)
+    - [Web components](usage/web-components.md)
 
 ## Recipes
 
