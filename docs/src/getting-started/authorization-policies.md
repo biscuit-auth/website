@@ -52,7 +52,7 @@ It is important to remember that fact names (`user`, `resource`, `operation`) do
 
 ## Datalog in Biscuit
 
-While this page gives an overview of how datalog works and can be used to describe access control, [complete datalog reference](../reference/datalog.md) is available for a detailed description of the datalog engine inner workings, as well as a list of all available functions and operations.
+While this page gives an overview of how datalog works and can be used to describe access control, [the complete datalog reference](../reference/datalog.md) is available for a detailed description of the datalog engine inner workings, as well as a list of all available functions and operations.
 
 ### Checks
 
