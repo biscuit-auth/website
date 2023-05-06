@@ -48,7 +48,7 @@ allow if user($u);
 </code></pre>
 </bc-datalog-playground> 
 
-It is important to remember the following that fact names (`user`, `resource`, `operation`) don't have a specific meaning within datalog. As long as facts names are consistent between facts and checks / policies, they can be named freely (within syntaxic rules).
+It is important to remember that fact names (`user`, `resource`, `operation`) don't have a specific meaning within datalog. As long as facts names are consistent between facts and checks / policies, they can be named freely (within syntaxic rules).
 
 ## Datalog in Biscuit
 
