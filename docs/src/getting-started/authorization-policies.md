@@ -27,9 +27,9 @@ Let's consider a user whose user id is `"1234"`, and who has generated a token w
 
 The user then issues the following HTTP request on the service API: `GET /files/file1.txt`.
 
-Here is how the scenario can be expressed with datalog:
+Here is how the scenario can be expressed with datalog (the example is interactive, feel free to make changes and try to guess their outcome):
 
-<bc-datalog-playground>
+<bc-datalog-playground showBlocks="true">
 <pre><code class="block">
 // the token contains information about its holder
 user("1234");
@@ -48,7 +48,7 @@ allow if user($u);
 </code></pre>
 </bc-datalog-playground> 
 
-It is important to remember that fact names (`user`, `resource`, `operation`) don't have a specific meaning within datalog. As long as facts names are consistent between facts and checks / policies, they can be named freely (within syntaxic rules).
+It is important to remember that fact names (`user`, `resource`, `operation`) don't have a specific meaning within datalog. As long as facts names are consistent between facts and checks / policies, they can be named freely (as long as the name starts with a letter and contains only letters, digits, `_` or `:`).
 
 ## Datalog in Biscuit
 
@@ -85,9 +85,11 @@ Checks can contain several _predicates_ (something matching on facts and introdu
 Let's illustrate this with an example: a check that ensures that a user can perform an operation on a resource only if explicitly allowed by a corresponding fact `right()`.
 The check also ensures that the operation is either `read` or `create`.
 
-<bc-datalog-playground>
-<pre><code class="authorizer">
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
 user("1234");
+</code></pre>
+<pre><code class="authorizer">
 operation("read");
 resource("file1.txt");
 right("1234", "file1.txt", "read");
@@ -102,19 +104,28 @@ allow if true;
 
 The validation in Biscuit relies on a list of allow or deny policies that are evaluated after all of the checks have succeeded. Like checks, they are queries that must find a matching set of facts to succeed. If they do not match, we try the next one. If they succeed, an allow policy will make the request validation succeed, while a deny policy will make it fail. If no policy matched, the validation will fail.
 
-Example policies:
+Policies allow to declare a series of alternatives, in descending priorities. It is useful when several authorization paths are available. This is different from checks, which all must succeed. You can think of it as such:
 
-<bc-datalog-editor>
-<pre><code>
-// verifies that we have rights for this request
-allow if
-  resource($res),
-  operation($op),
-  right($res, $op);
-// otherwise, allow if we're admin
-allow if is_admin();
+- checks are combined with **and**;
+- policies are combined with **or**.
+
+Here, the request is authorized if the token holder has the corresponding right declared, _or_ if the token carries a special `admin(true)` fact.
+
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+user("1234");
+// uncomment and see what happens, then try to remove the `user` fact, or the `right` fact
+// admin(true);
 </code></pre>
-</bc-datalog-editor> 
+<pre><code class="authorizer">
+operation("read");
+resource("file1.txt");
+right("1234", "file1.txt", "read");
+allow if user($u),
+  operation($o), resource($r), right($u, $r, $o);
+allow if admin(true);
+</code></pre>
+</bc-datalog-playground> 
 
 ### Blocks
 
