@@ -96,7 +96,7 @@ right("1234", "file1.txt", "read");
 check if user($u),
   operation($o), resource($r), right($u, $r, $o),
   ["read", "create"].contains($o);
-allow if true;
+allow if user($u);
 </code></pre>
 </bc-datalog-playground> 
 
@@ -126,6 +126,8 @@ allow if user($u),
 allow if admin(true);
 </code></pre>
 </bc-datalog-playground> 
+
+A common pattern is to only use checks for authorization. In that case a single `allow if true` policy will be necessary for authorization to go through.
 
 ### Blocks
 
