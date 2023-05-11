@@ -7,59 +7,127 @@ A Biscuit token could be verified by applications in various languages. To make 
 Logic languages are well suited for authorization policies, because they can represent complex relations between elements (like roles, groups, hierarchies) concisely, and efficiently explore and combine multiple rules.
 
 Biscuit's language loads facts, data that can comes from the token (user id), from the request (file name, read or write access, current date) or the application's internal databases (users, roles, rights).
-Then it validates those facts in two ways:
-- a check list: each check validates the presence of a fact. If one or more checks fail, the request is denied. Example: `check if time($time), $time < 2022-01-01T00:00:00Z` for an expiration date.
-- allow/deny policies: a list of policies that are tried in sequence until one of them matches. If it is an allow policy, the request is accepted, while if it is a deny policy (or none matched), the request is denied. Example: `allow if resource($res), operation($op), right($res, $op)`.
 
-Allow/deny policies can only be defined in the application, while checks can come from the application or the token. This is how token are attenuated, by adding more checks (i.e. more restrictions) to an existing token.
+Then it uses those facts to decide whether the request is allowed to go trough. It does so through two mechanisms:
+
+- a check list: each check validates the presence of one or more facts. **Every check must succeed for the request to be allowed.**
+  Example: `check if time($time), $time < 2022-01-01T00:00:00Z` for an expiration date.
+- allow/deny policies: a list of policies that are tried in sequence until _one of them matches_. If it is an allow policy, the request is accepted, while if it is a deny policy the request is denied. If no policy matches, the request is also denied.
+  Example: `allow if resource($res), operation($op), right($res, $op)`.
+
+Allow/deny policies can only be defined in the application, while checks can come from the application or the token: tokens can only add _restrictions_ (through checks), while only the application can approve a token (by defining an `allow` policy).
+
+Tokens can be attenuated by appending a block containing checks.
 
 ### First code example
 
-<bc-datalog-editor>
-<pre><code>
-resource("file1.txt");
-check if resource($file), $file.ends_with("txt");
-allow if true;
+Here we model an application allowing read or write access to files. It issues API tokens to logged-in users, and those tokens can be scoped to only allow specific operations. 
+
+Let's consider a user whose user id is `"1234"`, and who has generated a token which is only allowed to perform a read operation on `.txt` files.
+
+The user then issues the following HTTP request on the service API: `GET /files/file1.txt`.
+
+Here is how the scenario can be expressed with datalog (the example is interactive, feel free to make changes and try to guess their outcome):
+
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+// the token contains information about its holder
+user("1234");
+// the token contains checks:
+// it is only usable for read operations
+check if operation("read");
+// it is only usable on txt files.
+check if resource($file), $file.ends_with(".txt");
 </code></pre>
-</bc-datalog-editor> 
+<pre><code class="authorizer">
+// the application provides context about the request:
+resource("file1.txt"); // based on the request path
+operation("read"); // based on the request HTTP method
+// the application only accepts tokens which contain user information
+allow if user($u);
+</code></pre>
+</bc-datalog-playground> 
+
+It is important to remember that fact names (`user`, `resource`, `operation`) don't have a specific meaning within datalog. As long as facts names are consistent between facts and checks / policies, they can be named freely (as long as the name starts with a letter and contains only letters, digits, `_` or `:`).
 
 ## Datalog in Biscuit
 
-Please see the [datalog reference page](../reference/datalog.md) for more info.
+While this page gives an overview of how datalog works and can be used to describe access control, [the complete datalog reference](../reference/datalog.md) is available for a detailed description of the datalog engine inner workings, as well as a list of all available functions and operations.
 
 ### Checks
 
 The first part of the authorization logic comes with checks. They are queries over the Datalog facts. If the query produces something, if the underlying rule generates one or more facts, the check is validated. If the query does not produce anything, the check fails. For a token verification to be successful, all of the checks must succeed.
 
-As an example, we could have a check that tests the presence of a file resource, and verifies that its filename matches a specific pattern, using a string expression:
+In the previous example, there are two checks:
 
 <bc-datalog-editor>
 <pre><code>
-check if
-  resource($path),
-  $path.matches("file[0-9]+.txt")
+// the token contains checks:
+// it is only usable for read operations
+check if operation("read");
+// it is only usable on txt files.
+check if resource($file), $file.ends_with(".txt");
 </code></pre>
 </bc-datalog-editor> 
 
-This check matches only if there exists a `resource($path)` fact for which `$path` matches a pattern.
+The first one ensures that the fact `operation("read")` is present. This kind of fact (information about the request) is often called an _ambient fact_. Common ambient facts are `resource(…)` (the resource being accessed), `operation(…)` (the operation being attempted), `time(…)` (the datetime at which the request has been received).
+
+The second check is a bit more sophisticated: instead of matching an exact fact, it starts by matching _any_ fact named `resource()`, and binds a variable named `$file`
+to the actual resource name. It then checks that the resource name ends with `".txt"`. Here, `$file.ends_with(".txt")` is an _expression_. For the check to be valid,
+_all the expressions it contains must evaluate to `true`_.
+
+Checks can contain several _predicates_ (something matching on facts and introducing variables) and several _expressions_:
+
+- all the _predicates_ must match existing facts
+- if a variable appears several times, all the values must match
+- all the expressions must evaluate to `true`
+
+Let's illustrate this with an example: a check that ensures that a user can perform an operation on a resource only if explicitly allowed by a corresponding fact `right()`.
+The check also ensures that the operation is either `read` or `create`.
+
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+user("1234");
+</code></pre>
+<pre><code class="authorizer">
+operation("read");
+resource("file1.txt");
+right("1234", "file1.txt", "read");
+check if user($u),
+  operation($o), resource($r), right($u, $r, $o),
+  ["read", "create"].contains($o);
+allow if user($u);
+</code></pre>
+</bc-datalog-playground> 
 
 ### Allow and deny policies
 
 The validation in Biscuit relies on a list of allow or deny policies that are evaluated after all of the checks have succeeded. Like checks, they are queries that must find a matching set of facts to succeed. If they do not match, we try the next one. If they succeed, an allow policy will make the request validation succeed, while a deny policy will make it fail. If no policy matched, the validation will fail.
 
-Example policies:
+Policies allow to declare a series of alternatives, in descending priorities. It is useful when several authorization paths are available. This is different from checks, which all must succeed. You can think of it as such:
 
-<bc-datalog-editor>
-<pre><code>
-// verifies that we have rights for this request
-allow if
-  resource($res),
-  operation($op),
-  right($res, $op);
-// otherwise, allow if we're admin
-allow if is_admin();
+- checks are combined with **and**;
+- policies are combined with **or**.
+
+Here, the request is authorized if the token holder has the corresponding right declared, _or_ if the token carries a special `admin(true)` fact.
+
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+user("1234");
+// uncomment and see what happens, then try to remove the `user` fact, or the `right` fact
+// admin(true);
 </code></pre>
-</bc-datalog-editor> 
+<pre><code class="authorizer">
+operation("read");
+resource("file1.txt");
+right("1234", "file1.txt", "read");
+allow if user($u),
+  operation($o), resource($r), right($u, $r, $o);
+allow if admin(true);
+</code></pre>
+</bc-datalog-playground> 
+
+A common pattern is to only use checks for authorization. In that case a single `allow if true` policy will be necessary for authorization to go through.
 
 ### Blocks
 
