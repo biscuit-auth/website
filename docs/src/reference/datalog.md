@@ -34,25 +34,16 @@ A fact contains data of the following types:
 Rules are used to generate new facts from existing ones. They specify a pattern to select facts and extract data from them.
 When we execute the rule `right($resource, "write") <- user($user_id), owner($user_id, $resource)`, we will look at all the `user` facts, and for each one, look at the `owner` facts with a matching `$user_id` value, select the second element from the fact with the `$resource` variable, and create a new fact from it.
 
-With the following facts:
-
-<bc-datalog-editor>
-<pre><code>
+<bc-datalog-playground>
+<pre><code class="authorizer">
+right($resource, "write") <- user($user_id), owner($user_id, $resource);
 user(1);
 owner(1, "file1.txt");
 owner(1, "file2.txt");
 owner(2, "file3.txt");
+allow if true;
 </code></pre>
-</bc-datalog-editor> 
-
-It will generate the facts:
-
-<bc-datalog-editor>
-<pre><code>
-right("file1.txt", "write");
-right("file2.txt", "write");
-</code></pre>
-</bc-datalog-editor> 
+</bc-datalog-playground> 
 
 A rule contains data of the following types:
 
@@ -113,8 +104,10 @@ If no policy matched, the request is rejected.
 
 They have a format similar to rules:
 
-<bc-datalog-editor>
-<pre><code>
+<bc-datalog-playground>
+<pre><code class="authorizer">
+user("admin");
+right("file1.txt", "read");
 // check
 check if right("file1.txt", "read");
 
@@ -124,7 +117,7 @@ allow if user("admin");
 // deny policy
 deny if true;
 </code></pre>
-</bc-datalog-editor> 
+</bc-datalog-playground> 
 
 ## Block scoping
 
