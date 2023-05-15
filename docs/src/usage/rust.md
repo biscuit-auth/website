@@ -23,7 +23,7 @@ let root_keypair = KeyPair::new();
 
 ```rust
 
-use biscuit_auth::{biscuit, biscuit_merge, Biscuit, KeyPair, error};
+use biscuit_auth::{error, macros::*, Biscuit, KeyPair};
 
 fn create_token(root: &KeyPair) -> Result<Biscuit, error::Token> {
     let user_id = "1234";
@@ -54,7 +54,7 @@ fn create_token(root: &KeyPair) -> Result<Biscuit, error::Token> {
 ## Create an authorizer
 
 ```rust
-use biscuit_auth::{authorizer, Biscuit, error, builder::Fact};
+use biscuit_auth::{builder_ext::AuthorizerExt, error, macros::*, Biscuit};
 
 fn authorize(token: &Biscuit) -> Result<(), error::Token> {
     let operation = "read";
@@ -70,7 +70,7 @@ fn authorize(token: &Biscuit) -> Result<(), error::Token> {
 
     // add a `allow if true;` policy
     // meaning that we are relying entirely on checks carried in the token itself
-    authorizer.add_allow_all()?;
+    authorizer.add_allow_all();
 
     // link the token to the authorizer
     authorizer.add_token(token)?;
@@ -84,18 +84,16 @@ fn authorize(token: &Biscuit) -> Result<(), error::Token> {
 ## Attenuate a token
 
 ```rust
-use biscuit_auth::{block, Biscuit, BlockBuilder, error, builder::Check};
+use biscuit_auth::{builder_ext::BuilderExt, error, macros::*, Biscuit};
 use std::time::{Duration, SystemTime};
 
 fn attenuate(token: &Biscuit) -> Result<Biscuit, error::Token> {
     let res = "file1";
     // same as `biscuit!` and `authorizer!`, a `block_merge!` macro is available
-    let mut builder = block!(
-      r#"check if resource(res);"#
-    );
+    let mut builder = block!(r#"check if resource({res});"#);
 
-    builder.check_expiration_date(System::now() + Duration::from_secs(60));
-    
+    builder.check_expiration_date(SystemTime::now() + Duration::from_secs(60));
+
     token.append(builder)
 }
 ```
