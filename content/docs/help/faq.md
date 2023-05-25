@@ -38,5 +38,15 @@ The cryptography of biscuit tokens has been informally checked out by experiment
 
 The documentation carries a more detailed [explanation of the cryptography](https://doc.biscuitsec.org/reference/cryptography.html).
 
+## Is this used in production? Has it been audited? Can I be fired for choosing biscuit?
+
+Biscuit is currently used in production. We know it is used by [Clever Cloud](https://clever-cloud.com), [Space And Time](https://www.spaceandtime.io/), [nixbuild.net](https://nixbuild.net/), even though we are not aware of all its production use cases. Additionally, [Outscale](https://outscale.com/) is investing time and resources in biscuit in the context of its IAM offering.
+
+Neither the biscuit specification nor the various implementations have been formally audited. The specification itself (more specifically the cryptographic scheme) has been informally audited by experienced cryptographers and the current specification raised no alarms.
+
+Of course biscuit is a recent piece of tech, which makes it harder to justify than more standard choices like JWT. That being said, biscuit and the patterns it allows have been instrumental in the success of several projects, so it is worth trying it out.
+
+Consider unionizing to protect yourself from being unduly fired.
+
 ## What is your favorite Biscuit recipe?
 
