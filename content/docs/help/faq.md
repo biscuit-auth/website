@@ -32,7 +32,7 @@ Offline attenuation particularly shines when it comes to make an existing author
 
 ## It's more of a comment than a question; I have found a flaw in biscuit's crypto, the private key is carried in the token.
 
-Offline attenuation in biscuit relies on chaining signed blocks. To this effect, single-use keypairs are used to validate that the blocks are correctly chained. In this scheme, only the authority block is signed with a well-known, multi-use private key, which is never carried in a token. The same applies for external signatures on third-party blocks.
+Offline attenuation in biscuit relies on chaining signed blocks together. To this effect, single-use keypairs are used to validate that the blocks are correctly chained. In this scheme, only the authority block is signed with a well-known, multi-use private key, which is never carried in a token. The same applies for external signatures on third-party blocks.
 
 The cryptography of biscuit tokens has been informally checked out by experimented cryptographers and no flaws have been found in the current scheme.
 
