@@ -24,5 +24,13 @@ This property is easily achievable in an authorization protocol where credential
 
 Offline attenuation particularly shines when it comes to make an existing authorization system evolve. In a greenfield authorization system, it is easy to bake in all the desired properties in the system itself during its design. Once the system is deployed, it becomes way harder to do. Offline attenuation gives you just that: the power of strengthening calls made in an existing system, without changing the authorization protocol itself, or requiring changes to the system architecture by introducing calls to a central token delivery service.
 
+## It's more of a comment than a question; I have found a flaw in biscuit's crypto, the private key is carried in the token.
+
+Offline attenuation in biscuit relies on chaining signed blocks. To this effect, single-use keypairs are used to validate that the blocks are correctly chained. In this scheme, only the authority block is signed with a well-known, multi-use private key, which is never carried in a token. The same applies for external signatures on third-party blocks.
+
+The cryptography of biscuit tokens has been informally checked out by experimented cryptographers and no flaws have been found in the current scheme.
+
+The documentation carries a more detailed [explanation of the cryptography](https://doc.biscuitsec.org/reference/cryptography.html).
+
 ## What is your favorite Biscuit recipe?
 
