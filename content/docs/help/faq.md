@@ -50,3 +50,4 @@ Consider unionizing to protect yourself from being unduly fired.
 
 ## What is your favorite Biscuit recipe?
 
+If you read French and tolerate the metric system (it's a big ask, we know), have a look at this recipe: <https://www.gourmandiseries.fr/palets-bretons/>.
