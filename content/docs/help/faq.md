@@ -16,6 +16,12 @@ top = false
 
 ## What is Biscuit?
 
+Biscuit is a platform made of three parts:
+
+- a token format;
+- a logic language for describing data and authorization policies;
+- libraries providing support for creating and parsing tokens as well as evaluating authorization policies in the context of a given token.
+
 ## What are the concrete benefits of offline attenuation?
 
 Offline attenuation is a powerful tool when it comes to applying the principle of least power: each action should be carried out with credentials that grant the least amount of access. Ideally, credentials should be only usable for the action they are tied to, nothing else.
