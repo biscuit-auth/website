@@ -20,7 +20,7 @@ top = false
 
 Biscuit is focused on the authorization and delegation side of API access, so it can be used as an OAuth access token. OAuth does not mandate a specific format for the access token.
 Refresh tokens work better when they are meant for a single use. In that case, a random string stored in the Authorization Server (in OAuth terms) database will fit the task.
-OIDC specifies that identity information is transmitted using JWT, so Biscuit will not be usable in their place.
+OIDC specifies that identity information is transmitted using JWTs, so Biscuit will not be usable in their place.
 
 ## Why Datalog?
 
