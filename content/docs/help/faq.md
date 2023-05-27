@@ -28,7 +28,7 @@ When searching for a suitable language to write authorization policies, it appea
 
 ## Isn't JWT enough?
 
-JWT fits a specific use case: transmitting identity and authorization information from one central service to multiple less trusted services without tampering it. This works well for simple architectures like monoliths, but will soon force some tradeoffs in complexity or safety when used in today's microservices or federate architectures.
+JWT fits a specific use case: transmitting identity and authorization information from one central service to multiple less trusted services without having it tampered with. This works well for simple architectures like monoliths, but will soon force some tradeoffs in complexity or safety when used in today's microservices or federated architectures.
 It was also specified with a number of pitfalls that created a number of security incidents over the years.
 
 Biscuit builds upon the experience earned building authorization systems with JWT and other tools, takes steps to address their risks, and clearly target the larger systems we are now buiding.
