@@ -56,7 +56,9 @@ OIDC specifies that identity information is transmitted using JWTs, so Biscuit w
 
 ## Why Datalog?
 
-When searching for a suitable language to write authorization policies, it appeared that logic languages are generally a good fit. Other projects like OPA and Oso came to the same conclusion. Datalog is simple enough to be taught in a few minutes, and its implementation is straightforward, which makes it a good choice for safe authorization.
+Biscuit needed a language that could be serialized in a compact format, and executed in the same way across different implementations in different languages. It also had to be fast to execute and have a limited impact on performance. And it had to be general enough, so it would not prescribe a specific authorization model.
+There is a long history of applying logic languages and in particular Datalog, to authorization policies, because of its well-understood semantics and its expressiveness in manipulating relational data.
+We designed a custom Datalog instead of reusing an existing one so we could specify its behaviour and execution and reduce the attack surface of the authorization core.
 
 ## Isn't JWT enough?
 
