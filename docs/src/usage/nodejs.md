@@ -190,7 +190,7 @@ app.get(
 
 The middleware takes an options object. All its fields are optional except `publicKey`:
 
-- `publicKey`: the public key used to verified token signatures;
+- `publicKey`: the public key used to verify token signatures;
 - `priorityAuthorizer`: either an authorizer or a function building an authorizer from a request. Policies from the priority authorizer are matched before the endpoint policies and the fallback authorizer policies;
 - `fallbackAuthorizer`: either an authorizer or a function building an authorizer from a request. Policies from the fallback authorizer are matched after the priority authorizer policies and the endpoint policies;
 - `tokenExtractor`: a function extracting the token string from a request. The default extractor expects the request to carry an authorization header with the `Bearer` auth scheme (ie an `Authorization:` header starting with `Bearer ` and then the biscuit token);
