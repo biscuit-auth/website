@@ -152,3 +152,47 @@ const acceptedPolicy = auth.authorize();
 const results = auth.query(rule`u($id) <- user($id)`);
 console.log(results.map(fact => fact.toString()));
 ```
+
+## Using biscuit with [express](https://expressjs.com)
+
+[Express](https://expressjs.com) is a popular web framework for NodeJS. `biscuit-wasm` provides support for express through a dedicated [middleware](https://expressjs.com/en/guide/using-middleware.html).
+
+Here is a minimal example of an application exposing a single `/protected/:dog` endpoint, and requiring a token with a corresponding `right()` fact.
+
+Calling `middleware` with an options object provides a middleware builder, which takes either an authorizer or a function building an authorizer from a request, and returns an actual middleware. This middleware generates an authorizer from the options and the builder, runs the authorization process and either aborts the request if authorization fails or passes control over to the endpoint handler if authorization succeeds.
+
+```javascript
+const express = require('express');
+const { authorizer, middleware, Biscuit, PublicKey } = require('@biscuit-auth/biscuit-wasm');
+
+const app = express();
+const port = 3000;
+
+const p = middleware({
+  publicKey: PublicKey.fromString("<public key>"),
+  fallbackAuthorizer: req => authorizer`time(${new Date()});`
+});
+
+app.get(
+  "/protected/:dog",
+  p((req) => authorizer`resource(${req.params.dog});
+                        action("read");
+                        allow if right(${req.params.dog}, "read");`),
+  (req, res) => {
+    // results of the authorization process are added to the `req` object
+    const {token, authorizer, result} = req.biscuit;
+    res.send("Hello!");
+  }
+)
+```
+
+### Middleware configuration
+
+The middleware takes an options object. All its fields are optional except `publicKey`:
+
+- `publicKey`: the public key used to verify token signatures;
+- `priorityAuthorizer`: either an authorizer or a function building an authorizer from a request. Policies from the priority authorizer are matched before the endpoint policies and the fallback authorizer policies;
+- `fallbackAuthorizer`: either an authorizer or a function building an authorizer from a request. Policies from the fallback authorizer are matched after the priority authorizer policies and the endpoint policies;
+- `tokenExtractor`: a function extracting the token string from a request. The default extractor expects the request to carry an authorization header with the `Bearer` auth scheme (ie an `Authorization:` header starting with `Bearer ` and then the biscuit token);
+- `tokenParser`: a function parsing and verifying the token. By default it parses the token from a URL-safe base64 string.
+- `onError`: an error handler. By default, it prints the error to stderr and returns an HTTP error (401 if the token is missing, 403 if it cannot be parsed, verified or authorized)
