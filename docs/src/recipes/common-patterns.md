@@ -15,7 +15,7 @@ check if time($time), $time <= 2022-03-30T20:00:00Z;
   </code>
 </bc-datalog-editor>
 
-It only depends the authorizer and tokens use the same fact name (here, `time()`). It would work with other fact names,
+It only depends on the authorizer and tokens using the same fact name (here, `time()`). It would work with other fact names,
 but the existing tooling provides helpers using `time()`, so it is better to be consistent with it. Additionally, `time()`
 is part of the [default symbol table](#default-symbols), so using it will result in smaller tokens.
 
