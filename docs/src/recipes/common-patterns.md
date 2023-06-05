@@ -1,7 +1,7 @@
 # Common patterns
 
 As a specification, biscuit does not mandate specific ways to use datalog. As far as authorization logic is concerned,
-there are no built-in facts with specific  behaviour. That being said, some patterns are common and while not part of
+there are no built-in facts with specific behaviour. That being said, some patterns are common and while not part of
 the spec, are codified in libraries and tools. Finally, using specific fact names can help with reducing token size.
 
 ## Expiration check
