@@ -85,8 +85,8 @@ user(1234);
   <code class="authorizer">
 // the authorizer provides the current date, the resource being accessed and the operation being performed
 time(2022-03-30T19:00:00Z);
-operation("read");
 resource("/articles/1");
+operation("read");
 // the authorizer provides a series of rights for the given user
 right(1234, "/articles/1", "read");
 right(1234, "/articles/1", "write");
@@ -112,8 +112,8 @@ check if resource("/articles/1");
   <code class="authorizer">
 // the authorizer provides the current date, the resource being accessed and the operation being performed
 time(2022-03-30T19:00:00Z);
-operation("read");
 resource("/articles/1");
+operation("read");
 // the authorizer provides a series of rights for the given user
 right(1234, "/articles/1", "read");
 right(1234, "/articles/1", "write");
@@ -138,8 +138,8 @@ check if resource("/articles/1");
   <code class="authorizer">
 // the authorizer provides the current date, the resource being accessed and the operation being performed
 time(2022-03-30T19:00:00Z);
-operation("write");
 resource("/articles/1/comments");
+operation("write");
 // the authorizer provides a series of rights for the given user
 right(1234, "/articles/1", "read");
 right(1234, "/articles/1", "write");
