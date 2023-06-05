@@ -156,7 +156,7 @@ more data, like a list of HTTP headers or a cryptographic hash of the body.
 ## Default symbols
 
 In order to reduce the size of tokens, the biscuit specification defines a list of strings that can be used in tokens
-without having to be serialized. Common symbols are thus almost free to use and won't increase the size of the token.
+without having to be serialized. Using these common symbols thus costs very little and won't increase the size of the token.
 It is thus then good practice to use those strings as fact names or terms, _as long as they make sense_.
 
 - read
