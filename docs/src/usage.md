@@ -6,4 +6,5 @@
 - [Haskell](./usage/haskell.md)
 - [Java](./usage/java.md)
 - [NodeJS](./usage/nodejs.md)
+- [Python](./usage/python.md)
 - [Rust](./usage/rust.md)
