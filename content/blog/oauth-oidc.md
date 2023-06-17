@@ -27,7 +27,7 @@ Based on those roles, OAuth 2.0 defines a list of authorization flows, and they 
 * the client contacts the authorization server to start the flow
 * the authorization server requests that the resource owner explicitely accepts it, generally by redirecting the resource owner to a page on the autorization server, eventually requiring username, password, etc
 * the authorization server delivers an access token to the client
-* the client uses the access token to request the resource server
+* the client uses the access token to issue a request to the resource server
 
 The different authorization flows target different use cases, like mobile applications, single page web applications, smart TVs...
 
