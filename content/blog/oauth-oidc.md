@@ -64,7 +64,7 @@ Now a picture is forming of what happens in this process:
 * the authorization server delivers an access token for B to the client
 * the client accesses resources on B
 
-Now we ay be tempted to used to ID token directly as access token in B. But that would be making the same mistake as before: the ID token's intended audience is B, and that tells nothing about the relatin between the client and B.
+Now we may be tempted to use the ID token directly as an access token in B. But that would be making the same mistake as before: the ID token's intended audience is B, and that tells nothing about the relation between the client and B.
 
 ## Refresh tokens
 
