@@ -25,7 +25,7 @@ Depending on the system, some of those roles can be mixed: the resource server c
 Based on those roles, OAuth 2.0 defines a list of authorization flows, and they all follow a general pattern:
 * the resource owner wants the client to access their resources
 * the client contacts the authorization server to start the flow
-* the authorization server requests that the resource owner explicitly accepts it, generally by redirecting the resource owner to a page on the autorization server, eventually requiring username, password, etc
+* the authorization server requests that the resource owner explicitly accepts it, generally by redirecting the resource owner to a page on the autorization server, which might ask the user to reauthenticate via username, password, etc
 * the authorization server delivers an access token to the client
 * the client uses the access token to issue a request to the resource server
 
