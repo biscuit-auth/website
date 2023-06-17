@@ -68,7 +68,7 @@ Now we may be tempted to use the ID token directly as an access token in B. But 
 
 ## Refresh tokens
 
-In general, the OAuth authorization server delivers both an access token and a refresh token to the client. WHat's the difference?
+In general, the OAuth authorization server delivers both an access token and a refresh token to the client. What's the difference?
 * the access token is used to query the resource server, it is typically short lived and at high risk (travels regularly over the network)
 * the refresh token is used to request a new access token from the authorization server. It is long lived, only the authorization server will ever see it, and according to current best practices, should be single use (the AS will deliver a new refresh token along with the new access token)
 
