@@ -21,7 +21,7 @@ lead = "How OAuth 2.0 and OIDC work, and how to integrate Biscuit with them"
 * *authorization server*: a service that issues access tokens used by the client to tell the resource server that they represent the resource owner
 * *access token*: this can be anything, like a random string, or a cryptographic token like Biscuit, as long as the resource server can use it to recognize a specific resource owner
 
-Depending on the system, some of those roles can be mixed: the resource server could also be the authorization server if they are in the same monomithic service, and the resource server and client could be the same web application.
+Depending on the system, some of those roles can be mixed: the resource server could also be the authorization server if they are in the same monolithic service, and the resource server and client could be the same web application.
 Based on those roles, OAuth 2.0 defines a list of authorization flows, and they all follow a general pattern:
 * the resource owner wants the client to access their resources
 * the client contacts the authorization server to start the flow
