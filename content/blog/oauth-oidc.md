@@ -85,4 +85,4 @@ Now, how do we fit Biscuit tokens in that architecture?
 - the refresh token is single use, to access only one server, so a random string stored in database is a much better fit there
 - the OAuth specification [does not mandate a specific format for access tokens](https://datatracker.ietf.org/doc/html/rfc6749#section-1.4)
 
-So OIDC and OAuth are used to first establish trust between the client and the server. After that, by using Biscuit in access tokens, that trust is carried forward with each request. The token can bear the exact set of rights that the user possesses, attenuates them per client/server request or between microservices, and augment it at the gateway level with third-party blocks.
+So OIDC and OAuth are used to first establish trust between the client and the server. After that, by using Biscuit in access tokens, that trust is carried forward with each request. The token can bear the exact set of rights that the user possesses. Those rights can then be attenuated per client/server request or between microservices, or even augmented at the gateway level with third-party blocks.
