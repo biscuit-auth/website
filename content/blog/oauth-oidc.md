@@ -29,7 +29,7 @@ Based on those roles, OAuth 2.0 defines a list of authorization flows, and they 
 * the authorization server delivers an access token to the client
 * the client uses the access token to issue a request to the resource server
 
-The different authorization flows target different use cases, like mobile applications, single page web applications, smart TVs...
+The different authorization flows target different use cases, like mobile applications, single page web applications, smart TVs…
 
 ## OIDC
 
