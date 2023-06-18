@@ -48,6 +48,26 @@ Of course biscuit is a recent piece of tech, which makes it harder to justify th
 
 Consider unionizing to protect yourself from being unduly fired.
 
+## How can biscuit be integrated with OAuth and OIDC?
+
+Biscuit is focused on the authorization and delegation side of API access, so it can be used as an OAuth access token. OAuth does not mandate a specific format for the access token.
+Refresh tokens work better when they are meant for a single use. In that case, a random string stored in the Authorization Server (in OAuth terms) database will fit the task.
+OIDC specifies that identity information is transmitted using JWTs, so Biscuit will not be usable in their place.
+
+## Why Datalog?
+
+Biscuit needed a language that could be serialized in a compact format, and executed in the same way across different implementations in different languages. It also had to be fast to execute and have a limited impact on memory use. Finally, it had to be general enough, so it would not prescribe a specific authorization model.
+There is a long history of applying logic languages and in particular Datalog, to authorization policies, because of its well-understood semantics and its expressiveness in manipulating relational data.
+We designed a custom Datalog instead of reusing an existing one so we could specify its behaviour and execution and reduce the attack surface of the authorization core.
+
+## Isn't JWT enough?
+
+JWT fits a specific use case: transmitting identity and authorization information from one central service to multiple less trusted services without having it tampered with. This works well for simple architectures like monoliths, but will soon force some tradeoffs in complexity or safety when used in today's microservices or federated architectures.
+It was also specified with a number of pitfalls that created a number of security incidents over the years. Projects like [PASETO](https://paseto.io/) address these issues within the same scope as JWT.
+
+Biscuit builds upon the experience earned developing authorization systems with JWT and other tools, takes steps to address their risks, and clearly target the larger systems we are now building.
+
+
 ## What is your favorite Biscuit recipe?
 
 If you read French and tolerate the metric system (it's a big ask, we know), have a look at this recipe: <https://www.gourmandiseries.fr/palets-bretons/>.
