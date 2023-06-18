@@ -12,7 +12,7 @@ authors = ["geal"]
 lead = "How OAuth 2.0 and OIDC work, and how to integrate Biscuit with them"
 +++
 
-##OAuth 2
+## OAuth 2
 
 [OAuth 2.0](https://oauth.net/2/) is a series of specifications describing authorization and delegation flows between services. It looks at service access through a list of roles:
 * *resource owner*: an agent that can give access to a resource. That can be a human, but also a service
