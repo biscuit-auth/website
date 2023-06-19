@@ -25,7 +25,7 @@ Depending on the system, some of those roles can be mixed: the resource server c
 Based on those roles, OAuth 2.0 defines a list of authorization flows, and they all follow a general pattern:
 * the resource owner wants the client to access their resources
 * the client contacts the authorization server to start the flow
-* the authorization server requests that the resource owner explicitly accepts it, generally by redirecting the resource owner to a page on the autorization server, which might ask the user to reauthenticate via username, password, etc
+* the authorization server requests that the resource owner explicitly accepts it, generally by redirecting the resource owner to a page on the authorization server, which might ask the user to reauthenticate via username, password, etc
 * the authorization server delivers an access token to the client
 * the client uses the access token to issue a request to the resource server
 
@@ -33,7 +33,7 @@ The different authorization flows target different use cases, like mobile applic
 
 ## OIDC
 
-[OpenID Connect](https://openid.net/connect/) builds upon OAuth 2.0 to provide an authentication layer. Why use OIDC instead of OAuth directly though? After all, getting an access token from the authorition server should be enough of a proof that the user is authenticated?
+[OpenID Connect](https://openid.net/connect/) builds upon OAuth 2.0 to provide an authentication layer. Why use OIDC instead of OAuth directly though? After all, getting an access token from the authorization server should be enough of a proof that the user is authenticated?
 
 Let's consider this scenario:
 * the user is connected to service A, a resource server and authorization server
