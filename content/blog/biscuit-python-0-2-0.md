@@ -21,7 +21,7 @@ Following the stable release of [biscuit-rust][biscuit-rust] and the update of [
 
 ## Biscuit-python
 
-[Biscuit-python][biscuit-python] is available on [pypi](https://pypi.org), pre-compiled for several GNU/Linux distributions, MacOS (x86 and Apple Silicon) and windows, as well as a source distribution.
+[Biscuit-python][biscuit-python] is available on [pypi](https://pypi.org), pre-compiled for several GNU/Linux distributions, MacOS (x86 and Apple Silicon) and Windows, as well as a source distribution.
 
 ```sh
 pip install biscuit-python
