@@ -35,7 +35,7 @@ The current library grew out of a proof-of-concept started by [Josh Wright](http
 
 ## A few bites of [biscuit-python][biscuit-python]
 
-When working with biscuit, most of the work is about manipulating datalog snippets. Same as with SQL, manually building datalog snippets by concatenating strings is discouraged, as it can be the cause of security issues through injections.
+When working with biscuit, most of the work is about manipulating datalog snippets. Same as with SQL, manually building datalog snippets by concatenating strings is discouraged, as it can be the cause of security issues through [injections](https://owasp.org/Top10/A03_2021-Injection/).
 
 All biscuit libraries provide a way to bind parameters within datalog by referencing values from the host language, and [biscuit-python][biscuit-python] is no exception:
 
