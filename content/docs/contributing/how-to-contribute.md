@@ -23,6 +23,8 @@ Everything is developed in the open
 
 👉 Find implementations and tools in the [`biscuit-auth` organisation](https://github.com/biscuit-auth)
 
+👉 Discuss with the developers and users on our [Matrix rooms](https://matrix.to/#/#biscuit-auth:matrix.org)
+
 We are always looking for new interesting use cases for Biscuit. Show us what you can do with it,
 and tell the world about it!
 
