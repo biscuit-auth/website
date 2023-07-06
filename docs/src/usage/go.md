@@ -8,7 +8,7 @@ In `go.mod`:
 
 ```
 require(
-    github.com/biscuit-auth/biscuit-go v1.0.0
+    github.com/biscuit-auth/biscuit-go v2.2.0
 )
 ```
 
@@ -22,105 +22,98 @@ func CreateKey() (ed25519.PublicKey, ed25519.PrivateKey) {
 }
 ```
 
-## Create a token
+## Create and serialize a token
 
 ```go
-func CreateToken(root *ed25519.PrivateKey) (*biscuit.Biscuit, error) {
-	builder := biscuit.NewBuilder(*root)
+rng := rand.Reader
+publicRoot, privateRoot, _ := ed25519.GenerateKey(rng)
 
-	fact, err := parser.FromStringFact(`user("1234")`)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse authority facts: %v", err)
-	}
-	err = builder.AddAuthorityFact(fact)
-	if err != nil {
-		return nil, fmt.Errorf("failed to add authority facts: %v", err)
-	}
+authority, err := parser.FromStringBlockWithParams(`
+	right("/a/file1.txt", {read});
+	right("/a/file1.txt", {write});
+	right("/a/file2.txt", {read});
+	right("/a/file3.txt", {write});
+`, map[string]biscuit.Term{"read": biscuit.String("read"), "write": biscuit.String("write")})
 
-	check, err := parser.FromStringCheck(`check if operation("read")`)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse authority checks: %v", err)
-	}
-	err = builder.AddAuthorityCheck(check)
-	if err != nil {
-		return nil, fmt.Errorf("failed to add authority checks: %v", err)
-	}
-
-	token, err := builder.Build()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build biscuit: %v", err)
-	}
-
-	return token, nil
+if err != nil {
+	panic(fmt.Errorf("failed to parse authority block: %v", err))
 }
+
+builder := biscuit.NewBuilder(privateRoot)
+builder.AddBlock(authority)
+
+b, err := builder.Build()
+if err != nil {
+	panic(fmt.Errorf("failed to build biscuit: %v", err))
+}
+
+token, err := b.Serialize()
+if err != nil {
+	panic(fmt.Errorf("failed to serialize biscuit: %v", err))
+}
+
+// token is now a []byte, ready to be shared
+// The biscuit spec mandates the use of URL-safe base64 encoding for textual representation:
+fmt.Println(base64.URLEncoding.EncodeToString(token))
 ```
 
-## Create an authorizer
+## Parse and authorize a token
 
 ```go
-func Authorize(token *biscuit.Biscuit, root *ed25519.PublicKey) error {
-	authorizer, err := token.Authorizer(*root)
-	if err != nil {
-		return fmt.Errorf("failed to create authorizer: %v", err)
-	}
-
-	fact1, err := parser.FromStringFact(`resource("/a/file1.txt")`)
-	if err != nil {
-		return fmt.Errorf("failed to parse authorizer fact: %v", err)
-	}
-	authorizer.AddFact(fact1)
-
-	fact2, err := parser.FromStringFact(`operation("read")`)
-	if err != nil {
-		return fmt.Errorf("failed to parse authorizer fact: %v", err)
-	}
-	authorizer.AddFact(fact2)
-
-	policy, err := parser.FromStringPolicy(`allow if resource("/a/file1.txt")`)
-	if err != nil {
-		return fmt.Errorf("failed to parse authorizer policy: %v", err)
-	}
-	authorizer.AddPolicy(policy)
-
-	return authorizer.Authorize()
+b, err := biscuit.Unmarshal(token)
+if err != nil {
+    panic(fmt.Errorf("failed to deserialize token: %v", err))
 }
-```
+
+authorizer, err := b.Authorizer(publicRoot)
+if err != nil {
+    panic(fmt.Errorf("failed to verify token and create authorizer: %v", err))
+}
+
+authorizerContents, err := parser.FromStringAuthorizerWithParams(`
+	resource({res});
+	operation({op});
+	allow if right({res}, {op});
+	`, map[string]biscuit.Term{"res": biscuit.String("/a/file1.txt"), "op": biscuit.String("read")})
+if err != nil {
+	panic(fmt.Errorf("failed to parse authorizer: %v", err))
+}
+authorizer.AddAuthorizer(authorizerContents)
+
+if err := authorizer.Authorize(); err != nil {
+    fmt.Printf("failed authorizing token: %v\n", err)
+} else {
+    fmt.Println("success authorizing token")
+}```
 
 ## Attenuate a token
 
 ```go
-func Attenuate(serializedToken []byte, root *ed25519.PublicKey) ([]byte, error) {
-	token, err := biscuit.Unmarshal(serializedToken)
-	if err != nil {
-		return nil, fmt.Errorf("failed to deserialize biscuit: %v", err)
-	}
-
-	blockBuilder := token.CreateBlock()
-
-	check, err := parser.FromStringCheck(`check if resource($file), operation($permission), ["read"].contains($permission)`)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse check: %v", err)
-	}
-	err = blockBuilder.AddCheck(check)
-	if err != nil {
-		return nil, fmt.Errorf("failed to add block check: %v", err)
-	}
-
-	rng := rand.Reader
-	token2, err := token.Append(rng, blockBuilder.Build())
-	if err != nil {
-		return nil, fmt.Errorf("failed to append: %v", err)
-	}
-
-	return token2.Serialize()
+b, err = biscuit.Unmarshal(token)
+if err != nil {
+    panic(fmt.Errorf("failed to deserialize biscuit: %v", err))
 }
-```
 
-## Seal a token
+// Attenuate the biscuit by appending a new block to it
+blockBuilder := b.CreateBlock()
+block, err := parser.FromStringBlockWithParams(`
+		check if resource($file), operation($permission), [{read}].contains($permission);`,
+	map[string]biscuit.Term{"read": biscuit.String("read")})
+if err != nil {
+	panic(fmt.Errorf("failed to parse block: %v", err))
+}
+blockBuilder.AddBlock(block)
 
-```go
-rng := rand.Reader
-return token.Seal(rng)
+attenuatedBiscuit, err := b.Append(rng, blockBuilder.Build())
+if err != nil {
+    panic(fmt.Errorf("failed to append: %v", err))
+}
+
+// attenuatedToken is a []byte, representing an attenuated token
+attenuatedToken, err := b.Serialize()
+if err != nil {
+    panic(fmt.Errorf("failed to serialize biscuit: %v", err))
+}
 ```
 
 ## Reject revoked tokens
