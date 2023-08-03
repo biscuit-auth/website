@@ -1,8 +1,8 @@
 # Java
 
 
-The Java version of Biscuit can be found on [Github](https://github.com/CleverCloud/biscuit-java),
-and [maven](https://search.maven.org/artifact/com.clever-cloud/biscuit-java).
+The Java version of Biscuit can be found on [Github](https://github.com/biscuit-auth/biscuit-java),
+and [maven](https://search.maven.org/artifact/org.biscuitsec/biscuit).
 
 ## Install
 
@@ -10,9 +10,9 @@ In `pom.xml`:
 
 ```toml
 <dependency>
-    <groupId>com.clever-cloud</groupId>
-    <artifactId>biscuit-java</artifactId>
-    <version>2.1.0</version>
+    <groupId>org.biscuitsec</groupId>
+    <artifactId>biscuit</artifactId>
+    <version>2.3.1</version>
     <type>jar</type>
 </dependency>
 ```
