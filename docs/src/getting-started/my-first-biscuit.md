@@ -240,6 +240,6 @@ The following checks failed:
 Here it failed because the date provided in the authorizer (`time(2021-12-21T20:00:00Z)`) is greater
 than the expiration date specified in the check (`check if time($time), $time <= 2021-12-20T00:00:00+00:00`).
 
-## Going furhter
+## Going further
 
 You can learn more about datalog by reading [the datalog reference](../reference/datalog.md).
