@@ -22,7 +22,7 @@ content = 'If you hold a valid token, you can generate a new one with less right
 
 [[extra.list]]
 title = "Datalog policies"
-content = 'Authorization policies are witten in a logic language. They can be provided by the application, or transported by the token (attenuation)'
+content = 'Authorization policies are written in a logic language. They can be provided by the application, or transported by the token (attenuation)'
 
 # use cases
 
