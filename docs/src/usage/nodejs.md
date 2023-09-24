@@ -44,20 +44,20 @@ const root = new KeyPair();
 ```javascript
 const { biscuit, KeyPair } = require('@biscuit-auth/biscuit-wasm');
 
-const root = new KeyPair();
 const userId = "1234";
 // a token can be created from a datalog snippet
-const biscuitBuilder = biscuit`
+const builder = biscuit`
   user(${userId});
   check if resource("file1");
 `;
 
 // facts, checks and rules can be added one by one on an existing builder.
 for (let right of ["read", "write"]) {
-    biscuitBuilder.addFact(fact`right(${right})`);
+    builder.addFact(fact`right(${right})`);
 }
 
-const token = builder.build(root);
+const privateKey = PrivateKey.fromString("<private key">);
+const token = builder.build(privateKey);
 console.log(token.toBase64());
 ```
 
@@ -66,7 +66,8 @@ console.log(token.toBase64());
 ```javascript
 const { authorizer, Biscuit } = require('@biscuit-auth/biscuit-wasm');
 
-const token = Biscuit.fromBase64("<base64 string>");
+const publicKey = PublicKey.fromString("<public key">);
+const token = Biscuit.fromBase64("<base64 string>", publicKey);
 
 const userId = "1234";
 const auth = authorizer`
@@ -93,7 +94,8 @@ const acceptedPolicyCustomLimits = authorizer.authorizeWithLimits({
 ```javascript
 const { block, Biscuit } = require('@biscuit-auth/biscuit-wasm');
 
-const token = Biscuit.fromBase64("<base64 string>");
+const publicKey = PublicKey.fromString("<public key">);
+const token = Biscuit.fromBase64("<base64 string>", publicKey);
 
 // restrict to read only
 const attenuatedToken = token.append(block`check if operation("read")`);
@@ -107,7 +109,8 @@ A sealed token cannot be attenuated further.
 ```javascript
 const { Biscuit } = require('@biscuit-auth/biscuit-wasm');
 
-const token = Biscuit.fromBase64("<base64 string>");
+const publicKey = PublicKey.fromString("<public key">);
+const token = Biscuit.fromBase64("<base64 string>", publicKey);
 
 const sealedToken = token.sealToken();
 ```
@@ -118,7 +121,8 @@ const sealedToken = token.sealToken();
 ```javascript
 const { Biscuit } = require('@biscuit-auth/biscuit-wasm');
 
-const token = Biscuit.fromBase64("<base64 string>");
+const publicKey = PublicKey.fromString("<public key">);
+const token = Biscuit.fromBase64("<base64 string>", publicKey);
 
 // revocationIds is a list of hex-encoded revocation identifiers,
 // one per block
