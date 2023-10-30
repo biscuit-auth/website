@@ -4,7 +4,7 @@ description = "Individuals and companies contributing to biscuit"
 date = 2023-10-26T19:30:00+00:00
 updated = 2023-10-26T19:30:00+00:00
 draft = false
-weight = 30
+weight = 430
 sort_by = "weight"
 template = "docs/page.html"
 
