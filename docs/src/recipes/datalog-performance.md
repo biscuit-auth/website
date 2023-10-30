@@ -1,12 +1,23 @@
-# Datalog performance considerations
+# Authorization performance
 
-Authorization is likely part of your request handling hot path. As such, it is natural to try and make it as fast as possible. Parsing and signature verification depend chiefly on the token size, so the part where you can have the most impact is datalog evaluation.
+Authorization is likely part of your request handling hot path. As such, it is natural to try and make it as fast as possible. Signature verification makes up for an important part of the whole authorization process.
+
+## Authorization process breakdown
+
+The authorization process can be broken down in 4 parts:
+
+- parsing;
+- signature verification;
+- datalog generation;
+- datalog evaluation.
+
+Parsing is typically not a big contributor and depends only on the token size. Signature verification is an important contributor and depends mostly on the number of blocks (and their size). Datalog generation and datalog evaluation happen in tandem. That's the part where you have the most leverage. Datalog generation purely depends on how your application is designed. In many cases it can be done statically and thus have a negligible contribution to the overall runtime. Datalog evaluation depends on the actual datalog code that is evaluated.
 
 ## The first rule of performance optimization
 
 > Don't do it
 
-Benchmarks done with biscuit-rust show that the whole process (parsing, signatures verification and datalog evaluation) usually clocks in at around one milliseconds. In a lot of cases, that will not be a bottleneck and thus not where you should work on performance optimization.
+Benchmarks done with biscuit-rust show that the whole process (parsing, signatures verification and datalog evaluation) usually clocks in at around one millisecond. In a lot of cases, that will not be a bottleneck and thus not where you should work on performance optimization.
 
 ## Measure
 
