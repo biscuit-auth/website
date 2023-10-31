@@ -29,7 +29,7 @@
     - [Interoperability & Reusability](./recipes/interoperability-reusability.md)
     - [Role Based Access Control](./recipes/role-based-access-control.md)
     - [Per request attenuation](./recipes/per-request-attenuation.md)
-    - [Datalog performance](./recipes/datalog-performance.md)
+    - [Authorization performance](./recipes/authorization-performance.md)
 
 ## Reference
 

@@ -1,6 +1,12 @@
 # Authorization performance
 
-Authorization is likely part of your request handling hot path. As such, it is natural to try and make it as fast as possible. Signatures verification makes up for significant share of the time spent in the authorization process.
+Authorization is likely part of your request handling hot path. As such, it is natural to try and make it as fast as possible.
+
+## The first rule of performance optimization
+
+> Don't do it
+
+Benchmarks done with biscuit-rust show that the whole process (parsing, signatures verification and datalog generation and evaluation) usually clocks in at around one millisecond. In a lot of cases, that will not be a bottleneck and thus not where you should work on performance optimization. That being said, in some cases you will need to optimize the authorization process, so this page is there to help you do so.
 
 ## Authorization process breakdown
 
@@ -13,21 +19,13 @@ The authorization process can be broken down in 4 parts:
 
 Parsing is typically one of the fastest steps; it depends only on the token size. Signature verification is where most of the time is spent; it depends mostly on the number of blocks (and their size). Datalog generation and datalog evaluation happen in tandem. That's the part where you have the most leverage. Datalog generation purely depends on how your application is designed. In many cases it can be done statically and thus have a negligible contribution to the overall runtime. Datalog evaluation depends on the actual datalog code that is evaluated.
 
-## The first rule of performance optimization
-
-> Don't do it
-
-Benchmarks done with biscuit-rust show that the whole process (parsing, signatures verification and datalog generation and evaluation) usually clocks in at around one millisecond. In a lot of cases, that will not be a bottleneck and thus not where you should work on performance optimization.
-
 ## Measure
 
-When it comes to performance optimization, the first step is always to measure things. First to determine if optimization is even needed, then to quantify progress.
+When it comes to performance optimization, the first step is always to measure the execution time of each step. First to determine if optimization is even needed, then to quantify progress.
 This part entirely depends on your tech stack. You can start with coarse-grained traces telling you how long the whole authorization process takes, and then only dig down if optimization is needed.
 
-Then, there are two steps in the authorization process that you can analyze: datalog generation, and datalog evaluation. 
-
-The first step, datalog generation, is not likely to be the bottleneck in simple cases, with static authorization rules. However, if your datalog generation involves database queries and complex generation logic, then you have optimization opportunities.  
-The second step is datalog evaluation. There might be a balance between those two steps (i.e. making the datalog generation process more complex in order to simplify evaluation), so optimizations should always be considered over the whole authorization process.
+Datalog generation is not likely to be the bottleneck in simple cases, with static authorization rules. However, if your datalog generation involves database queries and complex generation logic, then you have optimization opportunities. Large or complex datalog rule sets can take time to evaluate, making datalog evaluation a good target for optimization.
+There might be a balance between datalog generation and evaluation (i.e. making the datalog generation process more complex in order to simplify evaluation), so optimizations should always be considered over the whole authorization process.
 
 ## Datalog performance contributors
 
@@ -46,7 +44,7 @@ The number of rules is a direct contributor to evaluation performance. The datal
 
 ### Expression evaluation
 
-> This part is implementation-dependent, advice applies primarily to the rust implementation.
+_This part is implementation-dependent, advice applies primarily to the rust implementation._
 
 Rules can contain expressions, that are evaluated after facts are matched. The biscuit specification describes an evaluation strategy based on a stack machine, which aims at providing a fast evaluation.
 
