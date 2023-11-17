@@ -52,7 +52,29 @@ This will give you something like:
 Once you have that, you can inspect it with the CLI:
 
 ```
-echo "CgkI6AcQZBjAhD0Q2YkBGvMBCAQSCi9maWxlMS50eHQSBDEyMzQiRBADGgkKBwgKEgMYgQgaDQoLCAQSAxiACBICGAAqJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIIDEpKsGCgQaAggAKjUQAxoJCgcIAhIDGIAIGggKBggDEgIYABoMCgoIBRIGILCX3aoGKg4KDAoCCBsSBggKEgIICjIVChEKAggbEgsIBBIDGIAIEgIYABAAOicKAgoAEggKBggDEgIYABIJCgcIAhIDGIAIEgwKCggFEgYgsJfdqgY6HgoCEAASDQoLCAQSAxiACBICGAASCQoHCAoSAxiBCEAA" | biscuit inspect-snapshot -
+$ echo "CgkI6AcQZBjAhD0Q2YkBGvMBCAQSCi9maWxlMS50eHQSBDEyMzQiRBADGgkKBwgKEgMYgQgaDQoLCAQSAxiACBICGAAqJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIIDEpKsGCgQaAggAKjUQAxoJCgcIAhIDGIAIGggKBggDEgIYABoMCgoIBRIGILCX3aoGKg4KDAoCCBsSBggKEgIICjIVChEKAggbEgsIBBIDGIAIEgIYABAAOicKAgoAEggKBggDEgIYABIJCgcIAhIDGIAIEgwKCggFEgYgsJfdqgY6HgoCEAASDQoLCAQSAxiACBICGAASCQoHCAoSAxiBCEAA" \
+  | biscuit inspect-snapshot -
+
+// Facts:
+// origin: 0
+right("/file1.txt", "read");
+user("1234");
+// origin: authorizer
+operation("read");
+resource("/file1.txt");
+time(2023-11-17T11:17:04Z);
+
+// Checks:
+// origin: authorizer
+check if user($user);
+// origin: 0
+check if time($time), $time < 2023-12-01T00:00:00Z;
+
+// Policies:
+allow if right("/file1.txt", "read");
+
+⏱️ Execution time: 17μs (0 iterations)
+🙈 Datalog check skipped 🛡️
 ```
 
 Or directly with the [web-based snapshot inspector](/docs/tooling/snapshot-inspector/):
