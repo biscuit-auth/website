@@ -20,13 +20,13 @@ It turns out that being able to serialize authorization policies gives us anothe
 
 ## Authorizer snapshots
 
-In `biscuit-rust` and most biscuit libraries, the authorization process is carried out through an `Authorizer` value.
+In [`biscuit-rust`][biscuit-rust] and most biscuit libraries, the authorization process is carried out through an [`Authorizer`][authorizer] value.
 
-An `Authorizer` is created from a biscuit token, along with facts, rules, checks, and policies added by the authorizing party. 
+An [`Authorizer`][authorizer] is created from a biscuit token, along with facts, rules, checks, and policies added by the authorizing party.
 
-Once all this has been provided, the `Authorizer` runs datalog evaluation (it repeatedly generates new datalog facts from rules unless no new facts can be generated). Once this is done, checks and policies are evaluated and are used to compute the authorization result (all checks have to pass, and the first policy to match must be an `allow` policy). The `Authorizer` makes sure these two steps are carried out in a timely fashion by aborting after a specified timeout, if too many facts are generated, or after a specific amount of iterations. This is crucial to make sure authorization does not become a DoS target.
+Once all this has been provided, the [`Authorizer`][authorizer] runs datalog evaluation (it repeatedly generates new datalog facts from rules unless no new facts can be generated). Once this is done, checks and policies are evaluated and are used to compute the authorization result (all checks have to pass, and the first policy to match must be an `allow` policy). The [`Authorizer`][authorizer] makes sure these two steps are carried out in a timely fashion by aborting after a specified timeout, if too many facts are generated, or after a specific amount of iterations. This is crucial to make sure authorization does not become a DoS target.
 
-The good news is that an `Authorizer` only contains serializable data, and as such can be stored.
+The good news is that an [`Authorizer`][authorizer] only contains serializable data, and as such can be stored.
 
 ```rust
 let mut authorizer = authorizer!(
@@ -55,7 +55,7 @@ Once you have that, you can inspect it with the CLI:
 echo "CgkI6AcQZBjAhD0Q2YkBGvMBCAQSCi9maWxlMS50eHQSBDEyMzQiRBADGgkKBwgKEgMYgQgaDQoLCAQSAxiACBICGAAqJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIIDEpKsGCgQaAggAKjUQAxoJCgcIAhIDGIAIGggKBggDEgIYABoMCgoIBRIGILCX3aoGKg4KDAoCCBsSBggKEgIICjIVChEKAggbEgsIBBIDGIAIEgIYABAAOicKAgoAEggKBggDEgIYABIJCgcIAhIDGIAIEgwKCggFEgYgsJfdqgY6HgoCEAASDQoLCAQSAxiACBICGAASCQoHCAoSAxiBCEAA" | biscuit inspect-snapshot -
 ```
 
-Or directly with the [web-based snapshot inspector](todo):
+Or directly with the [web-based snapshot inspector](/docs/tooling/snapshot-inspector/):
 
 <bc-snapshot-printer snapshot="CgkI6AcQZBjAhD0Q2YkBGvMBCAQSCi9maWxlMS50eHQSBDEyMzQiRBADGgkKBwgKEgMYgQgaDQoLCAQSAxiACBICGAAqJgokCgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIIDEpKsGCgQaAggAKjUQAxoJCgcIAhIDGIAIGggKBggDEgIYABoMCgoIBRIGILCX3aoGKg4KDAoCCBsSBggKEgIICjIVChEKAggbEgsIBBIDGIAIEgIYABAAOicKAgoAEggKBggDEgIYABIJCgcIAhIDGIAIEgwKCggFEgYgsJfdqgY6HgoCEAASDQoLCAQSAxiACBICGAASCQoHCAoSAxiBCEAA"></bc-snapshot-printer>
 
@@ -74,3 +74,15 @@ A similar use-case is auditing access. For highly sensitive operations, you migh
 ### Resumable execution
 
 Snapshots allow separating the authorization process in several steps: first you create an authorizer from a biscuit token, and then pass the authorizer around (serialized through a snapshot), to finally resume authorization somewhere else. While doing it in one step is better in most cases, some software stacks can be overly restrictive and force a separate authentication step (verify biscuit signatures) before authorization (evaluate datalog policies).
+
+## Tooling support
+
+Saving and loading snapshots is available in [`biscuit-rust`][biscuit-rust] and [`biscuit-python`][biscuit-python].
+
+[`biscuit-cli`][biscuit-cli] also lets you save a snapshot (`biscuit inspect --dump-snapshot-to`) and inspect a snapshot (`biscuit inspect-snapshot`), with optional authorizer code and queries. [`biscuit-web-components`][biscuit-web-components] provides a `<bc-snapshot-printer>` component, which allows inspecting and querying snapshot.
+
+[biscuit-rust]: https://crates.io/crates/biscuit-auth
+[biscuit-cli]: https://github.com/biscuit-auth/biscuit-cli
+[biscuit-web-components]: https://doc.biscuitsec.org/usage/web-components
+[biscuit-python]: https://pypi.org/project/biscuit-python/
+[authorizer]: https://docs.rs/biscuit-auth/4.0.0/biscuit_auth/struct.Authorizer.html
