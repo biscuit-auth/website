@@ -192,6 +192,18 @@ check if time($time), $time < 2023-05-04T00:00:00Z;
 </code></pre>
 </bc-token-generator>
 
+### Snapshot printer
+
+This component allows you to inspect the contents of a snapshot, optionally adding extra authorization code or queries.
+
+```html
+<bc-snapshot-printer snapshot="CgkI6AcQZBjAhD0Q72YaZAgEEgVmaWxlMSINEAMaCQoHCAQSAxiACCoQEAMaDAoKCAUSBiCo492qBjIRCg0KAggbEgcIBBIDGIAIEAA6EgoCCgASDAoKCAUSBiCo492qBjoPCgIQABIJCgcIBBIDGIAIQAA=" showAuthorizer="true" showQuery="true">
+</bc-snapshot-printer>
+```
+
+<bc-snapshot-printer snapshot="CgkI6AcQZBjAhD0Q72YaZAgEEgVmaWxlMSINEAMaCQoHCAQSAxiACCoQEAMaDAoKCAUSBiCo492qBjIRCg0KAggbEgcIBBIDGIAIEAA6EgoCCgASDAoKCAUSBiCo492qBjoPCgIQABIJCgcIBBIDGIAIQAA=" showAuthorizer="true" showQuery="true">
+</bc-snapshot-printer>
+
 ### Datalog playground
 
 The datalog playground allows you to type in and evaluate datalog code without
