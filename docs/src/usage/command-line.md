@@ -106,6 +106,31 @@ $ biscuit inspect --raw-input biscuit-file.bc \
 > Matched allow policy: allow if right("file1")
 ```
 
+## Generate a snapshot
+
+Biscuit inspect can store the authorization context to a file, which can be inspected later. The file will contain both the token contents, and the authorizer contents.
+
+```
+$ biscuit inspect --raw-input biscuit-file.bc \
+   --public-key-file public-key-file \
+   --authorize-with 'allow if right("file1");' \
+   --include-time \
+   --dump-snapshot-to snapshot-file
+> Open biscuit
+> Authority block:
+> == Datalog ==
+> right("file1");
+>
+> == Revocation id ==
+> a1675990f0b23015019a49b6b003c14fcfd2be134c9899b8146f4f702f8089486ca20766e188cd3388eb8ef653327a78e2dc0f6e42d31be8d97b1c5a8488eb0e
+>
+> ==========
+>
+> ✅ Public key check succeeded 🔑
+> ✅ Authorizer check succeeded 🛡️
+> Matched allow policy: allow if right("file1")
+```
+
 ## Attenuate a token
 
 ```
@@ -123,4 +148,33 @@ $ biscuit attenuate --raw-input biscuit-file.bc  --add-ttl "1 day" --block ""
 ```
 # this will prevent a biscuit from being attenuated further
 $ biscuit seal --raw-input biscuit-file.bc
+```
+
+## Inspect a snapshot
+
+`inspect-snapshot` displays the contents of a snapshot (facts, rules, checks, policies), as well as how much time has been spent evaluating datalog.
+
+The authorization process can be resumed with `--authorize-interactive`, `--authorize-with`, or `--authorize-with-file`.
+
+The authorizer can be queried with `--query` or `--query-all`
+
+```
+$ biscuit inspect-snapshot snapshot-file \
+    --authorize-with "" \
+    --query 'data($file) <- right($file)'
+// Facts:
+// origin: 0
+right("file1");
+// origin: authorizer
+time(2023-11-17T13:59:04Z);
+
+// Policies:
+allow if right("file1");
+
+⏱️ Execution time: 13μs (0 iterations)
+✅ Authorizer check succeeded 🛡️
+Matched allow policy: allow if right("file1")
+
+🔎 Running query: data($file) <- right($file)
+data("file1")
 ```
