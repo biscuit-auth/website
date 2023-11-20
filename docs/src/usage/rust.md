@@ -75,9 +75,24 @@ fn authorize(token: &Biscuit) -> Result<(), error::Token> {
     // link the token to the authorizer
     authorizer.add_token(token)?;
 
-    authorizer.authorize()?;
+    let result = authorizer.authorize();
 
+    // store the authorization context
+    println!("{}", authorizer.to_base64_snapshot()?);
+
+    let _ = result?;
     Ok(())
+}
+```
+
+## Restore an authorizer from a snasphot
+
+```rust
+use biscuit_auth::Authorizer;
+
+fn display(snapshot: &str) {
+  let authorizer = Authorizer::from_base64_snapshot(snapshot).unwrap();
+  println!("{authorizer}");
 }
 ```
 
