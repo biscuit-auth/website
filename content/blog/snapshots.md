@@ -26,7 +26,9 @@ An [`Authorizer`][authorizer] is created from a biscuit token, along with facts,
 
 Once all this has been provided, the [`Authorizer`][authorizer] runs datalog evaluation (it repeatedly generates new datalog facts from rules unless no new facts can be generated). Once this is done, checks and policies are evaluated and are used to compute the authorization result (all checks have to pass, and the first policy to match must be an `allow` policy). The [`Authorizer`][authorizer] makes sure these two steps are carried out in a timely fashion by aborting after a specified timeout, if too many facts are generated, or after a specific amount of iterations. This is crucial to make sure authorization does not become a DoS target.
 
-The good news is that an [`Authorizer`][authorizer] only contains serializable data, and as such can be stored.
+The good news is that an [`Authorizer`][authorizer] only contains serializable data, and as such can be stored, logged, or displayed.
+
+Here is an example of creating a snapshot with [`biscuit-rust`][biscuit-rust].
 
 ```rust
 let mut authorizer = authorizer!(
@@ -34,13 +36,13 @@ let mut authorizer = authorizer!(
   resource("/file1.txt");
   operation("read");
   check if user($user);
-  allow if right("/file1.txt", read);
+  allow if right("/file1.txt", "read");
   "#,
   now = SystemTime::now(),
 );
 authorizer.add_token(biscuit);
 let result = authorizer.authorize();
-println!("{}", authorizer.snapshot().to_base64_snapshot())
+println!("{}", authorizer.to_base64_snapshot());
 ```
 
 This will give you something like:
