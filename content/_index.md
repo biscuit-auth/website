@@ -36,7 +36,7 @@ content = 'All tokens come with unique revocation identifiers, that can be used 
 
 [[extra.list]]
 title = "Portable"
-content = 'Biscuit is implemented in Rust, Haskell, Go, Java, WebAssembly, C... All you need for a new implementation is a Protobuf generator and Ed25519 signing. The specification comes with a list of predefined test cases'
+content = 'Biscuit is available in Rust, Haskell, Go, Java, JS (node & browser), WebAssembly, C, Python, C#… All you need for a new implementation is a Protobuf generator and Ed25519 signing. The specification comes with a list of predefined test cases'
 
 +++
 
