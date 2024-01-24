@@ -69,3 +69,20 @@ allow if
 
 {% end %}
 </div>
+
+<div class="container">
+  <div class="row justify-content-center text-center">
+      <h2>Meet the team</h2>
+      <p>Biscuit is the result of the help of dozens of contributors over the years, patiently refining the specification and implementations. The project is maintained and led by:</p>
+      <div class="col-lg-5">
+        <h2 class="h4">Geoffroy Couprie</h2>
+        <img src="/img/geoffroy.jpg" style="width: 50%; margin-bottom: 10px" />
+        <p>Geoffroy has worked on distributed systems security for over a decade, and is now a Senior Staff Engineer at Apollo GraphQL. You will often find him deep in discussions on protocols and cryptography.</p>
+      </div>
+      <div class="col-lg-5">
+        <h2 class="h4">Clément Delafargue</h2>
+        <img src="/img/clement.jpg" style="width: 50%; margin-bottom: 10px" />
+        <p>Clément is a functional programmer working at Outscale. He loves discussing about FP, distributed systems, cloud architecture, and dogs obviously.</p>
+      </div>
+  </div>
+</div>
