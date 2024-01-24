@@ -21,18 +21,18 @@ If you manage or work for a company that has a vested interest in biscuit, you s
 
 ### Geoffroy Couprie
 
-Geoffroy is in charge of the biscuit spec and the reference implementation, biscuit-rust. He contributes regularly to biscuit-wasm and the web-based tooling.
+Geoffroy has worked on distributed systems security for over a decade, and is now a Senior Staff Engineer at Apollo GraphQL. He is in charge of the biscuit spec and the reference implementation, biscuit-rust. He contributes regularly to biscuit-wasm and the web-based tooling.
 
 ### Clément Delafargue
 
-Clément co-authors the spec, contributes regularly to biscuit-rust, and is in charge of various bindings (wasm, python, web tooling), as well as biscuit-haskell and the CLI tooling.
+Clément is a functional programmer working at Outscale. He co-authors the spec, contributes regularly to biscuit-rust, and is in charge of various bindings (wasm, python, web tooling), as well as biscuit-haskell and the CLI tooling.
 
 ## Corporate sponsors
-
-### Clever Cloud
-
-Clever Cloud has kickstarted and sponsored the early development of biscuit (v0 and v1), when Geoffroy Couprie worked there. They are now in charge of biscuit-java.
 
 ### Outscale
 
 Outscale is now the main corporate sponsor for biscuit by allocating a sizeable part of Clément Delafargue's schedule to biscuit.
+
+### Clever Cloud
+
+Clever Cloud has kickstarted and sponsored the early development of biscuit (v0 and v1), when Geoffroy Couprie worked there.
