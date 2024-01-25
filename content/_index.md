@@ -71,6 +71,7 @@ allow if
 </div>
 
 <div class="container">
+  <img src="/img/thumbnail.png" style="height:0" />
   <div class="row justify-content-center text-center">
       <h2>Meet the team</h2>
       <p>Biscuit is the result of the help of dozens of contributors over the years, patiently refining the specification and implementations. The project is maintained and led by:</p>
