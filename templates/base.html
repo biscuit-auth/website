@@ -32,6 +32,12 @@
 {% block rss %}
   <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="blog/atom.xml", trailing_slash=false) }}">
 {% endblock %}
+
+{% if config.thumbnail %}
+  <meta property="og:image" content="{{config.thumbnail}}" />
+{% else %}
+  <meta property="og:image" content="/img/thumbnail.png" />
+{% endif %}
 </head>
 {% block body %}{% set page_class="home" %}{% endblock body %}
 <body class="{{ page_class }}">
