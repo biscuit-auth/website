@@ -38,7 +38,7 @@ The different authorization flows target different use cases, like mobile applic
 Let's consider this scenario:
 * the user is connected to service A, a resource server and authorization server
 * services B and C use OAuth access to service A for authentication: they redirect the user to service A to get an access token, then test the access token can actually access the resources
-* the user connects to B and C using service A, so B and C recieved access token for the user's ressources on A
+* the user connects to B and C using service A, so B and C received access token for the user's resources on A
 * now, the malicious admin of service C wants to access service B. They start the OAuth authoization to service B, but at the point where they are redirected to A, and must return the new access token, they instead provide the token they already have for the user
 * B checks that the token is valid, and lets them in
 
