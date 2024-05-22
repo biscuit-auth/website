@@ -7,3 +7,5 @@ title = "Biscuit"
 
 [output.html.playground]
 runnable = false
+git-repository-url = "https://github.com/biscuit-auth/biscuit"
+git-repository-icon = "fa-github"
