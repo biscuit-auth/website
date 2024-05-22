@@ -5,5 +5,10 @@ multilingual = false
 src = "src"
 title = "Biscuit"
 
+[output.html]
+git-repository-url = "https://github.com/biscuit-auth/biscuit"
+git-repository-icon = "fa-github"
+
 [output.html.playground]
 runnable = false
+
