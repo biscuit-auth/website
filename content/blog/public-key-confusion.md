@@ -1,7 +1,7 @@
 +++
 title = "Security advisory: public key confusion in third-party blocks"
 description = "A potential security issue has been detected and addressed"
-date = 2023-11-20T00:09:00+02:00
+date = 2024-07-31T18:00:00+02:00
 draft = false
 template = "blog/page.html"
 
