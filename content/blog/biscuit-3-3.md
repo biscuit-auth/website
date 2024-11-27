@@ -1,0 +1,159 @@
++++
+title = "Biscuit 3.3"
+description = "Version 3.3.0 of the biscuit specification has been released"
+date = 2024-11-28T00:09:00+02:00
+draft = false
+template = "blog/page.html"
+
+[taxonomies]
+authors = ["clementd"]
+
+[extra]
+lead = "A new version of the biscuit spec has been released"
++++
+
+Biscuit is a specification for a cryptographically verified authorization token
+supporting offline attenuation, and a language for authorization policies based on Datalog.
+It is used to build decentralized authorization systems, such as microservices architectures,
+or advanced delegation patterns with user facing systems.
+
+Building on more than a year of use since the last feature release, the biscuit team is proud to announce [biscuit `v3.3`](https://github.com/biscuit-auth/biscuit/releases/tag/v3.3), with a lot of new features, stronger crypto and (hopefully) a clearer version scheme.
+
+A sizeable chunk of the new datalog features has been financed by [3DS Outscale][outscale].
+
+## New version scheme
+
+Versions appear in several places in the biscuit ecosystem:
+
+- the spec itself is versioned (with a semver version number);
+- datalog blocks have a version number (encoded with a single unsigned integer);
+- libraries have versions (with version numbers depending on the language ecosystem, semver in most cases).
+
+All this made things somewhat confusing, especially since these version numbers are related but different, and expressed with various schemes.
+
+Starting with this release, we will try to clarify things a bit:
+
+### Spec version
+
+The datalog spec is released as `v3.3.0` (major version 3, minor version three, patch number zero).
+
+The major number is bumped when the token format changes completely, without any support for backward compatibility.
+
+The minor number is bumped when new features are added in a backward-compatible way (ie as long as you’re not using new features, you are compatible with older versions).
+
+The patch number will be either for fixes in the spec or small changes that don’t affect the tokens themselves. As far as token compatibility is concerned, the patch number does not exist.
+
+### Block version number
+
+Datalog blocks carry an unsigned integer named `version`. This number is intended to declare the minimum version of the spec that is needed to correctly understand the block. For space efficiency reasons, it is encoded as a single unsigned integer, representing a `major.minor` spec version.
+
+A block with version number `3` can only be understood by libraries with support for spec `v3.0` and higher, `4` requires `v3.1+`, `5` requires `v3.2+` and `6` requires `v3.3+`. This makes possible for libraries to reject tokens that rely on too recent features, instead of possibly mis-interpret a token.
+
+Libraries are supposed to encode tokens with the smallest version number possible, in order to facilitate gradual migration.
+
+### Signed block version number
+
+Starting with biscuit `v3.3`, the spec also defines a version number for the block signatures. This will allow improving signatures in a more graceful way.
+
+## tl;dr: partial breaking changes
+
+Biscuit has a strong policy for making spec updates additive:
+
+- tokens emitted with a library supporting biscuit 3.0 to 3.3 will be handled correctly by a library supporting biscuit 3.3;
+- tokens emitted by a library supporting biscuit 3.3, but not using any features from biscuit 3.3 will be handled correctly by a library supporting the features they use.
+
+However, biscuit 3.2 introduced a breaking change for third-party blocks, making third-party blocks emitted with a 3.0/3.1 library not accepted anymore.
+
+Biscuit 3.3 also introduces a breaking change on third-party blocks. New third-party blocks will not be supported by biscuit 3.2 libs, and third-party blocks emitted with biscuit 3.2 will be rejected by default by 3.3 libs (this can be relaxed during a migration period).
+
+### Datalog syntax changes
+
+The spec guarantees that datalog updates are purely additive, when encoded in tokens.
+
+The textual syntax for datalog has been updated in biscuit 3.3:
+
+- sets are now delimited by `{}`
+- strict equality tests are now denoted by `===` and `!==`
+
+## Datalog improvements
+
+### Arrays and maps / JSON support
+
+Up until now biscuit datalog only had a single collection type: sets. Sets were quite restrictive (no nesting, homogeneous). This made impossible for a biscuit token to carry JSON for instance.
+
+Biscuit 3.3 adds support for arrays, maps, and `null`, thus providing a way to embed arbitrary JSON values in a token.
+
+```
+todo
+```
+
+#### `null`
+
+Arrays and map support `.get()`, so we needed a way to handle missing keys. Since biscuit datalog is untyped, `null` is an okay solution for this. `null` was also the last missing piece for JSON support.
+
+```
+todo
+```
+
+#### Closures
+
+With this new focus on collection types, we needed a way to express more things in the language. Datalog expressions follow a pure evaluation model, so mutability and loops were not available. Higher-order functions were thus the best way to work with collections.
+
+Arrays, sets and maps support `.any()` and `.all()`, taking a predicate. Closures are not first-class (meaning they cannot be manipulated like regular values), but can however be nested (to work with nested data types). Variable shadowing was not possible until then (since all variables could only be bound in the same scope, with predicates). Variable shadowing is now possible syntactically, but explicitly forbidden by the spec and rejected by implementations.
+
+```
+todo
+```
+
+### `reject if`
+
+`check if` (and `check all`) allow encoding rules that must match for authorization to success. Biscuit 3.3 adds `reject if`, a way to make authorization fail when a rule matches. This allows expressing something similar to `DENY` statements in AWS policies.
+
+```
+todo
+```
+
+### Foreign Function Interface
+
+Biscuit datalog is a small language, on purpose. The goal is to have it embedded in each biscuit implementation, with consistent semantics. In polyglot architectures, this allows to have consistent authorization rules across services. The drawback is that authorization logic is constrained to what datalog can express.
+
+In some cases, it can be desirable to trade the cross-language consistency for flexibility and to have datalog delegate to the host language. This is exactly what the datalog Foreign Function Interface allows.
+
+```
+todo
+```
+
+### Other datalog improvements
+
+- heterogeneous equality
+- `.type()`
+
+
+## Crypto layer improvements
+
+In addition to new datalog features, biscuit’s crypto layer has been improved as well.
+
+### ECDSA support
+
+Biscuit now supports ECDSA with the `secp256r1` curve. This allows using biscuit in environments where ed25519 is still not supported.
+
+### Hardened signature algorithm
+
+Biscuit’s signature algorithm has been hardened, to make signature evolutions easier, as well as preventing block re-use, especially for third-party blocks.
+
+## Next steps
+
+[biscuit-rust][biscuit-rust] will soon be released with full support for biscuit-3.3, along with [biscuit-cli][biscuit-cli] and [biscuit-web-components][biscuit-web-components]. Libraries based on biscuit-rust ([biscuit-python][biscuit-python] and [biscuit-wasm][biscuit-wasm]) will follow soon.
+
+## Let's have a chat!
+
+Please come have a chat on [our matrix room][matrix] if you have questions about
+biscuit. There is a lot to discover!
+
+[matrix]: https://matrix.to/#/!MXwhyfCFLLCfHSYJxg:matrix.org
+[outscale]: https://outscale.com
+[biscuit-rust]: https://github.com/biscuit-auth/biscuit-rust
+[biscuit-cli]: https://github.com/biscuit-auth/biscuit-cli
+[biscuit-web-components]: https://github.com/biscuit-auth/biscuit-web-components
+[biscuit-python]: https://github.com/biscuit-auth/biscuit-python
+[biscuit-wasm]: https://github.com/biscuit-auth/biscuit-wasm
