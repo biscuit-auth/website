@@ -83,16 +83,16 @@ Up until now biscuit datalog only had a single collection type: sets. Sets were 
 
 Biscuit 3.3 adds support for arrays, maps, and `null`, thus providing a way to embed arbitrary JSON values in a token.
 
-```
-todo
+```biscuit
+payload({"key": ["value", true, null, {}]});
 ```
 
 #### `null`
 
 Arrays and map support `.get()`, so we needed a way to handle missing keys. Since biscuit datalog is untyped, `null` is an okay solution for this. `null` was also the last missing piece for JSON support.
 
-```
-todo
+```biscuit
+check if [].get(0) == null;
 ```
 
 #### Closures
@@ -101,16 +101,17 @@ With this new focus on collection types, we needed a way to express more things 
 
 Arrays, sets and maps support `.any()` and `.all()`, taking a predicate. Closures are not first-class (meaning they cannot be manipulated like regular values), but can however be nested (to work with nested data types). Variable shadowing was not possible until then (since all variables could only be bound in the same scope, with predicates). Variable shadowing is now possible syntactically, but explicitly forbidden by the spec and rejected by implementations.
 
-```
-todo
+```biscuit
+check if ["a","b","c"].any($x -> $x.starts_with("a"));
+check if [1,2,3,4].all($x -> $x < 10);
 ```
 
 ### `reject if`
 
 `check if` (and `check all`) allow encoding rules that must match for authorization to success. Biscuit 3.3 adds `reject if`, a way to make authorization fail when a rule matches. This allows expressing something similar to `DENY` statements in AWS policies.
 
-```
-todo
+```biscuit
+reject if user($user), denylist($denied), $denied.contains($user);
 ```
 
 ### Foreign Function Interface
@@ -119,14 +120,36 @@ Biscuit datalog is a small language, on purpose. The goal is to have it embedded
 
 In some cases, it can be desirable to trade the cross-language consistency for flexibility and to have datalog delegate to the host language. This is exactly what the datalog Foreign Function Interface allows.
 
+Assuming this user-defined implementation provided to the biscuit runtime:
+
+```rust
+HashMap::from_iter([(
+    "in_range".to_owned(),
+    ExternFunc::new(Arc::new(|ip, range| match (ip, range) {
+        (Term::Str(ip), Some(Term::Str(range))) => {
+            let ip: Ipv4Addr = ip
+                .parse()
+                .map_err(|e| format!("Invalid IPv4 address: {e}"))?;
+            let range: Ipv4Net = range
+                .parse()
+                .map_err(|e| format!("Invalid IPv4 range: {e}"))?;
+            Ok(Term::Bool(range.contains(&ip)))
+        }
+        _ => Err("ip_in_range expects two strings".to_owned()),
+    })),
+)])
 ```
-todo
+
+The function named `in_range` becomes available in datalog expressions.
+
+```biscuit
+check if source_ip($source_ip), $source_id.extern::in_range("192.168.0.0/16");
 ```
 
 ### Other datalog improvements
 
-- heterogeneous equality
-- `.type()`
+- heterogeneous equality: `1 == "a"` returns `false`, without raising an error, while `1 === "a"` will make evaluation fail;
+- `.type()`: `1.type() =="integer"`
 
 
 ## Crypto layer improvements
