@@ -39,7 +39,7 @@ The datalog spec is released as `v3.3.0` (major version 3, minor version three, 
 
 The major number is bumped when the token format changes completely, without any support for backward compatibility.
 
-The minor number is bumped when new features are added in a backward-compatible way (ie as long as you’re not using new features, you are compatible with older versions).
+The minor number is bumped when new features are added in a backward-compatible way (ie as long as you’re not using new features, you are compatible with older versions). Critical security fixes can also trigger a minor version bump.
 
 The patch number will be either for fixes in the spec or small changes that don’t affect the tokens themselves. As far as token compatibility is concerned, the patch number does not exist.
 
@@ -62,9 +62,9 @@ Biscuit has a strong policy for making spec updates additive:
 - tokens emitted with a library supporting biscuit 3.0 to 3.3 will be handled correctly by a library supporting biscuit 3.3;
 - tokens emitted by a library supporting biscuit 3.3, but not using any features from biscuit 3.3 will be handled correctly by a library supporting the features they use.
 
-However, biscuit 3.2 introduced a breaking change for third-party blocks, making third-party blocks emitted with a 3.0/3.1 library not accepted anymore.
+However, biscuit 3.2 introduced a breaking change for third-party blocks, making third-party blocks emitted with a 3.0/3.1 library not accepted anymore. While we try to avoid this kind of breaking changes, it was necessary to fix a security issue. This breaking change only affected third-party blocks, which are not widely used.
 
-Biscuit 3.3 also introduces a breaking change on third-party blocks. New third-party blocks will not be supported by biscuit 3.2 libs, and third-party blocks emitted with biscuit 3.2 will be rejected by default by 3.3 libs (this can be relaxed during a migration period).
+Biscuit 3.3 also introduces a breaking change on third-party blocks. New third-party blocks will not be supported by biscuit 3.2 libs, and third-party blocks emitted with biscuit 3.2 will be rejected by default by 3.3 libs (this can be relaxed during a migration period). Same as for the previous breaking change, it is necessary to fix a security issue and affects a small percentage of use-cases.
 
 ### Datalog syntax changes
 
