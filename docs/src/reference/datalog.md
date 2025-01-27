@@ -175,7 +175,7 @@ right("file1", "read");
 // the authority block trusts facts from itself and the authorizer
 check if action("read");
 </code></pre>
-<pre><code class="block" privateKey="4933a0b1dccbda376d018ff3be561e8eb0fd428062459ebd77352f9f67188257">
+<pre><code class="block" privateKey="ed25519/4933a0b1dccbda376d018ff3be561e8eb0fd428062459ebd77352f9f67188257">
 right("file2", "read");
 // blocks trust facts from the authority block and the authorizer
 check if action("read");
